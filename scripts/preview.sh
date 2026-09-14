@@ -190,10 +190,22 @@ if [ "$FAIL_LOGIN" = 1 ]; then
 import sys
 path = sys.argv[1]
 src = open(path, encoding="utf-8").read()
-old = "loginRevealTimer.start();"
-assert old in src, "reveal timer not found"
-src = src.replace(old, old + '\n            error_message.color = config.errorMsgFontColor;\n            error_message.text = textConstants.loginFailed;', 1)
+old = "deck.daypart = part;"
+assert src.count(old) == 1, "daypart assignment not found"
+src = src.replace(old, old + '\n        error_message.color = config.errorMsgFontColor;\n        error_message.text = textConstants.loginFailed;', 1)
 open(path, "w", encoding="utf-8").write(src)
+EOF
+fi
+if [ "$STAGE_MAIN_NEEDS_COPY" = 1 ] && { [ -n "$PREFILL_USER" ] || [ -n "$PREFILL_PASSWORD" ] || [ "$FAIL_LOGIN" = 1 ]; }; then
+  # Staged-only: start revealed so probe screenshots render the login
+  # surface (production starts hidden until first click/key, like upstream).
+  python3 - "$STAGE/Main.qml" <<'EOF'
+import sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read()
+old = 'state: "off"'
+assert src.count(old) == 1, "fader state not found"
+open(path, "w", encoding="utf-8").write(src.replace(old, 'state: "on"', 1))
 EOF
 fi
 
