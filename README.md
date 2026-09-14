@@ -122,7 +122,11 @@ background video is sequenced by `components/MediaDeck.qml` (dual Qt6
 `scripts/media/build-catalog`; Qt disables XHR GET on local files, so the
 runtime catalog is imported synchronously, never fetched).
 No network is used at runtime; with no local clips (or with
-`videoEnabled=false`) the greeter falls back to `background.jpg`.
+`videoEnabled=false`) the greeter falls back to `background.jpg`. The
+`hornero-greeter-media-base` pack ships 8 Argentina clips; the runtime
+catalog wires 7 into rotation (Iguazu, Perito Moreno x2, Ushuaia, Buenos
+Aires, Bariloche by day; mountain lake dimmed at night). The theme
+package bridges them in under `<theme>/media/base`.
 New `theme.conf` keys: `videoEnabled`, `crossfadeDuration`, `testMode`.
 See `media/README.md` for the pack format.
 
