@@ -131,7 +131,9 @@ Item {
         id: playerA
         property string _currentId: ""
         videoOutput: videoA
-        loops: MediaPlayer.NoLoop
+        // Single play per entry; the sequencer re-queues (Qt6 has no
+        // MediaPlayer.NoLoop constant, and it warns as undefined).
+        loops: 1
         onErrorOccurred: function (error, errorString) {
             deck._onPlayerError(playerA);
         }
@@ -162,7 +164,9 @@ Item {
         id: playerB
         property string _currentId: ""
         videoOutput: videoB
-        loops: MediaPlayer.NoLoop
+        // Single play per entry; the sequencer re-queues (Qt6 has no
+        // MediaPlayer.NoLoop constant, and it warns as undefined).
+        loops: 1
         onErrorOccurred: function (error, errorString) {
             deck._onPlayerError(playerB);
         }

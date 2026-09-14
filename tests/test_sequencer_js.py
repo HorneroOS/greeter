@@ -16,7 +16,7 @@ HARNESS = """
 const fs = require("fs");
 let src = fs.readFileSync(%s, "utf8");
 src = src.split("\\n").filter(l => !l.startsWith(".pragma")).join("\\n");
-const Catalog = new Function(src + "\\nreturn { clampCrossfade, isDay, isLocalRelativePath, validateCatalog, entriesForDaypart, resolveEntries, createSequencer, MIN_CROSSFADE_MS, MAX_CROSSFADE_MS, DEFAULT_CROSSFADE_MS, TEST_SEED };")();
+const Catalog = new Function(src + "\\nreturn { clampCrossfade, isDay, daypartForHour, isLocalRelativePath, validateCatalog, entriesForDaypart, resolveEntries, createSequencer, MIN_CROSSFADE_MS, MAX_CROSSFADE_MS, DEFAULT_CROSSFADE_MS, TEST_SEED };")();
 const out = {};
 %s
 console.log(JSON.stringify(out));
@@ -38,6 +38,24 @@ def test_clamp_crossfade_bounds():
 def test_is_day_boundaries_match_upstream_semantics():
     out = run_js("out.v = [Catalog.isDay(7, 7, 19), Catalog.isDay(19, 7, 19), Catalog.isDay(6, 7, 19), Catalog.isDay(20, 7, 19), Catalog.isDay(12, 7, 19)];")
     assert out["v"] == [True, True, False, False, True]
+
+
+def test_daypart_for_hour_prefers_golden_then_day_then_night():
+    out = run_js("out.v = [Catalog.daypartForHour(18, 7, 19, 17, 20), Catalog.daypartForHour(12, 7, 19, 17, 20), Catalog.daypartForHour(22, 7, 19, 17, 20), Catalog.daypartForHour(17, 7, 19, 17, 20), Catalog.daypartForHour(20, 7, 19, 17, 20), Catalog.daypartForHour(7, 7, 19, 17, 20)];")
+    assert out["v"] == ["golden-hour", "day", "night", "golden-hour", "golden-hour", "day"]
+
+
+def test_daypart_for_hour_falls_back_to_day_on_garbage():
+    out = run_js('out.v = Catalog.daypartForHour("x", 7, 19, 17, 20);')
+    assert out["v"] == "day"
+
+
+def test_validate_accepts_golden_hour_bucket_and_rejects_bad_part():
+    good = {"version": 1, "fallbackImage": "background.jpg", "dayparts": {"day": [], "golden-hour": [{"id": "g1", "file": "g.mp4", "daypart": "golden-hour", "kind": "video"}], "night": []}}
+    bad = {"version": 1, "fallbackImage": "background.jpg", "dayparts": {"day": [], "golden-hour": "nope", "night": []}}
+    out = run_js("out.good = Catalog.validateCatalog(%s); out.bad = Catalog.validateCatalog(%s);" % (json.dumps(good), json.dumps(bad)))
+    assert out["good"]["ok"] is True, out["good"]["errors"]
+    assert out["bad"]["ok"] is False
 
 
 def test_validate_accepts_shipped_catalog():

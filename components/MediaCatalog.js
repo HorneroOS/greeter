@@ -5,7 +5,10 @@
 // ("import \"MediaCatalog.js\" as Catalog") and testable from plain node.
 // There is deliberately no network, no shell, and no filesystem access.
 
-var DAYPARTS = ["day", "night", "any"];
+var DAYPARTS = ["day", "golden-hour", "night", "any"];
+// Daypart buckets present in a catalog file. day/night are required;
+// golden-hour is optional (missing means an empty golden-hour bucket).
+var CATALOG_PARTS = ["day", "golden-hour", "night"];
 var MIN_CROSSFADE_MS = 2000;
 var MAX_CROSSFADE_MS = 4000;
 var DEFAULT_CROSSFADE_MS = 3000;
@@ -59,12 +62,15 @@ function validateCatalog(obj) {
         errors.push("catalog.fallbackImage must be a local relative path");
     }
     if (obj.dayparts === null || typeof obj.dayparts !== "object" || Array.isArray(obj.dayparts)) {
-        errors.push("catalog.dayparts must be an object with day/night arrays");
+        errors.push("catalog.dayparts must be an object with day/night arrays (golden-hour optional)");
         return { ok: errors.length === 0, errors: errors };
     }
     var seen = {};
-    ["day", "night"].forEach(function (part) {
+    CATALOG_PARTS.forEach(function (part) {
         var list = obj.dayparts[part];
+        if (list === undefined && part === "golden-hour") {
+            return;
+        }
         if (!Array.isArray(list)) {
             errors.push("catalog.dayparts." + part + " must be an array");
             return;
@@ -86,7 +92,7 @@ function validateCatalog(obj) {
                 errors.push(where + ".file must be a local relative path");
             }
             if (DAYPARTS.indexOf(entry.daypart) === -1) {
-                errors.push(where + ".daypart must be one of day/night/any");
+                errors.push(where + ".daypart must be one of day/golden-hour/night/any");
             }
             if (entry.kind !== "video") {
                 errors.push(where + ".kind must be \"video\"");
@@ -108,13 +114,37 @@ function isDay(hour, start, end) {
     return h >= s && h <= e;
 }
 
+function inWindow(hour, start, end) {
+    var h = parseInt(hour, 10);
+    var s = parseInt(start, 10);
+    var e = parseInt(end, 10);
+    if (isNaN(h) || isNaN(s) || isNaN(e)) {
+        return false;
+    }
+    return h >= s && h <= e;
+}
+
+// Daypart moods for the background deck: "day", "golden-hour" or "night".
+// The golden-hour window is checked first so an evening mood can overlap
+// the tail of the day window. Unparseable input falls back to "day".
+function daypartForHour(hour, dayStart, dayEnd, goldenStart, goldenEnd) {
+    if (inWindow(hour, goldenStart, goldenEnd)) {
+        return "golden-hour";
+    }
+    if (isDay(hour, dayStart, dayEnd)) {
+        return "day";
+    }
+    return "night";
+}
+
 function entriesForDaypart(catalog, daypart) {
     if (!catalog || !catalog.dayparts || !Array.isArray(catalog.dayparts[daypart])) {
         return [];
     }
     var out = [];
-    ["day", "night"].forEach(function (part) {
-        catalog.dayparts[part].forEach(function (entry) {
+    CATALOG_PARTS.forEach(function (part) {
+        var list = catalog.dayparts[part] || [];
+        list.forEach(function (entry) {
             if (entry.daypart === daypart || entry.daypart === "any") {
                 out.push(entry);
             }

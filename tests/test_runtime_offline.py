@@ -13,6 +13,7 @@ NO_NETWORK_FILES = sorted(
     + list((REPO_ROOT / "components").glob("*.qml"))
     + list((REPO_ROOT / "components").glob("*.js"))
     + [REPO_ROOT / "media" / "catalog.json"]
+    + [REPO_ROOT / "media" / "catalog.js"]
     + [REPO_ROOT / "theme.conf"]
 )
 
@@ -83,3 +84,17 @@ def test_no_home_or_dotfile_references(runtime_text):
 
 def test_no_remote_playlists_left_behind():
     assert not (REPO_ROOT / "playlists").exists()
+
+
+def test_no_xhr_for_local_files():
+    # Qt disables XMLHttpRequest GET on local files by default: an
+    # XHR-loaded catalog silently never arrives and no video ever plays.
+    # The runtime catalog must be imported synchronously instead.
+    main = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
+    assert "XMLHttpRequest" not in main
+
+
+def test_runtime_catalog_is_generated_module():
+    text = (REPO_ROOT / "media" / "catalog.js").read_text(encoding="utf-8")
+    assert "var CATALOG" in text
+    assert "build-catalog" in text

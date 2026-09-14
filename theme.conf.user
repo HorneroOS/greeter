@@ -1,7 +1,6 @@
 [General]
 dayTimeStart=7
 dayTimeEnd=19
-mediaManifest=media/catalog.json
 videoEnabled=true
 crossfadeDuration=3000
 testMode=false
