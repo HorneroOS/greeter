@@ -45,7 +45,22 @@ footage, not the code.
 Qt6 reference consulted during the port: Keyitdev/sddm-astronaut-theme
 (unversioned `QtMultimedia` import, `QtQuick.Effects` usage).
 
-## Hornero identity (`feat/hornero-identity`)
+## Fidelity restoration (upstream look, Argentina footage)
+
+The `feat/hornero-identity` redesign (cinematic hero, location label,
+avatar, hairline fields, terracotta palette) was reverted: the greeter
+now reproduces the upstream layout verbatim — centered clock column,
+label-left login rows, top action bar, upstream fonts/sizes/colors —
+and the ONLY intentional difference is local Argentina clips instead of
+the streamed playlists. `tests/test_upstream_fidelity.py` pins this
+contract (upstream values, structure, and the absence of redesign
+markers). Kept from the port: the `MediaDeck` local sequencer, the
+`FontLoader.name` read-only workaround, and the functional `theme.conf`
+keys (`videoEnabled`, `crossfadeDuration`, `testMode`, golden-hour
+window). Upstream `bgVidDay/bgVidNight` (`playlists/*.m3u`) stay out:
+streaming playlists violate the offline invariant.
+
+## Hornero identity (`feat/hornero-identity`, superseded)
 
 - `Main.qml` was redesigned around a Hornero-native cinematic hero: warm
   charcoal surfaces, earth browns, terracotta and burnt-orange accents,
