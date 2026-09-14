@@ -1,0 +1,29 @@
+# Maintainer: HorneroOS <horneroos@example.com>
+pkgname=hornero-greeter
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='HorneroOS SDDM greeter theme (Argentina footage, offline)'
+arch=('any')
+url='https://github.com/HorneroOS/greeter'
+license=('GPL-3.0-only')
+depends=('sddm' 'qt5-multimedia' 'gst-plugins-good')
+optdepends=('hornero-greeter-media-base: Argentina video pack')
+source=()
+sha256sums=()
+
+package() {
+  install -d "$pkgdir/usr/share/sddm/themes/hornero"
+  # Theme payload: QML, configs, static fallback (built from this repo).
+  cp -a "$srcdir/../../Main.qml" "$pkgdir/usr/share/sddm/themes/hornero/" 2>/dev/null || \
+    cp -a Main.qml "$pkgdir/usr/share/sddm/themes/hornero/"
+  for f in theme.conf theme.conf.user metadata.desktop background.jpg; do
+    [ -e "$f" ] && cp -a "$f" "$pkgdir/usr/share/sddm/themes/hornero/"
+  done
+  [ -d components ] && cp -a components "$pkgdir/usr/share/sddm/themes/hornero/"
+  # Layered SDDM snippet: selects this theme WITHOUT rewriting /etc/sddm.conf.
+  install -Dm644 "$srcdir/hornero.conf" "$pkgdir/etc/sddm.conf.d/10-hornero.conf" 2>/dev/null || \
+    install -Dm644 packaging/arch/hornero-greeter/hornero.conf "$pkgdir/etc/sddm.conf.d/10-hornero.conf"
+  # sddm-readable permissions throughout.
+  find "$pkgdir" -type d -exec chmod 0755 {} +
+  find "$pkgdir" -type f -exec chmod 0644 {} +
+}
