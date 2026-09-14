@@ -29,13 +29,15 @@ Item {
     property var _idlePlayer: playerB
     property var _idleOutput: videoB
 
-    signal showFallback()
-    signal backgroundPressed()
+    signal showFallback
+    signal backgroundPressed
 
     function _makeSequencer() {
         var entries = Catalog.entriesForDaypart(catalog, daypart);
         var seed = testMode ? Catalog.TEST_SEED : -1;
-        var opts = { maxErrors: maxErrors };
+        var opts = {
+            maxErrors: maxErrors
+        };
         if (testMode) {
             opts.seed = seed;
         }

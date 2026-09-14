@@ -8,7 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Qt6 QML tooling
-        run: sudo apt-get update && sudo apt-get install -y qt6-declarative-dev qt6-multimedia-dev python3-pytest nodejs
+        run: |
+          sudo apt-get update && sudo apt-get install -y qt6-declarative-dev qt6-multimedia-dev python3-pytest nodejs
+          # qmllint/qmlformat ship in the declarative tools package, not -dev.
+          sudo apt-get install -y qt6-declarative-dev-tools || sudo apt-get install -y qt6-declarative-devtools
+          echo "/usr/lib/qt6/bin" >> "$GITHUB_PATH"
       - name: QML lint and format check
         run: sh scripts/qml-lint.sh
       - name: Unit tests

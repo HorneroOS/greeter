@@ -48,24 +48,24 @@ Rectangle {
         // Local media catalog (media/catalog.json). A missing or invalid
         // catalog simply leaves the static image visible.
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState !== XMLHttpRequest.DONE)
-                return ;
+                return;
 
             if (xhr.status !== 200 && xhr.status !== 0)
-                return ;
+                return;
 
             var raw = null;
             try {
                 raw = JSON.parse(xhr.responseText);
             } catch (e) {
-                return ;
+                return;
             }
             if (!Catalog.validateCatalog(raw).ok)
-                return ;
+                return;
 
             var resolve = function resolve(list) {
-                return list.map(function(e) {
+                return list.map(function (e) {
                     return {
                         "id": e.id,
                         "daypart": e.daypart,
@@ -90,7 +90,6 @@ Rectangle {
         clear_passwd_button.visible = false;
         if (config.autofocusInput == "true")
             loginRevealTimer.start();
-
     }
 
     // Inherited from SDDMComponents
@@ -206,9 +205,7 @@ Rectangle {
                 position: 1
                 color: "#E6140D08"
             }
-
         }
-
     }
 
     Rectangle {
@@ -236,9 +233,7 @@ Rectangle {
                 position: 1
                 color: "#7A140D08"
             }
-
         }
-
     }
 
     // Gentle auto-reveal so the login surface appears on its own shortly
@@ -295,7 +290,6 @@ Rectangle {
                     repeat: true
                     onTriggered: time.dateTime = new Date()
                 }
-
             }
 
             Text {
@@ -391,7 +385,6 @@ Rectangle {
                                 source: config.avatarImage || ""
                                 visible: status === Image.Ready
                             }
-
                         }
 
                         Column {
@@ -435,9 +428,7 @@ Rectangle {
                                 KeyNavigation.backtab: language
                                 KeyNavigation.tab: password_input_box
                             }
-
                         }
-
                     }
 
                     Text {
@@ -476,7 +467,6 @@ Rectangle {
 
                                 if (password_input_box.text != "" && config.showClearPasswordButton != "false")
                                     clear_passwd_button.visible = true;
-
                             }
                             Keys.onPressed: {
                                 if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -528,7 +518,6 @@ Rectangle {
                             KeyNavigation.backtab: password_input_box
                             KeyNavigation.tab: reboot_button
                         }
-
                     }
 
                     Text {
@@ -540,13 +529,9 @@ Rectangle {
                         font.bold: true
                         wrapMode: Text.WordWrap
                     }
-
                 }
-
             }
-
         }
-
     }
 
     // Top Bar
@@ -626,11 +611,8 @@ Rectangle {
                         font.bold: true
                         color: container.cream
                     }
-
                 }
-
             }
-
         }
 
         Row {
@@ -662,9 +644,6 @@ Rectangle {
                 KeyNavigation.backtab: reboot_button
                 KeyNavigation.tab: session
             }
-
         }
-
     }
-
 }

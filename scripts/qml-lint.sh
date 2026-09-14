@@ -8,6 +8,14 @@
 set -eu
 
 ROOT=$(dirname "$(dirname "$0")")
+# Qt6 CLI tools live in /usr/lib/qt6/bin, which is often absent from PATH
+# (e.g. GitHub Actions runners). Pick it up when present so a missing tool
+# fails loudly below instead of producing a bogus "not formatted" report.
+if [ -d /usr/lib/qt6/bin ] && ! command -v qmllint >/dev/null 2>&1; then
+  PATH="/usr/lib/qt6/bin:$PATH"
+fi
+command -v qmllint >/dev/null 2>&1 || { echo "error: qmllint not found (install qt6-declarative-dev-tools)"; exit 1; }
+command -v qmlformat >/dev/null 2>&1 || { echo "error: qmlformat not found (install qt6-declarative-dev-tools)"; exit 1; }
 QML_FILES=$(find "$ROOT" -maxdepth 1 -name '*.qml' -o -path "$ROOT/components/*.qml" | sort)
 QML_IMPORT=""
 for cand in /usr/lib/qt6/qml /usr/lib/x86_64-linux-gnu/qt6/qml; do
