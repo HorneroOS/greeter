@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Qt6 QML tooling
         run: |
-          sudo apt-get update && sudo apt-get install -y qt6-declarative-dev qt6-multimedia-dev python3-pytest nodejs
+          sudo apt-get update && sudo apt-get install -y qt6-declarative-dev qt6-multimedia-dev python3-pytest nodejs ffmpeg
           # qmllint/qmlformat ship in the declarative tools package, not -dev.
           sudo apt-get install -y qt6-declarative-dev-tools || sudo apt-get install -y qt6-declarative-devtools
           # SDDM ships the SddmComponents QML module qmllint needs to
