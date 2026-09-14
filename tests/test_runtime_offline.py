@@ -90,8 +90,9 @@ def test_no_xhr_for_local_files():
     # Qt disables XMLHttpRequest GET on local files by default: an
     # XHR-loaded catalog silently never arrives and no video ever plays.
     # The runtime catalog must be imported synchronously instead.
+    # (The word may appear in comments documenting this ban.)
     main = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
-    assert "XMLHttpRequest" not in main
+    assert "new XMLHttpRequest" not in main
 
 
 def test_runtime_catalog_is_generated_module():

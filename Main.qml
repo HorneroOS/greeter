@@ -60,7 +60,7 @@ Rectangle {
         var raw = CatalogData.CATALOG;
         if (Catalog.validateCatalog(raw).ok) {
             var resolve = function resolve(list) {
-                return list.map(function(e) {
+                return list.map(function (e) {
                     return {
                         "id": e.id,
                         "daypart": e.daypart,
@@ -84,7 +84,6 @@ Rectangle {
         clear_passwd_button.visible = false;
         if (config.autofocusInput == "true")
             loginRevealTimer.start();
-
     }
 
     // Inherited from SDDMComponents
@@ -200,9 +199,7 @@ Rectangle {
                 position: 1
                 color: "#E6140D08"
             }
-
         }
-
     }
 
     Rectangle {
@@ -230,9 +227,7 @@ Rectangle {
                 position: 1
                 color: "#7A140D08"
             }
-
         }
-
     }
 
     // Gentle auto-reveal so the login surface appears on its own shortly
@@ -289,7 +284,6 @@ Rectangle {
                     repeat: true
                     onTriggered: time.dateTime = new Date()
                 }
-
             }
 
             Text {
@@ -331,7 +325,6 @@ Rectangle {
                     style: Text.Raised
                     styleColor: "#66000000"
                 }
-
             }
 
             // Borderless login surface: hairline fields directly on the
@@ -400,7 +393,6 @@ Rectangle {
                                 source: config.avatarImage || ""
                                 visible: status === Image.Ready
                             }
-
                         }
 
                         Column {
@@ -458,9 +450,7 @@ Rectangle {
                                 height: 1
                                 color: username_input_box.activeFocus ? container.hairlineFocus : container.hairline
                             }
-
                         }
-
                     }
 
                     Text {
@@ -505,7 +495,6 @@ Rectangle {
 
                                 if (password_input_box.text != "" && config.showClearPasswordButton != "false")
                                     clear_passwd_button.visible = true;
-
                             }
                             Keys.onPressed: {
                                 if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -561,7 +550,6 @@ Rectangle {
                             KeyNavigation.backtab: password_input_box
                             KeyNavigation.tab: reboot_button
                         }
-
                     }
 
                     Rectangle {
@@ -579,13 +567,9 @@ Rectangle {
                         font.bold: true
                         wrapMode: Text.WordWrap
                     }
-
                 }
-
             }
-
         }
-
     }
 
     // Top bar: transparent overlay, visually secondary. Session and
@@ -668,11 +652,8 @@ Rectangle {
                         font.bold: true
                         color: container.cream
                     }
-
                 }
-
             }
-
         }
 
         Row {
@@ -708,9 +689,6 @@ Rectangle {
                 KeyNavigation.backtab: reboot_button
                 KeyNavigation.tab: session
             }
-
         }
-
     }
-
 }
