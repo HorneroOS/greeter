@@ -1,0 +1,43 @@
+{
+  "id": "ar-rn-dina-huapi-timelapse",
+  "title": "Time-lapse of Patagonia (Nahuel Huapi / Dina Huapi)",
+  "location": {
+    "place": "Nahuel Huapi lake area, Dina Huapi",
+    "province": "Rio Negro",
+    "region": "Patagonia Norte",
+    "country": "Argentina"
+  },
+  "creator": "Erico Schulz (via Vimeo)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Time-lapse_of_Patagonia,_Argentina.webm",
+    "file": "Time-lapse of Patagonia, Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2016-05-25",
+    "evidence": "Vimeo-sourced import via video2commons claiming CC BY 3.0, but no reviewer confirmation exists on the file page (no LicenseReview reviewer entry, no reviewed-license category). Verify the archived Vimeo source license before promotion. DO NOT SHIP until confirmed."
+  },
+  "original": {
+    "bytes": 9215840,
+    "sha256": null,
+    "duration_s": 46.2,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 46.2,
+    "crop": "none (native 16:9 landscape, no audio track to strip)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "PARKED: ideal greeter material (1080p, 16:9, silent, Dina Huapi/Nahuel Huapi). Promotion path: confirm the archived Vimeo source carried CC BY, record reviewer evidence, then fetch original and record SHA256."
+}

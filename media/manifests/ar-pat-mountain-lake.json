@@ -1,0 +1,43 @@
+{
+  "id": "ar-pat-mountain-lake",
+  "title": "Mountain lake in Patagonia",
+  "location": {
+    "place": "Unspecified mountain lake, Patagonia",
+    "province": "Unspecified",
+    "region": "Patagonia",
+    "country": "Argentina"
+  },
+  "creator": "Tamtam90",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Un_lago_de_montana_en_la_Patagonia.webm",
+    "file": "Un lago de montana en la Patagonia.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2016-05-09",
+    "evidence": "Self-published work: uploader asserts own work under CC BY-SA 4.0 on the source page (categories: Self-published work, CC-BY-SA-4.0, Patagonia)."
+  },
+  "original": {
+    "bytes": 636820,
+    "sha256": "d037b67fecf85d4d03cabeeb6bec6f8ed403fd5fd4a45ecd0431a2f767143a22",
+    "duration_s": 4.0,
+    "width": 1280,
+    "height": 720,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 4.0,
+    "crop": "none (native 16:9 landscape)",
+    "scale": "keep 720p; loop the 4 s clip for a longer slot",
+    "audio": "strip"
+  },
+  "notes": "Very short ambient filler (4 s). Exact lake is not identified on the source page; province is recorded as Unspecified until the author clarifies. Replace with a located clip when available (see MEDIA_ROADMAP.md)."
+}

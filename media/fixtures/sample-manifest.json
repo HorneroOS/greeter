@@ -1,0 +1,43 @@
+{
+  "id": "ar-example-sample",
+  "title": "EXAMPLE - schema fixture, not a real clip",
+  "location": {
+    "place": "Example City",
+    "province": "Example Province",
+    "region": "Example Region",
+    "country": "Argentina"
+  },
+  "creator": "Example Author",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Example.webm",
+    "file": "Example.webm"
+  },
+  "license": {
+    "short": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2026-01-01",
+    "evidence": "EXAMPLE fixture: demonstrates the required fields. Not a real clip, never packaged."
+  },
+  "original": {
+    "bytes": 1,
+    "sha256": null,
+    "duration_s": 1.0,
+    "width": 16,
+    "height": 9,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 1.0,
+    "crop": "none",
+    "scale": "none",
+    "audio": "strip"
+  },
+  "notes": "EXAMPLE fixture for contributors and validator tests. Tiny by design: no video binaries belong in git."
+}

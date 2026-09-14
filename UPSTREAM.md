@@ -1,12 +1,26 @@
-# Upstream attribution
+# Upstream provenance
 
-This theme is derived from the **aerial-sddm-theme** by Fabio Almeida
-(3ximus):
+This theme starts from the **aerial-sddm-theme** project by Fabio Almeida
+(`3ximus/aerial-sddm-theme`), which plays Apple TV aerial videos behind an
+SDDM login screen.
 
-- Upstream repository: <https://github.com/3ximus/aerial-sddm-theme>
-- Imported into HorneroOS/greeter as commit `d198df6`
-  (`chore: import 3ximus/aerial-sddm-theme upstream`).
-- Upstream license: GNU General Public License v3.0 (see `LICENSE`).
+- Upstream repository: https://github.com/3ximus/aerial-sddm-theme
+- Imported as: `chore: import 3ximus/aerial-sddm-theme upstream`
+  (commit `2499e0d` on `main`).
+- Upstream license: **GPL-3.0** (`LICENSE`, kept verbatim). This project
+  stays GPL-3.0.
+- Upstream attribution is preserved in `NOTICE` and in the original theme
+  files (`metadata.desktop`, `README.md`).
+
+## What HorneroOS changes
+
+HorneroOS replaces the Apple TV footage (non-redistributable) with freely
+licensed footage of Argentina, curated under `media/` with per-clip source
+manifests, and ports the theme to Qt6. The upstream code remains credited
+above; every new file in this repository is likewise GPL-3.0 unless its
+own header says otherwise. Per-clip video licenses (CC BY / CC BY-SA) are
+recorded in each manifest and summarized in `NOTICE`; they govern the
+footage, not the code.
 
 ## What changed in the Qt6 migration (`feat/qt6-migration`)
 
@@ -18,7 +32,7 @@ This theme is derived from the **aerial-sddm-theme** by Fabio Almeida
 - The upstream HTTP video playlists (`playlists/*.m3u`, streaming Apple TV
   aerial clips) were removed: the greeter must run with zero network
   access. They are replaced by a local sequencer: `components/MediaDeck.qml`
-  driven by `components/MediaCatalog.js` and `media/catalog.json`.
+  driven by `components/MediaCatalog.js` and the generated `media/catalog.js` (built from `media/catalog.json`).
 - `components/WallpaperFader.qml` was reworked on `MultiEffect` and its
   default state was fixed (the old default referenced
   `lockScreenRoot.uiVisible`, which does not exist in an SDDM greeter).

@@ -1,0 +1,25 @@
+# Build and tooling output
+**/*.qmlc
+
+# Transcoded clips and staging (originals are fetched at build time,
+# verified against media/manifests, and never committed)
+/playlist_videos/*
+/videos/*
+*.webm
+*.mp4
+*.m4v
+*.ogv
+*.ogg
+*.ogm
+*.mov
+*.mkv
+*.avi
+*.flv
+*.wmv
+
+# Editor and OS noise
+*~
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

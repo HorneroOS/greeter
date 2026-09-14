@@ -1,0 +1,43 @@
+{
+  "id": "ar-noa-purmamarca-salinas-cafayate",
+  "title": "Purmamarca, Salinas Grandes, Salta and Cafayate aerials",
+  "location": {
+    "place": "Purmamarca and Salinas Grandes (Jujuy), Salta, Cafayate",
+    "province": "Jujuy / Salta",
+    "region": "Noroeste (NOA)",
+    "country": "Argentina"
+  },
+  "creator": "Views4k (via YouTube)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Purmamarca,_Las_Salinas_Grandes_de_Jujuy,_Salta_y_Cafayate.webm",
+    "file": "Purmamarca, Las Salinas Grandes de Jujuy, Salta y Cafayate.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "license-review-needed",
+    "reviewer": null,
+    "date": "2021-06-20",
+    "evidence": "Bare LicenseReview template on the source page; file carries Category:License review needed (video). Claimed YouTube CC BY 3.0 by Views4k, NOT yet confirmed by a reviewer. DO NOT SHIP until the review clears."
+  },
+  "original": {
+    "bytes": 97827679,
+    "sha256": null,
+    "duration_s": 101.8,
+    "width": 2560,
+    "height": 1440,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 101.8,
+    "crop": "undecided: select a 20-30 s 16:9 segment after review clears (covers Hornocal/Salinas/Purmamarca/Cafayate target areas; trim placeholder covers the full file)",
+    "scale": "downscale selection to 1080p",
+    "audio": "strip"
+  },
+  "notes": "PARKED: highest-value NOA candidate (1440p, covers Purmamarca, Salinas Grandes, Salta, Cafayate in one file). Promotion requires reviewer-confirmed license, then fetch, SHA256, and trim selection."
+}

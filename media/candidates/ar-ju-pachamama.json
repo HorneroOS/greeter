@@ -1,0 +1,43 @@
+{
+  "id": "ar-ju-pachamama",
+  "title": "Journey to the heart of Pachamama, Jujuy",
+  "location": {
+    "place": "Quebrada de Humahuaca area, Jujuy",
+    "province": "Jujuy",
+    "region": "Noroeste (NOA)",
+    "country": "Argentina"
+  },
+  "creator": "Eco Destinos (via YouTube)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Un_viaje_al_coraz%C3%B3n_de_la_Pachamama,_Jujuy,_Argentina.webm",
+    "file": "Un viaje al corazón de la Pachamama, Jujuy, Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0"
+  },
+  "review": {
+    "status": "license-review-needed",
+    "reviewer": null,
+    "date": "2025-10-11",
+    "evidence": "Bare LicenseReview template on the source page; file carries Category:License review needed (video). Claimed YouTube CC BY 4.0 by Eco Destinos, NOT yet confirmed by a reviewer. DO NOT SHIP until the review clears."
+  },
+  "original": {
+    "bytes": 152775458,
+    "sha256": null,
+    "duration_s": 568.1,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 568.1,
+    "crop": "undecided: select a 20-30 s landscape segment after review clears (trim placeholder covers the full file)",
+    "scale": "downscale selection to 1080p",
+    "audio": "strip"
+  },
+  "notes": "PARKED: 9.5-minute vlog-style video; needs segment selection plus license review. Promotion requires: reviewer-confirmed license on the source page, then fetch original, record SHA256, and pick trim."
+}

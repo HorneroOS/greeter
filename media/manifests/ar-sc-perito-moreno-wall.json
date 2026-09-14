@@ -1,0 +1,43 @@
+{
+  "id": "ar-sc-perito-moreno-wall",
+  "title": "Perito Moreno glacier ice wall on Lago Argentino",
+  "location": {
+    "place": "Los Glaciares National Park, near El Calafate",
+    "province": "Santa Cruz",
+    "region": "Patagonia",
+    "country": "Argentina"
+  },
+  "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Muro_de_hielo_del_Glaciar_Perito_Moreno_en_el_Lago_Argentino.webm",
+    "file": "Muro de hielo del Glaciar Perito Moreno en el Lago Argentino.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2025-12-10",
+    "evidence": "Self-published work uploaded via Campaign:wsc-ar (Wiki Science Competition 2025 in Argentina); uploader asserts own work under CC BY-SA 4.0 (categories: Self-published work, CC-BY-SA-4.0, Perito Moreno Glacier)."
+  },
+  "original": {
+    "bytes": 25334378,
+    "sha256": "55b6805e82198a2728478ac67c3ece485027fdec428e07f9cc63198676d058f0",
+    "duration_s": 50.0,
+    "width": 2160,
+    "height": 3840,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 5,
+    "trim_end_s": 35,
+    "crop": "portrait 2160x3840 to 16:9 landscape: center-crop 2160x1216 band (heavy crop, interim solution; prefer a landscape re-shoot long term)",
+    "scale": "downscale crop to 1080p",
+    "audio": "strip"
+  },
+  "notes": "Portrait source requires a heavy center crop; verify the cropped band keeps the ice wall framed before shipping the transcode. Pairs with ar-sc-perito-moreno-calving (same authors, same shoot)."
+}
