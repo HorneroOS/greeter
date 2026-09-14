@@ -34,24 +34,24 @@ Rectangle {
         // Local media catalog (media/catalog.json). A missing or invalid
         // catalog simply leaves the static image visible.
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState !== XMLHttpRequest.DONE)
-                return ;
+                return;
 
             if (xhr.status !== 200 && xhr.status !== 0)
-                return ;
+                return;
 
             var raw = null;
             try {
                 raw = JSON.parse(xhr.responseText);
             } catch (e) {
-                return ;
+                return;
             }
             if (!Catalog.validateCatalog(raw).ok)
-                return ;
+                return;
 
             var resolve = function resolve(list) {
-                return list.map(function(e) {
+                return list.map(function (e) {
                     return {
                         "id": e.id,
                         "daypart": e.daypart,
@@ -211,7 +211,6 @@ Rectangle {
                 font.pointSize: config.dateFontSize
                 font.bold: true
             }
-
         }
 
         Rectangle {
@@ -272,7 +271,6 @@ Rectangle {
                     KeyNavigation.backtab: password_input_box
                     KeyNavigation.tab: password_input_box
                 }
-
             }
 
             Rectangle {
@@ -321,7 +319,6 @@ Rectangle {
 
                         if (password_input_box.text != "" && config.showClearPasswordButton != "false")
                             clear_passwd_button.visible = true;
-
                     }
                     Keys.onPressed: {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -389,11 +386,8 @@ Rectangle {
                     anchors.left: password_input_box.left
                     anchors.leftMargin: 0
                 }
-
             }
-
         }
-
     }
 
     // Top Bar
@@ -474,11 +468,8 @@ Rectangle {
                         font.bold: true
                         color: config.actionBarFontColor
                     }
-
                 }
-
             }
-
         }
 
         Row {
@@ -510,9 +501,6 @@ Rectangle {
                 KeyNavigation.backtab: reboot_button
                 KeyNavigation.tab: session
             }
-
         }
-
     }
-
 }
