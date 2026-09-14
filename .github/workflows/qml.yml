@@ -14,8 +14,14 @@ jobs:
           sudo apt-get install -y qt6-declarative-dev-tools || sudo apt-get install -y qt6-declarative-devtools
           # SDDM ships the SddmComponents QML module qmllint needs to
           # resolve theme context (sddm/session/userModel/...) instead of
-          # warning on every unqualified access.
-          sudo apt-get install -y sddm
+          # warning on every unqualified access; the QtMultimedia module
+          # covers the MediaDeck players.
+          sudo apt-get install -y sddm qml6-module-qtmultimedia
+          # Version-pinned Qt tools (must match scripts/qml-lint.sh): distro
+          # qmlformat output drifts between Qt releases, so CI formats and
+          # lints with the exact same binaries developers use.
+          sudo apt-get install -y python3-pip
+          python3 -m pip install --break-system-packages "PySide6-Essentials==6.11.*"
           echo "/usr/lib/qt6/bin" >> "$GITHUB_PATH"
       - name: QML lint and format check
         run: sh scripts/qml-lint.sh
