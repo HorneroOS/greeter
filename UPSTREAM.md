@@ -30,3 +30,33 @@ This theme is derived from the **aerial-sddm-theme** by Fabio Almeida
 
 Qt6 reference consulted during the port: Keyitdev/sddm-astronaut-theme
 (unversioned `QtMultimedia` import, `QtQuick.Effects` usage).
+
+## Hornero identity (`feat/hornero-identity`)
+
+- `Main.qml` was redesigned around a Hornero-native cinematic hero: warm
+  charcoal surfaces, earth browns, terracotta and burnt-orange accents,
+  cream type. The video hero keeps `PreserveAspectCrop` and is graded with
+  a warm tint wash, a vertical legibility gradient and a horizontal
+  vignette; below it sit a large clock, date, a subtle location label (no
+  URLs on screen) and one minimal login card.
+- The login card adds an optional avatar (`showAvatar` / `avatarImage`
+  theme keys, local relative paths only) with a graceful initial-letter
+  fallback medallion. Password entry stays masked via `PasswordBox`; the
+  full keyboard flow (Tab chain across user, password, login, power,
+  session and layout controls, Enter to log in, Escape to clear) is kept.
+- Layout is resolution-independent: a `uiScale` factor derived from the
+  screen size (1.0 at 1280x720, clamped) drives hero width, card metrics
+  and font sizes, covering 720p, 1080p, 1440p and HiDPI from one file.
+- New `theme.conf` keys: `locationLabel`, `locationFontSize`,
+  `showAvatar`, `avatarImage`, `creamColor`, `mutedColor`, `accentColor`,
+  `terracottaColor`, `surfaceColor`, `surfaceBorderColor`. All prior keys
+  keep their meaning.
+- Fixed a latent Qt6 bug the port carried over: `FontLoader { name: ... }`
+  is a read-only property in Qt6 and aborts theme loading at runtime
+  (caught by previewing under `sddm-greeter-qt6 --test-mode`). The display
+  font family now binds directly from `theme.conf`.
+- New `scripts/preview.sh` stages a throwaway theme directory (symlinks,
+  repo stays read-only), builds local fixture clips from `background.jpg`
+  with ffmpeg (no downloads), and runs `sddm-greeter-qt6 --test-mode`
+  with optional `grim`/x11grab screenshots, HiDPI scale and a static
+  fallback (`--static`) mode.

@@ -29,19 +29,21 @@ def test_fallback_image_is_local_and_exists(catalog):
 
 
 def test_daypart_arrays_present(catalog):
-    assert set(catalog["dayparts"]) == {"day", "night"}
+    assert {"day", "night"} <= set(catalog["dayparts"]) <= {"day", "golden-hour", "night"}
     assert isinstance(catalog["dayparts"]["day"], list)
     assert isinstance(catalog["dayparts"]["night"], list)
+    if "golden-hour" in catalog["dayparts"]:
+        assert isinstance(catalog["dayparts"]["golden-hour"], list)
 
 
 def test_entries_have_unique_ids_and_valid_shape(catalog):
     seen = set()
-    for part in ("day", "night"):
+    for part in catalog["dayparts"]:
         for entry in catalog["dayparts"][part]:
             assert isinstance(entry["id"], str) and entry["id"]
             assert entry["id"] not in seen, f"duplicate id {entry['id']}"
             seen.add(entry["id"])
-            assert entry["daypart"] in ("day", "night", "any")
+            assert entry["daypart"] in ("day", "golden-hour", "night", "any")
             assert entry["kind"] == "video"
 
 
@@ -51,7 +53,7 @@ def test_no_remote_urls_anywhere_in_catalog(catalog):
 
 
 def test_referenced_files_exist_and_are_local(catalog):
-    for part in ("day", "night"):
+    for part in catalog["dayparts"]:
         for entry in catalog["dayparts"][part]:
             assert not entry["file"].startswith(("http://", "https://", "/", "~"))
             assert (REPO_ROOT / entry["file"]).is_file(), entry["file"]

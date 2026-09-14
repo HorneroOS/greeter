@@ -117,11 +117,14 @@ attribution and the full license text.
 The theme was migrated from Qt5 to Qt6: `QMediaPlaylist` is gone, so
 background video is sequenced by `components/MediaDeck.qml` (dual Qt6
 `MediaPlayer`/`VideoOutput` pairs with a 2-4 s crossfade) driven by
-`components/MediaCatalog.js` and the local `media/catalog.json`.
+`components/MediaCatalog.js` and the generated `media/catalog.js`
+(regenerate from the `media/catalog.json` source of truth with
+`scripts/media/build-catalog`; Qt disables XHR GET on local files, so the
+runtime catalog is imported synchronously, never fetched).
 No network is used at runtime; with no local clips (or with
 `videoEnabled=false`) the greeter falls back to `background.jpg`.
-New `theme.conf` keys: `mediaManifest`, `videoEnabled`,
-`crossfadeDuration`, `testMode`. See `media/README.md` for the pack format.
+New `theme.conf` keys: `videoEnabled`, `crossfadeDuration`, `testMode`.
+See `media/README.md` for the pack format.
 
 ## QML lint, format, and tests
 
