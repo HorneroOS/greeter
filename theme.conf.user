@@ -1,8 +1,9 @@
 [General]
 dayTimeStart=7
 dayTimeEnd=19
-bgVidDay=playlists/day.m3u
-bgVidNight=playlists/night.m3u
+videoEnabled=true
+crossfadeDuration=3000
+testMode=false
 displayFont="Misc Fixed"
 passwordLeftMargin=15
 relativePositionX=0.5
