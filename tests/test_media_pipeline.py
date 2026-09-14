@@ -1,6 +1,7 @@
 """Media pipeline + packaging tests (offline; fixture only, no downloads)."""
 
 import json
+import shutil
 import stat
 import subprocess
 import sys
@@ -20,6 +21,18 @@ def run(*args):
     proc = subprocess.run(list(args), capture_output=True, text=True, cwd=REPO)
     assert proc.returncode == 0, f"{args} failed: {proc.stderr[-2000:]}"
     return proc
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _clean_pipeline_artifacts():
+    """build/, dist/ and .cache/ are gitignored staging areas: the suite
+    must not leave video files behind (the catalog validator fails on
+    any video binary in the repo), so clean before and after."""
+    for name in ("build", "dist", ".cache"):
+        shutil.rmtree(REPO / name, ignore_errors=True)
+    yield
+    for name in ("build", "dist", ".cache"):
+        shutil.rmtree(REPO / name, ignore_errors=True)
 
 
 def test_manifests_load_and_licenses_allowlisted():

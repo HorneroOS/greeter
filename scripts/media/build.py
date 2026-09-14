@@ -157,6 +157,23 @@ def build_fixture():
     return dest
 
 
+def fixture_manifest():
+    """Manifest-shaped record for the synthetic offline fixture clip."""
+    return {
+        "id": FIXTURE_ID,
+        "title": "EXAMPLE - schema fixture, not a real clip",
+        "location": {"place": "Example City", "province": "Example Province",
+                     "region": "Example Region", "country": "Argentina"},
+        "creator": "Example Author",
+        "source": {"page": "https://commons.wikimedia.org/wiki/File:Example.webm",
+                   "file": "Example.webm"},
+        "license": {"short": "CC-BY-4.0",
+                    "name": "Creative Commons Attribution 4.0",
+                    "url": "https://creativecommons.org/licenses/by/4.0"},
+        "dayparts": ["day"],
+    }
+
+
 def write_generated(manifests):
     """catalog.json / catalog.csv / MEDIA_LICENSES.md / ATTRIBUTION.md."""
     entries = []
@@ -222,7 +239,8 @@ def main(argv=None):
             return 2
     if args.fixture:
         dest = build_fixture()
-        print(f"fixture OK: {dest.name}")
+        write_generated([(None, fixture_manifest())])
+        print(f"fixture OK: {dest.name} + generated catalog/licenses")
         return 0
     manifests = load_manifests()
     if args.id:
