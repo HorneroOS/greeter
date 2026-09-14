@@ -1,0 +1,43 @@
+{
+  "id": "ar-sa-salta-musicians",
+  "title": "Street musicians in Salta",
+  "location": {
+    "place": "Salta",
+    "province": "Salta",
+    "region": "Noroeste (NOA)",
+    "country": "Argentina"
+  },
+  "creator": "Viktor Pinchuk",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Street_musicians_(Salta,_Argentina).webm",
+    "file": "Street musicians (Salta, Argentina).webm"
+  },
+  "license": {
+    "short": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2015-01-05",
+    "evidence": "Self-published work (part of the author's Latin American expedition materials); uploader asserts own work under CC BY 4.0 on the source page (categories: Self-published work, CC-BY-4.0)."
+  },
+  "original": {
+    "bytes": 2732566,
+    "sha256": "e1e007935126722529c4b53a38887409ca5bb9f1580207fbc823af2d6b82238e",
+    "duration_s": 35.0,
+    "width": 640,
+    "height": 480,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 30.0,
+    "crop": "640x480 (4:3) to 16:9: center-crop 640x360 band",
+    "scale": "upscale crop to 720p minimum",
+    "audio": "strip"
+  },
+  "notes": "NOA region representative (people/street life rather than landscape). Diegetic street music is stripped at transcode: the greeter always plays video muted, so no performance-rights question reaches runtime. Faces are visible; footage is used as published under its CC license."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ar-mis-iguazu-falls",
+  "title": "Iguazu Falls from the Argentina side",
+  "location": {
+    "place": "Puerto Iguazu, Iguazu National Park",
+    "province": "Misiones",
+    "region": "Litoral",
+    "country": "Argentina"
+  },
+  "creator": "redwing115 (via YouTube)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Iguazu_Falls_(Cataratas_de_Iguasu)_in_Argentina.webm",
+    "file": "Iguazu Falls (Cataratas de Iguasu) in Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "reviewed",
+    "reviewer": "McZusatz",
+    "date": "2013-07-19",
+    "evidence": "LicenseReview template with reviewer and date on the source page; file carries Category:Files from external sources with reviewed licenses. Original YouTube source: https://www.youtube.com/watch?v=AH4NofGs6ws (archived copies referenced on the file page)."
+  },
+  "original": {
+    "bytes": 24687423,
+    "sha256": "557b20f4de0c3a15d5f174fe65825b5c133385492987163ef9a07cd4c758c4b3",
+    "duration_s": 61.9,
+    "width": 1280,
+    "height": 720,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 10,
+    "trim_end_s": 40,
+    "crop": "none (native 16:9 landscape)",
+    "scale": "keep 720p; runtime scales to output",
+    "audio": "strip"
+  },
+  "notes": "Longest daylight scenic clip (61.9 s). Trim a 30 s loopable middle segment to avoid intro/outro motion. Litoral region representative."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ar-ju-purmamarca-salinas-vlog",
+  "title": "North Argentina vlog: Jujuy, Purmamarca and Salinas Grandes",
+  "location": {
+    "place": "Purmamarca and Salinas Grandes, Jujuy",
+    "province": "Jujuy",
+    "region": "Noroeste (NOA)",
+    "country": "Argentina"
+  },
+  "creator": "Gajes del Youtuber (via YouTube)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Purmamarca_y_Salinas_Grandes,_Jujuy,_Argentina.webm",
+    "file": "Purmamarca y Salinas Grandes, Jujuy, Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "license-review-needed",
+    "reviewer": null,
+    "date": "2023-11-29",
+    "evidence": "Bare LicenseReview template on the source page; file carries Category:License review needed (video). Claimed YouTube CC BY 3.0 by Gajes del Youtuber, NOT yet confirmed by a reviewer. DO NOT SHIP until the review clears."
+  },
+  "original": {
+    "bytes": 703727618,
+    "sha256": null,
+    "duration_s": 662.9,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 662.9,
+    "crop": "undecided: vlog format, needs segment scouting after review clears (trim placeholder covers the full file)",
+    "scale": "downscale selection to 1080p",
+    "audio": "strip"
+  },
+  "notes": "PARKED: 11-minute, 703 MB vlog; only worth scouting segments if the license review clears. Lowest priority of the three Jujuy candidates."
+}

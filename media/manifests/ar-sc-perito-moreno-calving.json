@@ -1,0 +1,43 @@
+{
+  "id": "ar-sc-perito-moreno-calving",
+  "title": "Iceberg calving at Perito Moreno glacier",
+  "location": {
+    "place": "Los Glaciares National Park, near El Calafate",
+    "province": "Santa Cruz",
+    "region": "Patagonia",
+    "country": "Argentina"
+  },
+  "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Desprendimiento_de_iceberg_en_glaciar_Perito_Moreno.webm",
+    "file": "Desprendimiento de iceberg en glaciar Perito Moreno.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2025-12-10",
+    "evidence": "Self-published work uploaded via Campaign:wsc-ar (Wiki Science Competition 2025 in Argentina); uploader asserts own work under CC BY-SA 4.0 (categories: Self-published work, CC-BY-SA-4.0, Perito Moreno Glacier)."
+  },
+  "original": {
+    "bytes": 10497598,
+    "sha256": "1a641bec3b11ed9411986861856588b38516b85be16b2efd62df857d464a0635",
+    "duration_s": 20.7,
+    "width": 2160,
+    "height": 3840,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 20.7,
+    "crop": "portrait 2160x3840 to 16:9 landscape: center-crop 2160x1216 band (heavy crop, interim solution)",
+    "scale": "downscale crop to 1080p",
+    "audio": "strip"
+  },
+  "notes": "Short action moment (calving); use full clip and loop. Same crop caveat as ar-sc-perito-moreno-wall."
+}

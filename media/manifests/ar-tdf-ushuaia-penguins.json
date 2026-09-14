@@ -1,0 +1,43 @@
+{
+  "id": "ar-tdf-ushuaia-penguins",
+  "title": "Penguin colony at the End of the World lighthouse, Ushuaia",
+  "location": {
+    "place": "Les Eclaireurs lighthouse area, Beagle Channel, Ushuaia",
+    "province": "Tierra del Fuego",
+    "region": "Patagonia Austral",
+    "country": "Argentina"
+  },
+  "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Poblaci%C3%B3n_de_pinguinos_en_Faro_del_Fin_del_mundo_en_Ushuaia.webm",
+    "file": "Población de pinguinos en Faro del Fin del mundo en Ushuaia.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2025-12-10",
+    "evidence": "Self-published work uploaded via Campaign:wsc-ar (Wiki Science Competition 2025 in Argentina); uploader asserts own work under CC BY-SA 4.0 (categories: Self-published work, CC-BY-SA-4.0, Ushuaia)."
+  },
+  "original": {
+    "bytes": 6755558,
+    "sha256": "5775b41c05f8c9805101b9b73b9da2a9df3651d87e2101172787747197d58890",
+    "duration_s": 11.0,
+    "width": 2160,
+    "height": 3840,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 11.0,
+    "crop": "portrait 2160x3840 to 16:9 landscape: center-crop 2160x1216 band (heavy crop, interim solution)",
+    "scale": "downscale crop to 1080p; loop the 11 s clip for a longer slot",
+    "audio": "strip"
+  },
+  "notes": "Only Austral-region clip; short, so loop it. Crop framing must be checked: keep the colony, not only water."
+}

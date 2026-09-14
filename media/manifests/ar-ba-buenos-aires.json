@@ -1,0 +1,43 @@
+{
+  "id": "ar-ba-buenos-aires",
+  "title": "Buenos Aires city montage",
+  "location": {
+    "place": "Buenos Aires",
+    "province": "Ciudad Autonoma de Buenos Aires",
+    "region": "Pampas",
+    "country": "Argentina"
+  },
+  "creator": "Neoredacturus",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Buenos_Aires_-_Argentina.webm",
+    "file": "Buenos Aires - Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2020-05-16",
+    "evidence": "Self-published work: uploader asserts own work under CC BY-SA 4.0 on the source page (categories: Self-published work, CC-BY-SA-4.0, Videos from Buenos Aires). No third-party transfer, so no external license review is required."
+  },
+  "original": {
+    "bytes": 50121020,
+    "sha256": "3fd77f3468b861e88ea9119f89804afa0252dec1345587cc936fc5256be6fdd8",
+    "duration_s": 31.2,
+    "width": 1280,
+    "height": 720,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 31.2,
+    "crop": "none (native 16:9 landscape)",
+    "scale": "keep 720p; runtime scales to output",
+    "audio": "strip"
+  },
+  "notes": "Daylight city footage; good day-playlist anchor for the Pampas/CABA region. Use full clip and loop. Confirm loop point at ingest."
+}

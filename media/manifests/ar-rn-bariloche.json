@@ -1,0 +1,43 @@
+{
+  "id": "ar-rn-bariloche",
+  "title": "San Carlos de Bariloche lakeshore",
+  "location": {
+    "place": "San Carlos de Bariloche",
+    "province": "Rio Negro",
+    "region": "Patagonia Norte",
+    "country": "Argentina"
+  },
+  "creator": "Gabo2012",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:San_Carlos_de_Bariloche,_Argentina.ogv",
+    "file": "San Carlos de Bariloche, Argentina.ogv"
+  },
+  "license": {
+    "short": "CC-BY-SA-3.0",
+    "name": "Creative Commons Attribution-Share Alike 3.0",
+    "url": "https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2014-06-19",
+    "evidence": "Self-published work: uploader asserts own work under CC BY-SA 3.0 on the source page (categories: Self-published work, CC-BY-SA-3.0, Bariloche Department)."
+  },
+  "original": {
+    "bytes": 11578350,
+    "sha256": "a2a9a1c7ea8b6123069bc194bf8fffa2d8a9f2dec7797ed0f4b6a762d57ce9bf",
+    "duration_s": 17.7,
+    "width": 720,
+    "height": 480,
+    "container": "ogv"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 17.7,
+    "crop": "720x480 (3:2) to 16:9: center-crop 720x405 band",
+    "scale": "upscale crop to 720p minimum; SD source, acceptable as one slot among HD clips",
+    "audio": "strip"
+  },
+  "notes": "Only SD clip in the catalog; keep until an HD Bariloche/Nahuel Huapi replacement ships (see MEDIA_ROADMAP.md). Transcode from Theora to the runtime codec at build time."
+}
