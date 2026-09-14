@@ -40,6 +40,7 @@ else
     # qmlformat has no dry-run flag: diff the formatted output instead.
     if ! qmlformat "$f" | cmp -s -- "$f" -; then
       echo "qmlformat: $f is not formatted (run FORMAT=1 $0 to fix)"
+      qmlformat "$f" | diff --unified=2 -- "$f" - || true
       fail=1
     fi
   done
