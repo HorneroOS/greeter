@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "fallbackImage": "background.jpg",
+  "dayparts": {
+    "day": [],
+    "night": []
+  }
+}

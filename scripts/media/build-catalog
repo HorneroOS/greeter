@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""Build the greeter runtime catalog from its source manifest.
+
+Reads media/catalog.json (human-editable source of truth, owned by media
+curation) and emits media/catalog.js, a QML-importable module that Main.qml
+loads synchronously. The greeter must not depend on XMLHttpRequest for local
+files: Qt disables GET on local files by default, so an XHR-loaded catalog
+silently never arrives and the background video never plays.
+
+Usage:
+    scripts/media/build-catalog [SOURCE_JSON] [OUTPUT_JS]
+    scripts/media/build-catalog --check [SOURCE_JSON] [OUTPUT_JS]
+
+--check exits non-zero when the generated file is out of sync (CI gate).
+Only the Python standard library is used.
+"""
+import json
+import sys
+from pathlib import Path
+
+HEADER = """\
+.pragma library
+// GENERATED from %s — do not edit by hand.
+// Regenerate: scripts/media/build-catalog
+// The greeter imports this module synchronously; it must never be fetched
+// over the network at runtime (see AGENTS.md no-runtime-network invariant).
+var CATALOG = %s;
+"""
+
+
+def build(source: Path) -> str:
+    doc = json.loads(source.read_text(encoding="utf-8"))
+    if not isinstance(doc, dict) or doc.get("version") != 1:
+        raise SystemExit(f"error: {source} must be an object with version 1")
+    dayparts = doc.get("dayparts")
+    if not isinstance(dayparts, dict):
+        raise SystemExit(f"error: {source} dayparts must be an object")
+    rel = source.name
+    return HEADER % (rel, json.dumps(doc, indent=2, sort_keys=True))
+
+
+def main(argv):
+    check = "--check" in argv
+    args = [a for a in argv[1:] if a != "--check"]
+    default_source = Path(__file__).resolve().parent.parent.parent / "media" / "catalog.json"
+    source = Path(args[0]) if len(args) > 0 else default_source
+    output = Path(args[1]) if len(args) > 1 else source.with_suffix(".js")
+    rendered = build(source)
+    if check:
+        if not output.is_file() or output.read_text(encoding="utf-8") != rendered:
+            raise SystemExit(f"error: {output} is out of sync, run scripts/media/build-catalog")
+        print(f"{output} in sync")
+        return
+    output.write_text(rendered, encoding="utf-8")
+    print(f"wrote {output}")
+
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -109,4 +109,29 @@ languageBoxFontSize => actionBarFontSize
 
 ## License
 
-Theme is licensed under GPL.
+Theme is licensed under GPL. See LICENSE, NOTICE, and UPSTREAM.md for
+attribution and the full license text.
+
+## Qt6 port (HorneroOS)
+
+The theme was migrated from Qt5 to Qt6: `QMediaPlaylist` is gone, so
+background video is sequenced by `components/MediaDeck.qml` (dual Qt6
+`MediaPlayer`/`VideoOutput` pairs with a 2-4 s crossfade) driven by
+`components/MediaCatalog.js` and the generated `media/catalog.js`
+(regenerate from the `media/catalog.json` source of truth with
+`scripts/media/build-catalog`; Qt disables XHR GET on local files, so the
+runtime catalog is imported synchronously, never fetched).
+No network is used at runtime; with no local clips (or with
+`videoEnabled=false`) the greeter falls back to `background.jpg`.
+New `theme.conf` keys: `videoEnabled`, `crossfadeDuration`, `testMode`.
+See `media/README.md` for the pack format.
+
+## QML lint, format, and tests
+
+- `sh scripts/qml-lint.sh` runs `qmllint` on every QML file and verifies
+  `qmlformat` cleanliness (`FORMAT=1 sh scripts/qml-lint.sh` reformats).
+- `python3 -m pytest tests/ -q` runs the unit suites: catalog schema,
+  duplicate IDs, remote-URL ban, dayparts, `theme.conf` contract, the
+  `MediaCatalog.js` sequencer (via node), file permissions for the `sddm`
+  user, and the `qmllint` gate. The same steps run in CI
+  (`.github/workflows/qml.yml`).
