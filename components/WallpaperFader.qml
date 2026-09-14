@@ -16,19 +16,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+// Qt6 port: QtGraphicalEffects (FastBlur + custom ShaderEffect) is gone.
+// The blur/grade is reimplemented with the Qt6 QtQuick.Effects MultiEffect
+// item. The default state is "off"; the old default expression referenced
+// lockScreenRoot.uiVisible, which does not exist in an SDDM greeter.
 
-import QtQuick 2.6
-import QtQuick.Controls 1.1
-import QtQuick.Layouts 1.1
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Effects
 
 Item {
     id: wallpaperFader
     property Item mainStack
     property Item footer
-    property alias source: wallpaperBlur.source
-    state: lockScreenRoot.uiVisible ? "on" : "off"
-    property real factor: 20
+    property alias source: wallpaperEffect.source
+    state: "off"
+    property real factor: 0
 
     Behavior on factor {
         NumberAnimation {
@@ -38,53 +40,16 @@ Item {
             easing.type: Easing.InOutQuad
         }
     }
-    FastBlur {
-        id: wallpaperBlur
+
+    MultiEffect {
+        id: wallpaperEffect
         anchors.fill: parent
-        radius: 50 * wallpaperFader.factor
-    }
-    ShaderEffect {
-        id: wallpaperShader
-        anchors.fill: parent
-        supportsAtlasTextures: true
-        property var source: ShaderEffectSource {
-            sourceItem: wallpaperBlur
-            live: true
-            hideSource: true
-            textureMirroring: ShaderEffectSource.NoMirroring
-        }
-
-        readonly property real contrast: 0.45 * wallpaperFader.factor + (1 - wallpaperFader.factor)
-        readonly property real saturation: 1.7 * wallpaperFader.factor + (1 - wallpaperFader.factor)
-        readonly property real intensity: wallpaperFader.factor + (1 - wallpaperFader.factor)
-
-        property var colorMatrix: Qt.matrix4x4(
-            contrast, 0,        0,        0.0,
-            0,        contrast, 0,        0.0,
-            0,        0,        contrast, 0.0,
-            0,        0,        0,        1.0).times(Qt.matrix4x4(
-                saturation, 0.0,          0.0,        0.0,
-                0,          saturation,   0,          0.0,
-                0,          0,            saturation, 0.0,
-                0,          0,            0,          1.0)).times(Qt.matrix4x4(
-                    intensity, 0,         0,         0,
-                    0,         intensity, 0,         0,
-                    0,         0,         intensity, 0,
-                    0,         0,         0,         1
-                ));
-    
-
-        fragmentShader: "
-            uniform mediump mat4 colorMatrix;
-            uniform mediump sampler2D source;
-            varying mediump vec2 qt_TexCoord0;
-            uniform lowp float qt_Opacity;
-
-            void main(void)
-            {
-                mediump vec4 tex = texture2D(source, qt_TexCoord0);
-                gl_FragColor = tex * colorMatrix * qt_Opacity;
-            }"
+        blurEnabled: true
+        blur: wallpaperFader.factor
+        blurMax: 32
+        brightness: -0.15 * wallpaperFader.factor
+        saturation: -0.4 * wallpaperFader.factor
+        contrast: 0.1 * wallpaperFader.factor
     }
 
     states: [
