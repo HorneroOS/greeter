@@ -2,7 +2,51 @@
   "version": 1,
   "fallbackImage": "background.jpg",
   "dayparts": {
-    "day": [],
-    "night": []
+    "day": [
+      {
+        "id": "ar-ba-buenos-aires",
+        "file": "media/base/ar-ba-buenos-aires.mp4",
+        "daypart": "day",
+        "kind": "video"
+      },
+      {
+        "id": "ar-mis-iguazu-falls",
+        "file": "media/base/ar-mis-iguazu-falls.mp4",
+        "daypart": "day",
+        "kind": "video"
+      },
+      {
+        "id": "ar-rn-bariloche",
+        "file": "media/base/ar-rn-bariloche.mp4",
+        "daypart": "day",
+        "kind": "video"
+      },
+      {
+        "id": "ar-sc-perito-moreno-calving",
+        "file": "media/base/ar-sc-perito-moreno-calving.mp4",
+        "daypart": "day",
+        "kind": "video"
+      },
+      {
+        "id": "ar-sc-perito-moreno-wall",
+        "file": "media/base/ar-sc-perito-moreno-wall.mp4",
+        "daypart": "day",
+        "kind": "video"
+      },
+      {
+        "id": "ar-tdf-ushuaia-penguins",
+        "file": "media/base/ar-tdf-ushuaia-penguins.mp4",
+        "daypart": "day",
+        "kind": "video"
+      }
+    ],
+    "night": [
+      {
+        "id": "ar-pat-mountain-lake",
+        "file": "media/base/ar-pat-mountain-lake.mp4",
+        "daypart": "night",
+        "kind": "video"
+      }
+    ]
   }
 }

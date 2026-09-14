@@ -27,8 +27,11 @@ license reviews clear.
    moment one clears, promote it per `media/candidates/README.md`.
 2. **Night / dusk footage.** Every shipped clip is daylight, so the night
    playlist has no native material yet. Wanted: Buenos Aires at night,
-   starry Patagonia/Andes. Interim: reuse day clips dimmed by the theme's
-   blur/dim layer until a night clip ships.
+   starry Patagonia/Andes. Interim (implemented): the night bucket reuses
+   the calmest daylight clip dimmed by the theme's blur/dim layer
+   (`ar-pat-mountain-lake`) until a native night clip ships.
+   `ar-sa-salta-musicians` was tried at night and held out (close-up faces
+   behind the login fields).
 3. **Atlantic coast (Mar del Plata / Puerto Madryn / Valdes).** Surveyed
    Commons video results were event/archival footage, nothing scenic and
    freely licensed. Keep searching; a coast clip balances the Andes-heavy

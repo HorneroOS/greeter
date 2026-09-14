@@ -12,6 +12,10 @@
 #   --shot FILE     capture the root window to FILE (needs ImageMagick import)
 #   --delay SECS    wait before capture (default 8: reveal timer + crossfade)
 #   --scale N       QT_SCALE_FACTOR for a HiDPI pass (default 1)
+#   --real-media    stage the REAL built pack (build/media/base) and the repo
+#                   catalog instead of synthetic fixtures (needs build.py run)
+#   --clip ID       with --real-media: preview a single catalog entry by id,
+#                   forcing the deck to its daypart (per-clip visual QA)
 #   --run-secs N    stop the greeter after N seconds (default 12 with --shot,
 #                   otherwise run until interrupted)
 #   --keep          keep the staged theme directory instead of deleting it
@@ -37,6 +41,8 @@ RUN_SECS=""
 KEEP=0
 STATIC=0
 FIXTURES_ONLY=0
+REAL_MEDIA=0
+CLIP=""
 DAYPART=""
 PREFILL_USER=""
 PREFILL_PASSWORD=""
@@ -50,6 +56,8 @@ while [ $# -gt 0 ]; do
     --run-secs) RUN_SECS="$2"; shift 2;;
     --keep) KEEP=1; shift;;
     --static) STATIC=1; shift;;
+    --real-media) REAL_MEDIA=1; shift;;
+    --clip) CLIP="$2"; shift 2;;
     --fixtures-only) FIXTURES_ONLY=1; shift;;
     --daypart) DAYPART="$2"; shift 2;;
     --prefill-user) PREFILL_USER="$2"; shift 2;;
@@ -105,8 +113,31 @@ ln -s "$FIXDIR/day.mp4" "$STAGE/media/preview-day.mp4"
 ln -s "$FIXDIR/night.mp4" "$STAGE/media/preview-night.mp4"
 ln -s "$FIXDIR/golden.mp4" "$STAGE/media/preview-golden.mp4"
 
+if [ -n "$CLIP" ] && [ "$REAL_MEDIA" != 1 ]; then
+  echo "--clip needs --real-media" >&2
+  exit 2
+fi
+if [ -n "$CLIP" ]; then
+  # Resolve the clip's bucket early: the STAGED Main.qml daypart force below
+  # runs before the catalog is staged, so the mood must be known here.
+  DAYPART=$(python3 - "$ROOT/media/catalog.json" "$CLIP" <<'EOF'
+import json, sys
+repo, want = sys.argv[1], sys.argv[2]
+doc = json.load(open(repo, encoding="utf-8"))
+for part, entries in doc["dayparts"].items():
+    for entry in entries:
+        if entry["id"] == want:
+            print({"day": "day", "golden-hour": "golden", "night": "night"}[part])
+            sys.exit(0)
+print(f"unknown clip id: {want}", file=sys.stderr)
+sys.exit(2)
+EOF
+)
+fi
+
 STAGE_MAIN_NEEDS_COPY=0
 [ -n "$DAYPART" ] && STAGE_MAIN_NEEDS_COPY=1
+[ -n "$CLIP" ] && STAGE_MAIN_NEEDS_COPY=1
 [ -n "$PREFILL_USER" ] && STAGE_MAIN_NEEDS_COPY=1
 [ -n "$PREFILL_PASSWORD" ] && STAGE_MAIN_NEEDS_COPY=1
 [ "$FAIL_LOGIN" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
@@ -166,7 +197,40 @@ open(path, "w", encoding="utf-8").write(src)
 EOF
 fi
 
-if [ "$STATIC" = 1 ]; then
+if [ "$REAL_MEDIA" = 1 ]; then
+  # Real-pack QA: link the built base pack and stage the repo catalog, so
+  # the greeter plays the actual shipped clips through the install layout
+  # (media/base/ bridge). Fixture clips are not staged in this mode.
+  if [ ! -d "$ROOT/build/media/base" ]; then
+    echo "no built pack: run python3 scripts/media/build.py first" >&2
+    exit 1
+  fi
+  ln -s "$ROOT/build/media/base" "$STAGE/media/base"
+  if [ -n "$CLIP" ]; then
+    # Single out one entry: the staged catalog holds only that clip (the
+    # deck mood was already forced to its bucket in the STAGED Main.qml).
+    python3 - "$ROOT/media/catalog.json" "$STAGE/media/catalog.json" "$CLIP" <<'EOF'
+import json, sys
+repo, staged, want = sys.argv[1], sys.argv[2], sys.argv[3]
+doc = json.load(open(repo, encoding="utf-8"))
+hit = None
+for part, entries in doc["dayparts"].items():
+    for entry in entries:
+        if entry["id"] == want:
+            hit = (part, entry)
+if hit is None:
+    print(f"unknown clip id: {want}", file=sys.stderr)
+    sys.exit(2)
+part, entry = hit
+out = {"version": 1, "fallbackImage": doc["fallbackImage"],
+       "dayparts": {"day": [], "golden-hour": [], "night": []}}
+out["dayparts"][part] = [entry]
+json.dump(out, open(staged, "w", encoding="utf-8"), indent=2)
+EOF
+  else
+    cp "$ROOT/media/catalog.json" "$STAGE/media/catalog.json"
+  fi
+elif [ "$STATIC" = 1 ]; then
   # Empty catalog: exercises the static fallback image path.
   cat > "$STAGE/media/catalog.json" <<'EOF'
 {
