@@ -16,6 +16,8 @@
 #                   catalog instead of synthetic fixtures (needs build.py run)
 #   --clip ID       with --real-media: preview a single catalog entry by id,
 #                   forcing the deck to its daypart (per-clip visual QA)
+#   --no-branding   staged-only: set brandingEnabled=false (pure upstream
+#                   presentation) for branding-off QA
 #   --run-secs N    stop the greeter after N seconds (default 12 with --shot,
 #                   otherwise run until interrupted)
 #   --keep          keep the staged theme directory instead of deleting it
@@ -44,6 +46,7 @@ FIXTURES_ONLY=0
 REAL_MEDIA=0
 CLIP=""
 DAYPART=""
+NO_BRANDING=0
 PREFILL_USER=""
 PREFILL_PASSWORD=""
 FAIL_LOGIN=0
@@ -56,6 +59,7 @@ while [ $# -gt 0 ]; do
     --run-secs) RUN_SECS="$2"; shift 2;;
     --keep) KEEP=1; shift;;
     --static) STATIC=1; shift;;
+    --no-branding) NO_BRANDING=1; shift;;
     --real-media) REAL_MEDIA=1; shift;;
     --clip) CLIP="$2"; shift 2;;
     --fixtures-only) FIXTURES_ONLY=1; shift;;
@@ -302,6 +306,10 @@ fi
 # reads of local files, so catalog.json alone would leave video dark).
 "$ROOT/scripts/media/build-catalog" "$STAGE/media/catalog.json" >/dev/null
 sed -e 's/^testMode=false/testMode=true/' "$ROOT/theme.conf" > "$STAGE/theme.conf"
+if [ "$NO_BRANDING" = 1 ]; then
+  # Staged-only: pure upstream presentation for branding-off QA.
+  sed -i -e 's/^brandingEnabled=true/brandingEnabled=false/' "$STAGE/theme.conf"
+fi
 
 echo "preview theme staged at $STAGE"
 if [ "$KEEP" = 1 ]; then

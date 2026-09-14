@@ -130,6 +130,17 @@ package bridges them in under `<theme>/media/base`.
 New `theme.conf` keys: `videoEnabled`, `crossfadeDuration`, `testMode`.
 See `media/README.md` for the pack format.
 
+## HorneroOS branding (optional overlay)
+
+The greeter intentionally preserves the upstream visual and interaction
+model. HorneroOS customizations are limited to: offline Argentina media;
+an optional minimal branding overlay (`components/BrandingMark.qml`, a
+small symbolic mark in the corner); configurable branding tokens
+(`brandingEnabled`, `brandingLogo`, `brandingAccent`, defaulting to the
+upstream red). Set `brandingEnabled=false` for pure upstream
+presentation. No layout, interaction, or behavior changes with branding
+on or off. The logo ships with the theme; no network, no dotfiles.
+
 ## QML lint, format, and tests
 
 - `sh scripts/qml-lint.sh` runs `qmllint` on every QML file and verifies

@@ -348,7 +348,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"
                 arrowColor: "transparent"
-                textColor: config.actionBarFontColor
+                textColor: config.brandingAccent || config.actionBarFontColor
                 borderColor: "transparent"
                 hoverColor: "#5692c4"
                 font.family: container.displayFont
@@ -400,7 +400,7 @@ Rectangle {
                         font.family: container.displayFont
                         font.pixelSize: config.actionBarFontSize
                         font.bold: true
-                        color: config.actionBarFontColor
+                        color: config.brandingAccent || config.actionBarFontColor
                     }
                 }
                 KeyNavigation.backtab: session
@@ -436,6 +436,22 @@ Rectangle {
                 KeyNavigation.tab: session
             }
         }
+    }
+
+    // Optional HorneroOS branding layer (overlay only): a small symbolic
+    // mark in the bottom-right corner. brandingEnabled=false restores pure
+    // upstream presentation. No layout, interaction, or behavior changes.
+    BrandingMark {
+        id: brandMark
+
+        width: 30
+        height: 30
+        anchors.right: parent.right
+        anchors.rightMargin: 24
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 24
+        brandingEnabled: config.brandingEnabled != "false"
+        source: config.brandingLogo || "components/resources/hornero-symbolic.svg"
     }
 
     Component.onCompleted: {
