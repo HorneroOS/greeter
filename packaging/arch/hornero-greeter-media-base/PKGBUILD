@@ -6,9 +6,11 @@ pkgdesc='Base Argentina video pack for the HorneroOS SDDM greeter (offline H.264
 arch=('any')
 url='https://github.com/HorneroOS/greeter'
 license=('CC-BY-4.0' 'CC-BY-3.0' 'CC-BY-SA-3.0' 'CC-BY-SA-4.0')
-# Built by scripts/media/package.py into dist/; never downloaded at install.
-source=("hornero-greeter-media-base-${pkgver}.tar.zst")
-sha256sums=('SKIP')
+# Built by scripts/media/package.py and attached to the greeter GitHub
+# Release below (never downloaded at install, never built from source).
+_media_tag=v0.1.0-preview
+source=("hornero-greeter-media-base-${pkgver}.tar.zst::https://github.com/HorneroOS/greeter/releases/download/${_media_tag}/hornero-greeter-media-base-${pkgver}.tar.zst")
+sha256sums=('fac8cbecef0b8225bb80c65eb68b64d5a84bb57555b0f37ae42cda33d452a057')
 
 package() {
   install -d "$pkgdir/usr/share/hornero/greeter/media/base"
