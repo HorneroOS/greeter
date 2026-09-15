@@ -1,0 +1,25 @@
+# pack-refs with: peeled fully-peeled sorted 
+3f5c25486feefe863e1fc4f31cc3baebcf179e35 refs/heads/docs/hornero-readme
+850453d8099f6dcf242db863ae90ac49cf8bd379 refs/heads/docs/vm-media-test
+779157f88777b21fb42286c4bc1ac5aa3585e03e refs/heads/feat/argentina-base-pack
+ed93230104a983d90faa721e90233e2dc0f7af97 refs/heads/feat/branding-layer
+e8aa91d960c4bbad496e5153232779275f618001 refs/heads/feat/hornero-identity
+cbb0edffd36dbeb49b32380adbc07054b2de61d5 refs/heads/feat/media-catalog
+fe4d4f5c31886ce4615117b228856a70c7e7fdd1 refs/heads/feat/media-pipeline
+376c8d44977c1dc61a0cfb37e00223889cd65e76 refs/heads/feat/qt6-migration
+d171e27d20ad8fd70010086e5c19355d63760e03 refs/heads/feat/upstream-fidelity
+5a90e87252226ac9fe8bc972f5cedc320375d14e refs/heads/gov/pr-governance-wiring
+bcf054efcd1b493a861d3cc67dafe84281b0c3af refs/heads/main
+376c8d44977c1dc61a0cfb37e00223889cd65e76 refs/pull/1/head
+3f5c25486feefe863e1fc4f31cc3baebcf179e35 refs/pull/10/head
+9f608224308f82afccce55044290c00a7d4ab356 refs/pull/10/merge
+5a90e87252226ac9fe8bc972f5cedc320375d14e refs/pull/11/head
+d64c34ff1ff1d6763c8779ee6a9e8a4ea43a0580 refs/pull/2/head
+fe4d4f5c31886ce4615117b228856a70c7e7fdd1 refs/pull/3/head
+e8aa91d960c4bbad496e5153232779275f618001 refs/pull/4/head
+cbb0edffd36dbeb49b32380adbc07054b2de61d5 refs/pull/5/head
+779157f88777b21fb42286c4bc1ac5aa3585e03e refs/pull/6/head
+850453d8099f6dcf242db863ae90ac49cf8bd379 refs/pull/7/head
+d171e27d20ad8fd70010086e5c19355d63760e03 refs/pull/8/head
+ed93230104a983d90faa721e90233e2dc0f7af97 refs/pull/9/head
+33fb436d09b1fb3b468b0a2f7642a346bd33f03f refs/tags/v0.1.0-preview
