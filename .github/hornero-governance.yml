@@ -1,0 +1,32 @@
+# Repo policy for the HorneroOS deterministic PR-governance engine.
+# Merged over safe defaults; see HorneroOS/.github governance/danger.
+#
+# media/catalog.js is GENERATED from media/catalog.json via
+# scripts/media/build-catalog (regenerate must diff clean; --check gate
+# in tests/test_theme_conf.py).
+
+version: 1
+kind: greeter
+visual_paths:
+  - "**/*.qml"
+  - "media/**"
+  - "screens/**"
+  - "components/resources/**"
+  - "background.jpg"
+generated_paths:
+  - source: "media/catalog.json"
+    derivative: "media/catalog.js"
+policies:
+  large_threshold: 800
+  forbidden_paths:
+    - "**/.env"
+    - "**/.env.*"
+    - "**/*.pem"
+    - "**/*.key"
+    - "**/id_rsa*"
+    - "**/credentials*"
+    - "**/*secret*"
+  risky_paths:
+    - ".github/workflows/**"
+    - "media/manifests/**"
+    - "scripts/media/**"
