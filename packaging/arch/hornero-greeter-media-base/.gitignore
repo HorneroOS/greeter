@@ -1,4 +1,4 @@
-# Local,.gitignore
+# Local artifacts for this package dir.
 # Local build trees and the downloaded release tarball (131MB).
 *.pkg.tar.*
 src/
