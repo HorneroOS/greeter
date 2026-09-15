@@ -6,8 +6,9 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# metadata.desktop keeps the upstream Website attribution string; SDDM never
-# fetches it, so it is exempt from the URL ban but not from the other bans.
+# metadata.desktop keeps a Website string (repo URL; upstream authorship
+# lives in Author/NOTICE/UPSTREAM.md); SDDM never fetches it, so it is
+# exempt from the URL ban but not from the other bans.
 NO_NETWORK_FILES = sorted(
     [REPO_ROOT / "Main.qml"]
     + list((REPO_ROOT / "components").glob("*.qml"))
