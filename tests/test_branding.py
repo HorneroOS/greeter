@@ -30,6 +30,10 @@ def test_branding_keys_present_with_upstream_defaults():
     # Default accent stays the upstream red; a future Appearance System
     # may drive brandingAccent, but this milestone preserves the baseline.
     assert conf["brandingAccent"] == '"#e0342c"'
+    # Display typeface follows the desktop (Rubik): the upstream font is
+    # not shipped, so the old default rendered as a fontconfig monospace
+    # fallback on every machine. Pinned here, not in upstream fidelity.
+    assert conf["displayFont"] == '"Rubik"'
 
 
 def test_branding_enabled_gate_and_single_instance():

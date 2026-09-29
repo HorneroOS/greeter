@@ -2,8 +2,11 @@
 
 The Qt6 port restores the upstream layout verbatim (centered clock
 column, label-left login rows, top action bar, upstream palette and
-metrics). The only intentional visual change is local Argentina clips
-instead of the streamed Apple TV playlists (offline invariant).
+metrics). Intentional visual changes are limited to two: local
+Argentina clips instead of the streamed Apple TV playlists (offline
+invariant), and displayFont defaulting to Rubik (desktop typeface
+coherence — the upstream font is not shipped, so the old default
+rendered as a fontconfig monospace fallback).
 """
 import configparser
 from pathlib import Path
@@ -12,7 +15,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 MAIN = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
 
 UPSTREAM_VALUES = {
-    "displayFont": '"Droid Sans Mono for Powerline"',
     "clockFontSize": '"72"',
     "dateFontSize": '"24"',
     "labelFontSize": '"16"',
