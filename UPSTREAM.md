@@ -50,11 +50,16 @@ Qt6 reference consulted during the port: Keyitdev/sddm-astronaut-theme
 The `feat/hornero-identity` redesign (cinematic hero, location label,
 avatar, hairline fields, terracotta palette) was reverted: the greeter
 now reproduces the upstream layout verbatim — centered clock column,
-label-left login rows, top action bar, upstream fonts/sizes/colors —
-and the ONLY intentional difference is local Argentina clips instead of
-the streamed playlists. `tests/test_upstream_fidelity.py` pins this
-contract (upstream values, structure, and the absence of redesign
-markers). Kept from the port: the `MediaDeck` local sequencer, the
+label-left login rows, top action bar, upstream sizes/colors — and the
+intentional differences are exactly two: local Argentina clips instead
+of the streamed playlists, and `displayFont` defaulting to Rubik.
+`tests/test_upstream_fidelity.py` pins this contract (upstream values,
+structure, and the absence of redesign markers); `displayFont` is
+pinned to Rubik in `tests/test_branding.py` instead. Rationale for the
+font: the upstream font (Droid Sans Mono for Powerline) is not shipped
+on HorneroOS, so the old default rendered as a fontconfig monospace
+fallback on every machine — matching neither upstream intent nor the
+desktop typeface (Rubik, per the appearance docs). Kept from the port: the `MediaDeck` local sequencer, the
 `FontLoader.name` read-only workaround, and the functional `theme.conf`
 keys (`videoEnabled`, `crossfadeDuration`, `testMode`, golden-hour
 window). Upstream `bgVidDay/bgVidNight` (`playlists/*.m3u`) stay out:
