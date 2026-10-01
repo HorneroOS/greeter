@@ -343,7 +343,8 @@ Rectangle {
 
             ComboBox {
                 id: session
-                width: 145
+                // Wide enough for "Hyprland (uwsm-managed)" in the bold bar font
+                width: 240
                 height: 20
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"

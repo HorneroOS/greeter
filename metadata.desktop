@@ -13,4 +13,5 @@ ConfigFile=theme.conf
 Email=fabio_r11@hotmail.com
 Theme-Id=hornero
 Theme-API=2.0
+QtVersion=6
 
