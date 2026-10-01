@@ -1,8 +1,8 @@
 [SddmGreeterTheme]
 Name=Hornero
 Description=Hornero cinematic greeter with offline Argentine landscapes
-Author=Fabio Almeida
-Copyright=(c) 2016, Fabio Almeida
+Author=Ulises Jeremias (HorneroOS)
+Copyright=(c) 2026 HorneroOS; based on aerial-sddm-theme (c) 2016 Fabio Almeida (CC-BY-SA)
 License=CC-BY-SA
 Type=sddm-theme
 Version=0.1
@@ -10,7 +10,8 @@ Website=https://github.com/HorneroOS/greeter
 Screenshot=screens/screenshot.png
 MainScript=Main.qml
 ConfigFile=theme.conf
-Email=fabio_r11@hotmail.com
+Email=ulisescf.24@gmail.com
 Theme-Id=hornero
 Theme-API=2.0
+QtVersion=6
 
