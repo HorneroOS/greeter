@@ -1,0 +1,10 @@
+{
+  "beforeSource": "cca1076e1a5f…",
+  "afterSource": "cf2f45e45ee1…",
+  "captureMode": "sddm-greeter-qt6 --test-mode",
+  "mediaPack": "hornero-greeter-media-base 1.0.0-2",
+  "resolution": "1920x1080",
+  "clip": "ar-mis-iguazu-falls",
+  "username": "Hornero (preview placeholder)",
+  "notes": "Captured on the live Hornero host through scripts/preview.sh. The staged theme resolves media/base through the install layout backed by the built pack at build/media/base; login is test-only and never authenticates."
+}

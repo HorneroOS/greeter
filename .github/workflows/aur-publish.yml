@@ -51,3 +51,14 @@ jobs:
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
           commit_message: Release ${{ github.ref_name }}
+      - name: Publish AUR media package
+        # yamllint disable rule:line-length
+        uses: ulises-jeremias/github-actions-aur-publish@507f0dba7755bdc2ad351232405bd7e4cd4a4a67  # v1
+        # yamllint enable rule:line-length
+        with:
+          pkgname: hornero-greeter-media-base
+          pkgbuild: packaging/arch/hornero-greeter-media-base/PKGBUILD
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: Release ${{ github.ref_name }}

@@ -23,6 +23,12 @@ def test_theme_uses_qt6_only_modules():
     assert "import QtQuick.Effects" in qml
 
 
+def test_preview_instructions_use_qt6_greeter():
+    readme = (ROOT / "README.md").read_text()
+    assert "sddm-greeter-qt6 --test-mode" in readme
+    assert "sddm-greeter --test-mode" not in readme
+
+
 def test_arch_package_installs_qt6_theme_runtime():
     recipe = PKGBUILD.read_text()
     assert "'qt6-multimedia'" in recipe

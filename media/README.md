@@ -86,6 +86,8 @@ Install bridge: the `hornero-greeter` theme package installs the generated
 `media/catalog.js` and symlinks `<theme>/media/base` to the media-base
 pack directory. The link dangles when the pack is absent — a supported
 state: the deck skips missing files and holds `background.jpg`.
+The Arch media-base package preserves its `base/` subdirectory and depends
+on `gst-libav`, which supplies the H.264 decoder for Qt Multimedia.
 
 ## Playback behaviour (see `components/MediaDeck.qml`)
 
