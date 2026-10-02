@@ -132,6 +132,8 @@ Rectangle {
                 font.pointSize: config.clockFontSize
                 font.family: container.displayFont
                 font.bold: true
+                style: Text.Outline
+                styleColor: "#99000000"
             }
 
             Text {
@@ -142,6 +144,8 @@ Rectangle {
                 font.family: container.displayFont
                 font.pointSize: config.dateFontSize
                 font.bold: true
+                style: Text.Outline
+                styleColor: "#99000000"
             }
         }
 
@@ -186,7 +190,7 @@ Rectangle {
                     anchors.leftMargin: config.usernameLeftMargin
                     anchors.right: parent.right
                     anchors.rightMargin: 0
-                    font: container.displayFont
+                    font.family: container.displayFont
                     color: "#25000000"
                     borderColor: "transparent"
                     textColor: config.labelFontColor
@@ -228,7 +232,7 @@ Rectangle {
                 PasswordBox {
                     id: password_input_box
                     height: parent.height
-                    font: container.displayFont
+                    font.family: container.displayFont
                     color: "#25000000"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
@@ -269,7 +273,7 @@ Rectangle {
                     color: "transparent"
                     text: "x"
                     textColor: config.labelFontColor
-                    font: container.displayFont
+                    font.family: container.displayFont
 
                     border.color: "transparent"
                     border.width: 0
@@ -301,7 +305,7 @@ Rectangle {
                     activeColor: "#268bd2"
                     pressedColor: "#2aa198"
                     textColor: config.labelFontColor
-                    font: container.displayFont
+                    font.family: container.displayFont
 
                     onClicked: sddm.login(username_input_box.text, password_input_box.text, session.index)
 

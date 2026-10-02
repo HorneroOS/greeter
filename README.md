@@ -16,7 +16,8 @@ Qt6 + Qt 6 Multimedia with the GStreamer backend, SDDM, and GStreamer
 "good" plugins:
 
 - Arch: `pacman -S sddm qt6-multimedia gst-plugins-good`
-  (+ `hornero-greeter-media-base` for the Argentina video pack)
+  (+ `hornero-greeter-media-base` for the Argentina video pack; its package
+  pulls in `gst-libav`, the H.264 decoder)
 - Debian/Ubuntu:
   `apt install sddm qml6-module-qtmultimedia gstreamer1.0-plugins-good`
 
@@ -33,8 +34,11 @@ or install the `hornero-greeter` package (see `packaging/`). Select the
 `hornero` theme in `sddm.conf`. Test without logging out:
 
 ```bash
-sddm-greeter --test-mode --theme <path-to-this-repository>
+sddm-greeter-qt6 --test-mode --theme <path-to-this-repository>
 ```
+
+Hornero is a Qt 6 theme. Use `sddm-greeter-qt6` for previews; the unsuffixed
+`sddm-greeter` may run Qt 5 and cannot load this theme.
 
 ## Other notes
 

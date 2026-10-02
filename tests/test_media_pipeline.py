@@ -54,6 +54,8 @@ def test_packaging_layout_and_no_sddm_conf_rewrite():
     assert ">/etc/sddm.conf" not in theme_pkg
     assert 'etc/sddm.conf"' not in theme_pkg
     assert "/usr/share/hornero/greeter/media/base" in media_pkg
+    assert "--strip-components=1 hornero-greeter-media-base/base" in media_pkg
+    assert "depends=('gst-libav')" in media_pkg
     assert "0644" in theme_pkg and "0644" in media_pkg
     snippet = REPO / "packaging/arch/hornero-greeter/hornero.conf"
     assert snippet.read_text().startswith("[Theme]\n")
@@ -117,6 +119,12 @@ def test_package_script_builds_single_base_pack():
     out = subprocess.run(["tar", "--zstd", "-tf", str(packs[0])],
                          capture_output=True, text=True)
     names = out.stdout.splitlines()
-    assert any(n.endswith("ar-example-sample.mp4") for n in names)
+    expected_video = "hornero-greeter-media-base/base/ar-example-sample.mp4"
+    assert expected_video in names
     assert any(n.endswith("catalog.json") for n in names)
+    extracted = REPO / "build" / "media" / "package-extract-test"
+    extracted.mkdir(parents=True)
+    run("tar", "--zstd", "-xf", str(packs[0]), "-C", str(extracted),
+        "--strip-components=1", "hornero-greeter-media-base/base")
+    assert (extracted / "base" / "ar-example-sample.mp4").is_file()
     packs[0].unlink()  # keep the tree clean; dist/ is gitignored anyway
