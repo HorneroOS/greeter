@@ -6,5 +6,5 @@
   "resolution": "1920x1080",
   "clip": "ar-mis-iguazu-falls",
   "username": "Hornero (preview placeholder)",
-  "notes": "Captured on the live Hornero host through scripts/preview.sh. The staged preview uses the installed media/base path; login is test-only and never authenticates."
+  "notes": "Captured on the live Hornero host through scripts/preview.sh. The staged theme resolves media/base through the install layout backed by the built pack at build/media/base; login is test-only and never authenticates."
 }

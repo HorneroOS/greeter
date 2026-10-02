@@ -100,7 +100,7 @@ def test_fixture_profile_no_audio_resolution_duration_permissions():
     assert mode & stat.S_IROTH, "sddm user must be able to read runtime files"
 
 
-def test_package_script_builds_single_base_pack():
+def test_package_script_builds_single_base_pack(tmp_path):
     run(sys.executable, "scripts/media/build.py", "--fixture")
     # package.py needs generated catalog files; synthesize minimal ones
     # around the offline fixture (mirrors build --all output shape).
@@ -122,7 +122,7 @@ def test_package_script_builds_single_base_pack():
     expected_video = "hornero-greeter-media-base/base/ar-example-sample.mp4"
     assert expected_video in names
     assert any(n.endswith("catalog.json") for n in names)
-    extracted = REPO / "build" / "media" / "package-extract-test"
+    extracted = tmp_path / "media-extracted"
     extracted.mkdir(parents=True)
     run("tar", "--zstd", "-xf", str(packs[0]), "-C", str(extracted),
         "--strip-components=1", "hornero-greeter-media-base/base")
