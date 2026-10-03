@@ -65,6 +65,12 @@ def test_pkgbuild_declares_qt6_multimedia():
     assert "qt6-multimedia" in _depends()
 
 
+def test_pkgbuild_declares_default_greeter_font():
+    theme_conf = (REPO_ROOT / "theme.conf").read_text(encoding="utf-8")
+    assert re.search(r'^displayFont="Rubik"$', theme_conf, re.MULTILINE)
+    assert "ttf-rubik-vf" in _depends()
+
+
 def test_qml_imports_covered_by_depends():
     imports = _qml_imports()
     assert "QtMultimedia" in imports, "expected the MediaDeck to import QtMultimedia"
