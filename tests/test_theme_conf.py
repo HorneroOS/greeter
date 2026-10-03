@@ -74,13 +74,11 @@ def test_fallback_images_are_local_and_exist():
 
 
 def test_no_remote_playlist_references():
-    for name in ("theme.conf", "theme.conf.user"):
-        text = (REPO_ROOT / name).read_text(encoding="utf-8")
-        assert "http://" not in text and "https://" not in text
-        assert "playlists/" not in text
+    text = (REPO_ROOT / "theme.conf").read_text(encoding="utf-8")
+    assert "http://" not in text and "https://" not in text
+    assert "playlists/" not in text
 
 
-def test_user_override_uses_new_schema():
-    conf = read_conf("theme.conf.user")
-    assert "mediaManifest" not in conf
-    assert "bgVidDay" not in conf and "bgVidNight" not in conf
+def test_user_override_is_not_shipped_as_factory_configuration():
+    recipe = (REPO_ROOT / "packaging/arch/hornero-greeter/PKGBUILD").read_text(encoding="utf-8")
+    assert '"$src/theme.conf.user"' not in recipe

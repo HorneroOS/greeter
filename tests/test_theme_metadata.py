@@ -34,8 +34,5 @@ def test_arch_package_installs_qt6_theme_runtime():
     assert "'qt6-multimedia'" in recipe
     assert "'qt6-declarative'" in recipe
     assert "'qt5-multimedia'" not in recipe
-    assert (
-        "for f in theme.conf theme.conf.user metadata.desktop background.jpg; do\n"
-        '    install -Dm644 "$src/$f" "${dest}$f"\n'
-        "  done"
-    ) in recipe
+    assert "for f in theme.conf metadata.desktop background.jpg; do\n" in recipe
+    assert '"$src/theme.conf.user"' not in recipe

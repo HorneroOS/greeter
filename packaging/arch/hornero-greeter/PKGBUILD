@@ -1,7 +1,7 @@
 # Maintainer: HorneroOS contributors <https://github.com/HorneroOS/greeter>
 pkgname=hornero-greeter
 pkgver=1.0.2
-pkgrel=4
+pkgrel=5
 pkgdesc='HorneroOS SDDM greeter theme (Argentina footage, offline)'
 arch=('any')
 url='https://github.com/HorneroOS/greeter'
@@ -23,7 +23,10 @@ package() {
   install -d "$dest"
   # Theme payload: QML, configs, static fallback (all required).
   install -Dm644 "$src/Main.qml" "${dest}Main.qml"
-  for f in theme.conf theme.conf.user metadata.desktop background.jpg; do
+  # theme.conf.user is an optional administrator override. Shipping a
+  # sample as an active override masks theme.conf defaults on a fresh
+  # install (including the default typeface and login affordance).
+  for f in theme.conf metadata.desktop background.jpg; do
     install -Dm644 "$src/$f" "${dest}$f"
   done
   cp -a "$src/components" "$dest"
