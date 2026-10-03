@@ -1,0 +1,12 @@
+{
+  "beforeSource": "HorneroOS/greeter main at 0240f849",
+  "afterSource": "53f28d9",
+  "package": "hornero-greeter 1.0.2-5",
+  "captureMode": "sddm-greeter-qt6 --test-mode under nested Hyprland",
+  "resolution": "1111x1016",
+  "beforeImage": "greeter-user-override-before.png",
+  "afterImage": "greeter-package-default-after.png",
+  "beforeConfiguration": "Installed package theme.conf.user overrides the packaged defaults: Misc Fixed, showLoginButton=false, relativePositionX=0.5, relativePositionY=0.75.",
+  "afterConfiguration": "Built package extracted to a temporary root; only theme.conf factory defaults are present. Video was disabled and the login content revealed in a temporary preview copy.",
+  "notes": "Neither capture changed the installed package or the running graphical session."
+}

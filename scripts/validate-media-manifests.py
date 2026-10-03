@@ -60,7 +60,7 @@ VIDEO_EXTENSIONS = {
 # replaces them with local files transcoded from media/manifests/ (see
 # MEDIA_ROADMAP.md). The exemption is reported as a warning, not silence.
 RUNTIME_SCAN = (
-    ["Main.qml", "theme.conf", "theme.conf.user"]
+    ["Main.qml", "theme.conf"]
     + sorted(str(p) for p in (REPO / "components").glob("*.qml"))
 )
 # License-notice URLs (GPL header boilerplate) are not network calls.

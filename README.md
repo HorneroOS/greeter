@@ -49,7 +49,10 @@ Local footage ships via media packs bridged under `<theme>/media`
 
 ## Changing settings in `theme.conf.user`
 
-Copy `theme.conf` values you want to override into `theme.conf.user`:
+The package ships only `theme.conf`, which contains the working factory
+defaults. `theme.conf.user` is an optional local override and is deliberately
+not installed by the package. Create it beside `theme.conf` only when you
+want to override selected values; copy just those values from `theme.conf`:
 
 - `dayTimeStart`, `dayTimeEnd`, `goldenHourStart`,
   `goldenHourEnd` - day/night/golden-hour windows

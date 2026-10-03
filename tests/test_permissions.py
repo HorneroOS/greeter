@@ -9,7 +9,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNTIME_PATHS = [
     REPO_ROOT / "Main.qml",
     REPO_ROOT / "theme.conf",
-    REPO_ROOT / "theme.conf.user",
     REPO_ROOT / "metadata.desktop",
     REPO_ROOT / "background.jpg",
     REPO_ROOT / "media" / "catalog.json",
