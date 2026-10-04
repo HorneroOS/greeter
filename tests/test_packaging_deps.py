@@ -71,6 +71,15 @@ def test_pkgbuild_declares_default_greeter_font():
     assert "ttf-rubik-vf" in _depends()
 
 
+def test_pkgbuild_version_matches_its_source_tag():
+    text = GREETER_PKGBUILD.read_text(encoding="utf-8")
+    version = re.search(r"^pkgver=([0-9][A-Za-z0-9._+~-]*)$", text, re.MULTILINE)
+    source_tag = re.search(r"#tag=v([0-9][A-Za-z0-9._+~-]*)", text)
+    assert version and source_tag, "PKGBUILD must pin a versioned greeter tag"
+    assert version.group(1) == source_tag.group(1), "pkgver and source tag drifted"
+    assert "github.com/HorneroOS/greeter.git" in text
+
+
 def test_qml_imports_covered_by_depends():
     imports = _qml_imports()
     assert "QtMultimedia" in imports, "expected the MediaDeck to import QtMultimedia"
