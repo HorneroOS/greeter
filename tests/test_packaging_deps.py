@@ -6,6 +6,7 @@ Also guards against committing VCS checkout byproducts (a stray
 makepkg/AUR git clone was once tracked under packaging/).
 """
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -69,6 +70,23 @@ def test_pkgbuild_declares_default_greeter_font():
     theme_conf = (REPO_ROOT / "theme.conf").read_text(encoding="utf-8")
     assert re.search(r'^displayFont="Rubik"$', theme_conf, re.MULTILINE)
     assert "ttf-rubik-vf" in _depends()
+
+
+def test_pkgbuild_version_tracks_a_published_theme_tag():
+    text = GREETER_PKGBUILD.read_text(encoding="utf-8")
+    version = re.search(r"^pkgver=([0-9][A-Za-z0-9._+~-]*)$", text, re.MULTILINE)
+    source_tag = re.search(r"#tag=v([0-9][A-Za-z0-9._+~-]*)", text)
+    assert version and source_tag, "PKGBUILD must pin a versioned greeter tag"
+    assert version.group(1) == source_tag.group(1), "pkgver and source tag drifted"
+    tag = f"v{version.group(1)}"
+    result = subprocess.run(
+        ["git", "tag", "--list", tag],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == tag, f"PKGBUILD tag {tag} is not published"
 
 
 def test_qml_imports_covered_by_depends():
