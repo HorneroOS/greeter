@@ -467,9 +467,7 @@ Rectangle {
         // Use dedicated, local Argentine stills when no suitable video is
         // available for golden hour or night. The day still remains the
         // upstream fallback for a missing/disabled video pack.
-        var stillImage = part === "golden-hour"
-                ? (config.bgImgGoldenHour || config.bgImgDay)
-                : (part === "night" ? config.bgImgNight : config.bgImgDay);
+        var stillImage = part === "golden-hour" ? (config.bgImgGoldenHour || config.bgImgDay) : (part === "night" ? config.bgImgNight : config.bgImgDay);
         if (stillImage !== null && stillImage !== undefined && stillImage !== "") {
             var fileType = stillImage.substring(stillImage.lastIndexOf(".") + 1).toLowerCase();
             if (fileType === "gif")
