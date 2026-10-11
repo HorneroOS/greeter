@@ -24,6 +24,8 @@ changes. Preview encodes use a separate, smaller 720p web profile.
 
 ## Benchmark (2026-09-14, ffmpeg n9.0.1, 1280x720p30 testsrc, 4 s)
 
+This historical codec comparison measured H.264 at CRF 20 for the synthetic testsrc; it is separate from the current CRF 25 runtime setting above.
+
 | profile | command (essence) | size | encode wall |
 | --- | --- | --- | --- |
 | H.264 (chosen) | `libx264 -preset slow -crf 20 -pix_fmt yuv420p +faststart` | 75,323 B | < 1 s |
