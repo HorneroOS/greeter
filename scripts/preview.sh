@@ -105,6 +105,7 @@ fi
 # Probe flags (--daypart/--prefill-*/--fail-login) operate on a COPY of
 # Main.qml inside the throwaway stage dir; the repo file is never modified.
 mkdir -p "$STAGE/media"
+ln -s "$ROOT/media/stills" "$STAGE/media/stills"
 ln -s "$ROOT/components" "$STAGE/components"
 ln -s "$ROOT/background.jpg" "$STAGE/background.jpg"
 ln -s "$ROOT/metadata.desktop" "$STAGE/metadata.desktop"
@@ -152,15 +153,15 @@ else
 fi
 
 if [ -n "$DAYPART" ]; then
-  # Force the deck mood in the STAGED copy so the state renders
-  # regardless of the real clock hour.
+  # Force both the static fallback and the video deck mood in the STAGED
+  # copy so this mood renders regardless of the real clock hour.
   python3 - "$STAGE/Main.qml" "$DAYPART" <<'EOF'
 import re, sys
 path, part = sys.argv[1], sys.argv[2]
 qml_file = {"day": "day", "golden": "golden-hour", "night": "night"}[part]
 src = open(path, encoding="utf-8").read()
-src2, n = re.subn(r"deck\.daypart\s*=\s*[^;]+;", 'deck.daypart = "%s";' % qml_file, src, count=1)
-assert n == 1, "daypart assignment not found"
+src2, n = re.subn(r"var part = Catalog\.daypartForHour\([^;]+;", 'var part = "%s";' % qml_file, src, count=1)
+assert n == 1, "daypart selection not found"
 open(path, "w", encoding="utf-8").write(src2)
 EOF
 fi

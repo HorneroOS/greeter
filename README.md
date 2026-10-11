@@ -117,11 +117,15 @@ background video is sequenced by `components/MediaDeck.qml` (dual Qt6
 runtime catalog is imported synchronously, never fetched).
 No network is used at runtime; with no local clips (or with
 `videoEnabled=false`) the greeter falls back to `background.jpg`. The
-`hornero-greeter-media-base` pack ships 8 Argentina clips; the runtime
-catalog wires 7 into rotation (Iguazu, Perito Moreno x2, Ushuaia, Buenos
-Aires, Bariloche by day; mountain lake dimmed at night). The theme
-package bridges them in under `<theme>/media/base`.
-New `theme.conf` keys: `videoEnabled`, `crossfadeDuration`, `testMode`.
+`hornero-greeter-media-base` contains the three video scenes selected for
+daytime rotation: Iguazu Falls, a wide Perito Moreno pan, and Ushuaia. The
+theme package includes licensed still fallbacks for golden hour and night;
+no daylight clip is mislabeled as a night scene. Inactive or rights-pending
+source manifests remain outside the default media pack. The theme package
+bridges video under `<theme>/media/base` and installs stills locally.
+`theme.conf` controls the daypart windows, fallback images, video, and
+crossfade behavior. See [MEDIA_ROADMAP.md](MEDIA_ROADMAP.md) for the editorial
+selection and [media/README.md](media/README.md) for the generation workflow.
 See `media/README.md` for the pack format.
 
 ## HorneroOS branding (optional overlay)

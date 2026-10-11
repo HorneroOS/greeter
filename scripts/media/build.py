@@ -248,6 +248,20 @@ def main(argv=None):
         if not manifests:
             print(f"unknown manifest id: {args.id}", file=sys.stderr)
             return 2
+    else:
+        # Only scenes selected by the editorial runtime catalog ship in the
+        # media pack. Licensed but inactive source manifests stay available
+        # for future review without silently adding package weight.
+        source = json.loads((Path(__file__).resolve().parents[2] / "media" / "catalog.json")
+                            .read_text(encoding="utf-8"))
+        active = {entry["id"] for entries in source["dayparts"].values()
+                  for entry in entries}
+        manifests = [(path, data) for path, data in manifests if data["id"] in active]
+        missing = active - {data["id"] for _, data in manifests}
+        if missing:
+            print(f"runtime catalog references unshippable clips: {', '.join(sorted(missing))}",
+                  file=sys.stderr)
+            return 1
     built = []
     for _, data in manifests:
         try:

@@ -1,0 +1,44 @@
+{
+  "id": "ar-mis-iguazu-falls-staggered",
+  "title": "Iguazú in tiers of mist",
+  "description": "A wide sweep across Iguazú's staggered cascades, with mist rising through the surrounding green canopy.",
+  "location": {
+    "place": "Iguazú Falls, Misiones",
+    "province": "Misiones",
+    "region": "Litoral",
+    "country": "Argentina"
+  },
+  "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Cascadas_del_Iguaz%C3%BA_en_varios_pisos_escalonadas.webm",
+    "file": "Cascadas del Iguazú en varios pisos escalonadas.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2026-10-11",
+    "evidence": "The Commons file page identifies the source as own work by the named creators, records a direct CC BY-SA 4.0 grant, and includes the Self-published work category. It was uploaded to the Wiki Science Competition 2025 in Argentina. Source page, license, and downloaded original checked on 2026-10-11."
+  },
+  "original": {
+    "bytes": 18767613,
+    "sha256": "dec4b78526982da39aec9887ef7b8f7c4609f158bb751753ff91bcb16f449e37",
+    "duration_s": 36.523,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 1,
+    "trim_end_s": 31,
+    "crop": "none (native 16:9 landscape)",
+    "scale": "keep 1080p source",
+    "audio": "strip"
+  },
+  "notes": "Checked at 0, 1, 3, 12, 24, 34, and 35 seconds. The continuous wide view layers multiple falls, dense greenery, and mist without titles or faces. Trim 1–31 seconds to retain the panorama while leaving the final framing drift out."
+}

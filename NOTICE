@@ -1,30 +1,35 @@
-HorneroOS greeter (SDDM theme)
+# HorneroOS greeter notices
 
-Derived from aerial-sddm-theme by Fabio Almeida (3ximus),
-https://github.com/3ximus/aerial-sddm-theme, under the GNU General Public
-License version 3. See LICENSE for the full license text.
+## Source code
 
-This program is free software: you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option)
-any later version.
+The SDDM theme is derived from aerial-sddm-theme by Fabio Almeida (3ximus),
+https://github.com/3ximus/aerial-sddm-theme, under GNU GPL version 3. See
+`LICENSE` for the source-code license.
 
+## Media included in the theme and base media pack
 
-Video footage (full provenance in media/manifests/)
-----------------------------------------------------
-- Buenos Aires city montage - Neoredacturus - CC BY-SA 4.0
-- Iguazu Falls from the Argentina side - redwing115 - CC BY 3.0
-- Perito Moreno glacier ice wall on Lago Argentino -
-  Brandon Antonio Segura Torres & Priscilla Vieto Bonilla - CC BY-SA 4.0
-- Iceberg calving at Perito Moreno glacier -
-  Brandon Antonio Segura Torres & Priscilla Vieto Bonilla - CC BY-SA 4.0
-- Penguin colony at the End of the World lighthouse, Ushuaia -
-  Brandon Antonio Segura Torres & Priscilla Vieto Bonilla - CC BY-SA 4.0
-- San Carlos de Bariloche lakeshore - Gabo2012 - CC BY-SA 3.0
-- Street musicians in Salta - Viktor Pinchuk - CC BY 4.0
-- Mountain lake in Patagonia - Tamtam90 - CC BY-SA 4.0
+Media is independently licensed; the GPL source-code license does not apply
+to these works. Adapted stills are installed with the theme. Video clips are
+downloaded and packaged by the reproducible media pipeline and are not stored
+in Git. Full source records, original hashes, dimensions, edits, and license
+evidence live in `media/stills/` and `media/manifests/`.
 
-License texts: https://creativecommons.org/licenses/by/3.0
-https://creativecommons.org/licenses/by/4.0
-https://creativecommons.org/licenses/by-sa/3.0
-https://creativecommons.org/licenses/by-sa/4.0
+- **Iguazú in tiers of mist** — Brandon Antonio Segura Torres & Priscilla
+  Vieto Bonilla; CC BY-SA 4.0;
+  https://commons.wikimedia.org/wiki/File:Cascadas_del_Iguaz%C3%BA_en_varios_pisos_escalonadas.webm
+- **Across the Perito Moreno ice front** — Brandon Antonio Segura Torres &
+  Priscilla Vieto Bonilla; CC BY-SA 4.0;
+  https://commons.wikimedia.org/wiki/File:Paneo_a_Glaciar_Perito_Moreno.webm
+- **Penguin colony at the End of the World lighthouse, Ushuaia** — Brandon
+  Antonio Segura Torres & Priscilla Vieto Bonilla; CC BY-SA 4.0;
+  https://commons.wikimedia.org/wiki/File:Poblaci%C3%B3n_de_pinguinos_en_Faro_del_Fin_del_mundo_en_Ushuaia.webm
+- **Palmar at the last light** — Leandro Kibisz (Loco085); adapted still;
+  CC BY-SA 4.0;
+  https://commons.wikimedia.org/wiki/File:Argentina_-_Entre_R%C3%ADos_-_Parque_Nacional_El_Palmar_(atardecer).JPG
+- **Corrientes Avenue after dark** — ProtoplasmaKid; adapted still;
+  CC BY-SA 4.0;
+  https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_nocturna_de_Avenida_9_de_julio_y_Avenida_Corrientes_02.jpg
+
+License texts:
+https://creativecommons.org/licenses/by/3.0/
+https://creativecommons.org/licenses/by-sa/4.0/

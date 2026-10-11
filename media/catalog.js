@@ -8,32 +8,14 @@ var CATALOG = {
     "day": [
       {
         "daypart": "day",
-        "file": "media/base/ar-ba-buenos-aires.mp4",
-        "id": "ar-ba-buenos-aires",
+        "file": "media/base/ar-mis-iguazu-falls-staggered.mp4",
+        "id": "ar-mis-iguazu-falls-staggered",
         "kind": "video"
       },
       {
         "daypart": "day",
-        "file": "media/base/ar-mis-iguazu-falls.mp4",
-        "id": "ar-mis-iguazu-falls",
-        "kind": "video"
-      },
-      {
-        "daypart": "day",
-        "file": "media/base/ar-rn-bariloche.mp4",
-        "id": "ar-rn-bariloche",
-        "kind": "video"
-      },
-      {
-        "daypart": "day",
-        "file": "media/base/ar-sc-perito-moreno-calving.mp4",
-        "id": "ar-sc-perito-moreno-calving",
-        "kind": "video"
-      },
-      {
-        "daypart": "day",
-        "file": "media/base/ar-sc-perito-moreno-wall.mp4",
-        "id": "ar-sc-perito-moreno-wall",
+        "file": "media/base/ar-sc-perito-moreno-pan.mp4",
+        "id": "ar-sc-perito-moreno-pan",
         "kind": "video"
       },
       {
@@ -43,14 +25,7 @@ var CATALOG = {
         "kind": "video"
       }
     ],
-    "night": [
-      {
-        "daypart": "night",
-        "file": "media/base/ar-pat-mountain-lake.mp4",
-        "id": "ar-pat-mountain-lake",
-        "kind": "video"
-      }
-    ]
+    "night": []
   },
   "fallbackImage": "background.jpg",
   "version": 1

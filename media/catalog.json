@@ -4,32 +4,14 @@
   "dayparts": {
     "day": [
       {
-        "id": "ar-ba-buenos-aires",
-        "file": "media/base/ar-ba-buenos-aires.mp4",
+        "id": "ar-mis-iguazu-falls-staggered",
+        "file": "media/base/ar-mis-iguazu-falls-staggered.mp4",
         "daypart": "day",
         "kind": "video"
       },
       {
-        "id": "ar-mis-iguazu-falls",
-        "file": "media/base/ar-mis-iguazu-falls.mp4",
-        "daypart": "day",
-        "kind": "video"
-      },
-      {
-        "id": "ar-rn-bariloche",
-        "file": "media/base/ar-rn-bariloche.mp4",
-        "daypart": "day",
-        "kind": "video"
-      },
-      {
-        "id": "ar-sc-perito-moreno-calving",
-        "file": "media/base/ar-sc-perito-moreno-calving.mp4",
-        "daypart": "day",
-        "kind": "video"
-      },
-      {
-        "id": "ar-sc-perito-moreno-wall",
-        "file": "media/base/ar-sc-perito-moreno-wall.mp4",
+        "id": "ar-sc-perito-moreno-pan",
+        "file": "media/base/ar-sc-perito-moreno-pan.mp4",
         "daypart": "day",
         "kind": "video"
       },
@@ -40,13 +22,6 @@
         "kind": "video"
       }
     ],
-    "night": [
-      {
-        "id": "ar-pat-mountain-lake",
-        "file": "media/base/ar-pat-mountain-lake.mp4",
-        "daypart": "night",
-        "kind": "video"
-      }
-    ]
+    "night": []
   }
 }

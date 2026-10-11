@@ -1,0 +1,41 @@
+{
+  "id": "ar-ba-nocturno",
+  "title": "Corrientes Avenue after dark",
+  "description": "A night view traces the illuminated avenues between Buenos Aires rooftops and high-rises.",
+  "location": {
+    "place": "Avenida Corrientes and Avenida 9 de Julio, Buenos Aires",
+    "province": "Ciudad Autónoma de Buenos Aires",
+    "region": "Pampas",
+    "country": "Argentina"
+  },
+  "creator": "ProtoplasmaKid",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_nocturna_de_Avenida_9_de_julio_y_Avenida_Corrientes_02.jpg",
+    "file": "Vista aérea nocturna de Avenida 9 de julio y Avenida Corrientes 02.jpg"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "evidence": "The Commons file page identifies this as the author's own work and displays a direct CC BY-SA 4.0 grant. The page records 4,021x2,262 pixels, 6,775,323 bytes, and the 2025-10-01 capture date. Original and license checked on 2026-10-11."
+  },
+  "original": {
+    "bytes": 6775323,
+    "sha256": "0a8f2a55895603269b3f4c69f2227e33a59c885a982b96eec7f188f9e4d536f4",
+    "width": 4021,
+    "height": 2262,
+    "container": "jpg"
+  },
+  "derivative": {
+    "file": "ar-ba-nocturno.jpg",
+    "sha256": "ad2818aa08e8689b3374728c3831fc0d4325ed9c1073feb66efb8854e7a19f39",
+    "width": 1920,
+    "height": 1080,
+    "processing": "Downscaled to 1920x1080 with Lanczos; metadata stripped; JPEG quality 3."
+  },
+  "role": "static-night-fallback",
+  "notes": "A real nighttime city view is used as the greeter's static night background while no licensed night video is selected. This image is not presented as a video scene."
+}

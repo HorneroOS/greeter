@@ -13,6 +13,15 @@ branch points at VP9/WebM. Staying with H.264 keeps the base pack
 directly playable by both the legacy Qt5 `QtMultimedia` player and the
 Qt6 `MediaDeck` sequencer without a re-encode.
 
+## Encoder settings
+
+The runtime uses `libx264 -preset slow -crf 25` for actual landscape media.
+The 2026-09-14 synthetic testsrc codec comparison below established the
+container/decoder choice, not the best visual CRF for scenic footage. CRF 25
+keeps the decode-compatible H.264 profile while controlling package size for
+high-detail water, mist, and foliage; review output frames when the collection
+changes. Preview encodes use a separate, smaller 720p web profile.
+
 ## Benchmark (2026-09-14, ffmpeg n9.0.1, 1280x720p30 testsrc, 4 s)
 
 | profile | command (essence) | size | encode wall |
@@ -30,7 +39,7 @@ criteria that matter for a greeter:
    ffmpeg) play H.264 everywhere; VP9-in-WebM needs extra plugins on
    minimal ISO images.
 3. **Qt6 alignment.** The reference catalog already expects `.mp4`.
-4. **Determinism.** `libx264` with `-preset slow -crf 20
+4. **Determinism.** `libx264` with `-preset slow -crf 25
    -map_metadata -1 +faststart` gives byte-stable, instantly-starting
    local files; VP9 two-pass/CRF tuning adds build-time variance.
 

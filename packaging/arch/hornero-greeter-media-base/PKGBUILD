@@ -2,7 +2,7 @@
 pkgname=hornero-greeter-media-base
 pkgver=1.0.0
 pkgrel=2
-pkgdesc='Base Argentina video pack for the HorneroOS SDDM greeter (offline H.264)'
+pkgdesc='Argentina video pack for the HorneroOS SDDM greeter (offline H.264)'
 arch=('any')
 url='https://github.com/HorneroOS/greeter'
 license=('CC-BY-4.0' 'CC-BY-3.0' 'CC-BY-SA-3.0' 'CC-BY-SA-4.0')

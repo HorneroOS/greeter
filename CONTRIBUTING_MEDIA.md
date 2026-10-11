@@ -1,7 +1,9 @@
 # Contributing media to the greeter
 
-English only, here and in every manifest. No video binaries in git:
-manifests plus tiny JSON fixtures are the only media files committed.
+English only, here and in every manifest. No video binaries in git. The
+theme may include optimized still derivatives; each needs a provenance JSON
+record under `media/stills/` and must be listed in `NOTICE` and installed by
+the theme package.
 
 ## License policy (hard rules)
 
@@ -15,6 +17,17 @@ manifests plus tiny JSON fixtures are the only media files committed.
     ticket or equivalent), quoted in `review.evidence`.
 - Anything else (`license-review-needed`, `review-pending`) goes to
   `media/candidates/` and **never** ships. The validator enforces this.
+
+## Still backgrounds
+
+Stills require the same source-rights review as video; credit alone is not a
+redistribution grant. Keep the original outside Git and record the source
+page, author, license, evidence, original dimensions/hash, derivative
+dimensions/hash, crop/encoding steps, and role in `media/stills/<id>.json`.
+Commit only the optimized derivative used by the theme, add its author and
+source to `NOTICE`, install it in the theme package, and test the configured
+daypart fallback with the media pack absent. A still fallback is not a video
+scene and must not appear in the runtime video catalog.
 
 ## How to propose a clip
 

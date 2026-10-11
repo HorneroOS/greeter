@@ -86,6 +86,33 @@ def test_wired_entries_match_shippable_manifests(catalog):
         for entry in catalog["dayparts"][part]:
             assert entry["id"] in shippable, f"unshippable id {entry['id']}"
             assert entry["file"] == f"media/base/{entry['id']}.mp4", entry["file"]
-            # Night reuse of daylight footage is the documented interim
-            # policy (MEDIA_ROADMAP.md gap 2) until native night clips ship.
-            assert entry["daypart"] in ("day", "night"), entry["daypart"]
+            assert entry["daypart"] == part, entry
+
+
+def test_empty_video_moods_are_intentional_and_static_fallbacks_exist(catalog):
+    assert catalog["dayparts"]["night"] == []
+    assert "golden-hour" not in catalog["dayparts"] or not catalog["dayparts"]["golden-hour"]
+    conf = {}
+    for line in (REPO_ROOT / "theme.conf").read_text(encoding="utf-8").splitlines():
+        if "=" in line and not line.lstrip().startswith("#"):
+            key, value = line.split("=", 1)
+            conf[key.strip()] = value.strip().strip('"')
+    for key in ("bgImgGoldenHour", "bgImgNight"):
+        value = conf[key]
+        assert not value.startswith(("http://", "https://", "/", "~"))
+        assert (REPO_ROOT / value).is_file(), value
+
+
+def test_still_provenance_matches_derivative_hashes():
+    import hashlib
+
+    for path in sorted((REPO_ROOT / "media" / "stills").glob("*.json")):
+        record = json.loads(path.read_text(encoding="utf-8"))
+        assert record["review"]["status"] in ("own-work", "reviewed", "written-permission")
+        assert record["license"]["url"].startswith("https://creativecommons.org/")
+        assert record["source"]["page"].startswith("https://")
+        image = path.parent / record["derivative"]["file"]
+        assert image.is_file()
+        assert hashlib.sha256(image.read_bytes()).hexdigest() == record["derivative"]["sha256"]
+        assert record["derivative"]["width"] == 1920
+        assert record["derivative"]["height"] == 1080

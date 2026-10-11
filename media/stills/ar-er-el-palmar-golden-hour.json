@@ -1,0 +1,41 @@
+{
+  "id": "ar-er-el-palmar-golden-hour",
+  "title": "Palmar at the last light",
+  "description": "Warm evening light falls across the grasslands and native yatay palms of El Palmar.",
+  "location": {
+    "place": "Parque Nacional El Palmar",
+    "province": "Entre Ríos",
+    "region": "Litoral",
+    "country": "Argentina"
+  },
+  "creator": "Leandro Kibisz (Loco085)",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Argentina_-_Entre_R%C3%ADos_-_Parque_Nacional_El_Palmar_(atardecer).JPG",
+    "file": "Argentina - Entre Ríos - Parque Nacional El Palmar (atardecer).JPG"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "evidence": "The Commons file page identifies this as the author's own work, names Leandro Kibisz, and displays a direct CC BY-SA 4.0 grant. The page records 6,000x4,000 pixels and a 2015-05-17 capture date. Original and license checked on 2026-10-11."
+  },
+  "original": {
+    "bytes": 11659264,
+    "sha256": "b636a1fe05823a6e79356470df8d4aa1ac388007d750adb28d07c2ca97485430",
+    "width": 6000,
+    "height": 4000,
+    "container": "jpg"
+  },
+  "derivative": {
+    "file": "ar-er-el-palmar-golden-hour.jpg",
+    "sha256": "265e8ae8b26db520dea5358a7468691925fd3bd404ce12f8cd4451c49520a4a0",
+    "width": 1920,
+    "height": 1080,
+    "processing": "Scaled to 1920x1280, center-cropped to 1920x1080, metadata stripped, JPEG quality 3."
+  },
+  "role": "static-golden-hour-fallback",
+  "notes": "A licensed dusk landscape provides the configured golden-hour fallback. It is a still image, not a video scene."
+}
