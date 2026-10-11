@@ -1,0 +1,44 @@
+{
+  "id": "ar-sc-perito-moreno-pan",
+  "title": "Across the Perito Moreno ice front",
+  "description": "A slow panorama of the blue-white glacier front, Lago Argentino, and the Andean ridge beyond.",
+  "location": {
+    "place": "Los Glaciares National Park, Lago Argentino",
+    "province": "Santa Cruz",
+    "region": "Patagonia Austral",
+    "country": "Argentina"
+  },
+  "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+  "source": {
+    "page": "https://commons.wikimedia.org/wiki/File:Paneo_a_Glaciar_Perito_Moreno.webm",
+    "file": "Paneo a Glaciar Perito Moreno.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-Share Alike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2026-10-11",
+    "evidence": "The Commons file page identifies the video as own work by the named creators, displays their direct CC BY-SA 4.0 grant, and categorizes it as Self-published work. No external transfer is involved. Reviewed against the file page and original metadata on 2026-10-11."
+  },
+  "original": {
+    "bytes": 20708303,
+    "sha256": "6b3811561febf05f361ceeb7cb66b8a88435b7b03eaf7c907cba838443cad1f6",
+    "duration_s": 37.805,
+    "width": 2160,
+    "height": 3840,
+    "container": "webm"
+  },
+  "dayparts": ["day"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 37.8,
+    "crop": "center-crop 2160x1216 (centered 16:9 band; preserves the continuous ice-front pan)",
+    "scale": "downscale to 1920x1080; source is 2160x3840 portrait",
+    "audio": "strip"
+  },
+  "notes": "Selected after checking frames at 4, 18, and 30 seconds. The centered crop retains the glacier wall, lake, and Andean ridge through the pan; replaces the two older portrait glacier clips in active rotation."
+}

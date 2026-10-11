@@ -464,9 +464,12 @@ Rectangle {
         // Static fallback image (local file only), layered under the deck.
         var hour = new Date().getHours();
         var part = Catalog.daypartForHour(hour, config.dayTimeStart, config.dayTimeEnd, config.goldenHourStart, config.goldenHourEnd);
-        // Golden-hour is a mood of the video deck; stills stay day/night.
-        var isDaytime = part !== "night";
-        var stillImage = isDaytime ? config.bgImgDay : config.bgImgNight;
+        // Use dedicated, local Argentine stills when no suitable video is
+        // available for golden hour or night. The day still remains the
+        // upstream fallback for a missing/disabled video pack.
+        var stillImage = part === "golden-hour"
+                ? (config.bgImgGoldenHour || config.bgImgDay)
+                : (part === "night" ? config.bgImgNight : config.bgImgDay);
         if (stillImage !== null && stillImage !== undefined && stillImage !== "") {
             var fileType = stillImage.substring(stillImage.lastIndexOf(".") + 1).toLowerCase();
             if (fileType === "gif")

@@ -29,6 +29,12 @@ package() {
   for f in theme.conf metadata.desktop background.jpg; do
     install -Dm644 "$src/$f" "${dest}$f"
   done
+  # Golden-hour and night have licensed local still fallbacks. Video remains
+  # an optional offline media pack; these compact images ship with the theme.
+  install -Dm644 "$src/media/stills/ar-ba-nocturno.jpg" \
+    "${dest}media/stills/ar-ba-nocturno.jpg"
+  install -Dm644 "$src/media/stills/ar-er-el-palmar-golden-hour.jpg" \
+    "${dest}media/stills/ar-er-el-palmar-golden-hour.jpg"
   cp -a "$src/components" "$dest"
   # Runtime video catalog (generated from media/catalog.json, committed):
   # entries resolve clips under media/base/ relative to the theme root.

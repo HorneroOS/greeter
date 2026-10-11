@@ -18,7 +18,7 @@ def read_conf(name):
 def test_required_keys_present():
     conf = read_conf("theme.conf")
     for key in (
-        "dayTimeStart", "dayTimeEnd", "bgImgDay", "bgImgNight",
+        "dayTimeStart", "dayTimeEnd", "bgImgDay", "bgImgNight", "bgImgGoldenHour",
         "videoEnabled", "crossfadeDuration", "testMode",
     ):
         assert key in conf, f"missing theme.conf key: {key}"
@@ -68,7 +68,7 @@ def test_generated_catalog_present_and_in_sync():
 
 def test_fallback_images_are_local_and_exist():
     conf = read_conf("theme.conf")
-    for key in ("bgImgDay", "bgImgNight"):
+    for key in ("bgImgDay", "bgImgGoldenHour", "bgImgNight"):
         assert not conf[key].startswith(("http://", "https://"))
         assert (REPO_ROOT / conf[key]).is_file()
 

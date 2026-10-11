@@ -23,7 +23,7 @@ VIDEO_CODEC = "h264"
 PIX_FMT = "yuv420p"
 MAX_HEIGHT = 1080
 MAX_FPS = 30.0
-CRF = "20"
+CRF = "25"
 PRESET = "slow"
 # Reproducibility: fixed mtime + sorted entries in package.py.
 REPRO_MTIME = 0

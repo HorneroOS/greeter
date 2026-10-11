@@ -11,6 +11,8 @@ RUNTIME_PATHS = [
     REPO_ROOT / "theme.conf",
     REPO_ROOT / "metadata.desktop",
     REPO_ROOT / "background.jpg",
+    REPO_ROOT / "media" / "stills" / "ar-ba-nocturno.jpg",
+    REPO_ROOT / "media" / "stills" / "ar-er-el-palmar-golden-hour.jpg",
     REPO_ROOT / "media" / "catalog.json",
     REPO_ROOT / "LICENSE",
     *sorted((REPO_ROOT / "components").glob("*.qml")),
