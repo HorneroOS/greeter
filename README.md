@@ -43,9 +43,11 @@ Hornero is a Qt 6 theme. Use `sddm-greeter-qt6` for previews; the unsuffixed
 The AUR publish workflow uses tags named
 `pkg/hornero-greeter-vX.Y.Z`; distro composition tags cannot trigger it.
 Arch `pkgver` does not allow hyphens, so prerelease labels use underscores in
-the tag, for example `pkg/hornero-greeter-v1.1.0_preview1`. The publisher keeps
-that upstream tag in `source`, while stamping `pkgver=1.1.0rc1` so Arch's
-version comparator orders the preview before stable `1.1.0`.
+the tag, for example `pkg/hornero-greeter-v1.1.0_preview1`. The tag determines
+the package version, while the published PKGBUILD pins its Git source to the
+verified release commit so a moved tag cannot change the build input. Preview
+tags are stamped as `pkgver=1.1.0rc1` so Arch's version comparator orders the
+preview before stable `1.1.0`.
 
 The offline media pack has its own release flow. Attach
 `hornero-greeter-media-base-X.Y.Z.tar.zst` to a published GitHub Release tagged

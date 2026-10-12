@@ -11,10 +11,12 @@ REPOSITORY = "git+https://github.com/HorneroOS/greeter.git"
 TAG_PREFIX = "pkg/hornero-greeter-v"
 
 
-def stamp(pkgbuild: Path, tag: str) -> None:
-    """Update pkgver and the source ref from a package-scoped tag."""
+def stamp(pkgbuild: Path, tag: str, release_sha: str) -> None:
+    """Update pkgver and pin the source to the release commit."""
     if not tag.startswith(TAG_PREFIX):
         raise ValueError(f"invalid release tag: {tag}")
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", release_sha):
+        raise ValueError("release commit must be a full 40-character SHA-1")
     upstream_version = tag.removeprefix(TAG_PREFIX)
     if not re.fullmatch(r"[0-9][A-Za-z0-9._+]*", upstream_version):
         raise ValueError(f"invalid Arch package version in release tag: {tag}")
@@ -31,7 +33,7 @@ def stamp(pkgbuild: Path, tag: str) -> None:
 
     source_matches = list(
         re.finditer(
-            re.escape(REPOSITORY) + r"(?:#tag=[^\s\"')]+)?", content
+            re.escape(REPOSITORY) + r"(?:#(?:tag|commit)=[^\s\"')]+)?", content
         )
     )
     if len(source_matches) != 1:
@@ -40,7 +42,7 @@ def stamp(pkgbuild: Path, tag: str) -> None:
     match = source_matches[0]
     content = (
         content[: match.start()]
-        + f"{REPOSITORY}#tag={tag}"
+        + f"{REPOSITORY}#commit={release_sha.lower()}"
         + content[match.end() :]
     )
     content = content.replace(version_lines[0], f"pkgver={version}", 1)
@@ -48,14 +50,14 @@ def stamp(pkgbuild: Path, tag: str) -> None:
 
 
 def main() -> int:
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print(
-            "usage: stamp_aur_package.py PKGBUILD pkg/hornero-greeter-vX.Y.Z",
+            "usage: stamp_aur_package.py PKGBUILD pkg/hornero-greeter-vX.Y.Z RELEASE_SHA",
             file=sys.stderr,
         )
         return 2
     try:
-        stamp(Path(sys.argv[1]), sys.argv[2])
+        stamp(Path(sys.argv[1]), sys.argv[2], sys.argv[3])
     except (OSError, ValueError) as error:
         print(f"STAMP-FAIL: {error}", file=sys.stderr)
         return 1
