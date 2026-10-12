@@ -1,0 +1,55 @@
+---
+# Publish the offline media pack only after its archive is attached to a
+# package-specific GitHub Release.
+
+name: aur-publish-media
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  aur-publish:
+    # yamllint disable rule:line-length
+    if: startsWith(github.event.release.tag_name, 'hornero-greeter-media-base-v')
+    # yamllint enable rule:line-length
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # yamllint disable rule:line-length
+      - name: Checkout release source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        # yamllint enable rule:line-length
+        with:
+          ref: main
+      - name: Download and verify the release media archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#hornero-greeter-media-base-v}"
+          asset="hornero-greeter-media-base-${version}.tar.zst"
+          mkdir -p "${RUNNER_TEMP}/hornero-media-release"
+          gh release download "${tag}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --pattern "${asset}" \
+            --dir "${RUNNER_TEMP}/hornero-media-release"
+          python3 scripts/stamp_media_aur_package.py \
+            packaging/arch/hornero-greeter-media-base/PKGBUILD \
+            "${tag}" \
+            "${RUNNER_TEMP}/hornero-media-release/${asset}"
+          grep -E '^(pkgver|pkgrel|_media_tag|source|sha256sums)=' \
+            packaging/arch/hornero-greeter-media-base/PKGBUILD
+      - name: Publish the AUR media package
+        # yamllint disable rule:line-length
+        uses: ulises-jeremias/github-actions-aur-publish@507f0dba7755bdc2ad351232405bd7e4cd4a4a67  # v1
+        # yamllint enable rule:line-length
+        with:
+          pkgname: hornero-greeter-media-base
+          pkgbuild: packaging/arch/hornero-greeter-media-base/PKGBUILD
+          allow_empty_commits: "false"
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: Release ${{ github.event.release.tag_name }}

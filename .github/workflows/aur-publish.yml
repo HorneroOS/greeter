@@ -24,7 +24,9 @@ jobs:
       - name: Stamp pkgver and source tag
         run: |
           pkgbuild=packaging/arch/hornero-greeter/PKGBUILD
-          python3 scripts/stamp_aur_package.py "${pkgbuild}" "${GITHUB_REF_NAME}"
+          python3 scripts/stamp_aur_package.py \
+            "${pkgbuild}" \
+            "${GITHUB_REF_NAME}"
           grep -E '^(pkgver|source)=' "${pkgbuild}"
       - name: Publish AUR package
         # yamllint disable rule:line-length
@@ -33,17 +35,7 @@ jobs:
         with:
           pkgname: hornero-greeter
           pkgbuild: packaging/arch/hornero-greeter/PKGBUILD
-          commit_username: ${{ secrets.AUR_USERNAME }}
-          commit_email: ${{ secrets.AUR_EMAIL }}
-          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-          commit_message: Release ${{ github.ref_name }}
-      - name: Publish AUR media package
-        # yamllint disable rule:line-length
-        uses: ulises-jeremias/github-actions-aur-publish@507f0dba7755bdc2ad351232405bd7e4cd4a4a67  # v1
-        # yamllint enable rule:line-length
-        with:
-          pkgname: hornero-greeter-media-base
-          pkgbuild: packaging/arch/hornero-greeter-media-base/PKGBUILD
+          allow_empty_commits: "false"
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}

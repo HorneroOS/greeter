@@ -47,6 +47,19 @@ the tag, for example `pkg/hornero-greeter-v1.1.0_preview1`. The publisher keeps
 that upstream tag in `source`, while stamping `pkgver=1.1.0rc1` so Arch's
 version comparator orders the preview before stable `1.1.0`.
 
+The offline media pack has its own release flow. Attach
+`hornero-greeter-media-base-X.Y.Z.tar.zst` to a published GitHub Release tagged
+`hornero-greeter-media-base-vX.Y.Z`. The release workflow checks the asset
+name, computes its SHA256, stamps the media PKGBUILD, and publishes only
+`hornero-greeter-media-base` to the AUR. A theme tag does not republish the
+media package; media updates remain tied to an explicit, versioned archive.
+Follow [media/README.md](media/README.md) to fetch, verify, and build the
+approved scenes; package them with `scripts/media/package.py --version X.Y.Z`.
+Create the release from current `main`, attach the resulting
+`dist/hornero-greeter-media-base-X.Y.Z.tar.zst`, then publish it. Preview tags
+use `_previewN` and attach an archive whose package version uses `rcN` (for
+example, `1.1.0rc1`).
+
 ## Other notes
 
 No network is used at runtime. If no local clip can play (or with
