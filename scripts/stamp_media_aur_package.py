@@ -41,6 +41,15 @@ def stamp(pkgbuild: Path, tag: str, asset: Path) -> None:
     with asset.open("rb") as asset_file:
         checksum = hashlib.file_digest(asset_file, "sha256").hexdigest()
     content = pkgbuild.read_text(encoding="utf-8")
+    package_lines = re.findall(r"^pkgname=.*$", content, re.MULTILINE)
+    source_lines = re.findall(r"^source=.*$", content, re.MULTILINE)
+    expected_source_suffix = (
+        f"releases/download/${{_media_tag}}/{PACKAGE}-${{pkgver}}.tar.zst"
+    )
+    if package_lines != [f"pkgname={PACKAGE}"]:
+        raise ValueError(f"PKGBUILD must define pkgname={PACKAGE} exactly once")
+    if len(source_lines) != 1 or expected_source_suffix not in source_lines[0]:
+        raise ValueError("PKGBUILD source must use the versioned media release URL")
     content = _replace_once(content, r"^pkgver=.*$", f"pkgver={version}", "pkgver")
     content = _replace_once(content, r"^pkgrel=.*$", "pkgrel=1", "pkgrel")
     content = _replace_once(
@@ -52,8 +61,6 @@ def stamp(pkgbuild: Path, tag: str, asset: Path) -> None:
         f"sha256sums=('{checksum}')",
         "sha256sums",
     )
-    if f"{PACKAGE}-${{pkgver}}.tar.zst" not in content:
-        raise ValueError("PKGBUILD source must name the versioned media archive")
     pkgbuild.write_text(content, encoding="utf-8")
 
 

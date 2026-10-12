@@ -11,7 +11,7 @@ PKGBUILD_TEMPLATE = """pkgname=hornero-greeter-media-base
 pkgver=1.0.0
 pkgrel=2
 _media_tag=v0.1.0-preview
-source=("hornero-greeter-media-base-${pkgver}.tar.zst::https://example.invalid/${_media_tag}/hornero-greeter-media-base-${pkgver}.tar.zst")
+source=("hornero-greeter-media-base-${pkgver}.tar.zst::https://github.com/HorneroOS/greeter/releases/download/${_media_tag}/hornero-greeter-media-base-${pkgver}.tar.zst")
 sha256sums=('old-checksum')
 """
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/aur-publish-media.yml"
@@ -97,11 +97,12 @@ def test_stamp_requires_asset_and_unambiguous_fields(tmp_path: Path) -> None:
     pkgbuild = tmp_path / "PKGBUILD"
     asset = tmp_path / f"{PACKAGE}-1.0.1.tar.zst"
     asset.write_bytes(b"fixture")
-    pkgbuild.write_text("pkgver=1.0.0\npkgrel=1\n", encoding="utf-8")
+    incomplete = PKGBUILD_TEMPLATE.replace("_media_tag=v0.1.0-preview\n", "")
+    pkgbuild.write_text(incomplete, encoding="utf-8")
 
     with pytest.raises(ValueError, match="_media_tag"):
         stamp(pkgbuild, "hornero-greeter-media-base-v1.0.1", asset)
-    assert pkgbuild.read_text(encoding="utf-8") == "pkgver=1.0.0\npkgrel=1\n"
+    assert pkgbuild.read_text(encoding="utf-8") == incomplete
 
 
 def test_stamp_does_not_write_when_release_asset_is_missing(tmp_path: Path) -> None:
