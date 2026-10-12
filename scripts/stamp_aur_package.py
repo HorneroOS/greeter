@@ -15,9 +15,14 @@ def stamp(pkgbuild: Path, tag: str) -> None:
     """Update pkgver and the source ref from a package-scoped tag."""
     if not tag.startswith(TAG_PREFIX):
         raise ValueError(f"invalid release tag: {tag}")
-    version = tag.removeprefix(TAG_PREFIX)
-    if not re.fullmatch(r"[0-9][A-Za-z0-9._+]*", version):
+    upstream_version = tag.removeprefix(TAG_PREFIX)
+    if not re.fullmatch(r"[0-9][A-Za-z0-9._+]*", upstream_version):
         raise ValueError(f"invalid Arch package version in release tag: {tag}")
+
+    # Arch's version comparator sorts `_previewN` after the matching stable
+    # version. Use the conventional `rcN` pkgver spelling while retaining the
+    # original upstream tag in `source`.
+    version = re.sub(r"_preview(?=\d)", "rc", upstream_version)
 
     content = pkgbuild.read_text(encoding="utf-8")
     version_lines = re.findall(r"(?m)^pkgver=.*$", content)
@@ -25,7 +30,9 @@ def stamp(pkgbuild: Path, tag: str) -> None:
         raise ValueError("expected exactly one pkgver assignment")
 
     source_matches = list(
-        re.finditer(re.escape(REPOSITORY) + r"(?:#tag=[^\s\"']+)?", content)
+        re.finditer(
+            re.escape(REPOSITORY) + r"(?:#tag=[^\s\"')]+)?", content
+        )
     )
     if len(source_matches) != 1:
         raise ValueError("expected exactly one Hornero Greeter source URL")
