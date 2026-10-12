@@ -1,14 +1,13 @@
 ---
-# Continuous AUR publishing: on version tags (v*), stamp pkgver and the
-# git source tag from the release tag, then push the packaging PKGBUILD
-# via the shared publish action (it regenerates .SRCINFO itself).
+# Continuous AUR publishing uses package-specific tags so distribution
+# preview tags cannot trigger an AUR publication.
 
 name: aur-publish
 
 on:
   push:
     tags:
-      - "v*"
+      - "pkg/hornero-greeter-v*"
 
 jobs:
   aur-publish:
@@ -24,21 +23,8 @@ jobs:
           fetch-depth: 0
       - name: Stamp pkgver and source tag
         run: |
-          tag="${GITHUB_REF_NAME}"
-          ver="${tag#v}"
           pkgbuild=packaging/arch/hornero-greeter/PKGBUILD
-          repo_url="git+https://github.com/HorneroOS/greeter.git"
-          # Exactly one mutation target each: fail loudly otherwise.
-          [ "$(grep -c '^pkgver=' "${pkgbuild}")" -eq 1 ]
-          [ "$(grep -Fc "${repo_url}" "${pkgbuild}")" -eq 1 ]
-          if grep -Fq '#tag=' "${pkgbuild}"; then
-            grep -Fq "${repo_url}#tag=${tag}" "${pkgbuild}" \
-              || { echo "STAMP-FAIL: already stamped with a different tag" >&2; exit 1; }
-            echo "stamp: already at ${tag}, skipping"
-          else
-            sed -i "s/^pkgver=.*/pkgver=${ver}/" "${pkgbuild}"
-            sed -i "s|${repo_url}|${repo_url}#tag=${tag}|" "${pkgbuild}"
-          fi
+          python3 scripts/stamp_aur_package.py "${pkgbuild}" "${GITHUB_REF_NAME}"
           grep -E '^(pkgver|source)=' "${pkgbuild}"
       - name: Publish AUR package
         # yamllint disable rule:line-length

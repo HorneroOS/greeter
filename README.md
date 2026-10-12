@@ -40,6 +40,13 @@ sddm-greeter-qt6 --test-mode --theme <path-to-this-repository>
 Hornero is a Qt 6 theme. Use `sddm-greeter-qt6` for previews; the unsuffixed
 `sddm-greeter` may run Qt 5 and cannot load this theme.
 
+The AUR publish workflow uses tags named
+`pkg/hornero-greeter-vX.Y.Z`; distro composition tags cannot trigger it.
+Arch `pkgver` does not allow hyphens, so prerelease labels use underscores in
+the tag, for example `pkg/hornero-greeter-v1.1.0_preview1`. The publisher keeps
+that upstream tag in `source`, while stamping `pkgver=1.1.0rc1` so Arch's
+version comparator orders the preview before stable `1.1.0`.
+
 ## Other notes
 
 No network is used at runtime. If no local clip can play (or with
