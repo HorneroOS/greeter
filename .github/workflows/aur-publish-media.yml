@@ -23,6 +23,7 @@ jobs:
         # yamllint enable rule:line-length
         with:
           ref: main
+          fetch-depth: 0
       - name: Verify release tag points to a commit on main
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
