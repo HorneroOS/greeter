@@ -23,6 +23,19 @@ jobs:
         # yamllint enable rule:line-length
         with:
           ref: main
+      - name: Verify release tag points to a commit on main
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          git fetch --no-tags origin \
+            "+refs/tags/${RELEASE_TAG}:refs/tags/${RELEASE_TAG}" \
+            "+refs/heads/main:refs/remotes/origin/main"
+          release_commit="$(git rev-parse "refs/tags/${RELEASE_TAG}^{commit}")"
+          if ! git merge-base --is-ancestor \
+            "${release_commit}" refs/remotes/origin/main; then
+            echo "Refusing to publish an AUR package from a release outside main." >&2
+            exit 1
+          fi
       - name: Download and verify the release media archive
         env:
           GH_TOKEN: ${{ github.token }}
