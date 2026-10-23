@@ -19,7 +19,7 @@ Qt6 + Qt 6 Multimedia with the GStreamer backend, SDDM, and GStreamer
   (+ `hornero-greeter-media-base` for the Argentina video pack; its package
   pulls in `gst-libav`, the H.264 decoder)
 - Debian/Ubuntu:
-  `apt install sddm qml6-module-qtmultimedia gstreamer1.0-plugins-good`
+  `apt install sddm qml6-module-qtmultimedia qml6-module-qtquick-virtualkeyboard gstreamer1.0-plugins-good`
 
 ## Installation
 

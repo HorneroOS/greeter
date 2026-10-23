@@ -16,7 +16,7 @@ jobs:
           # resolve theme context (sddm/session/userModel/...) instead of
           # warning on every unqualified access; the QtMultimedia module
           # covers the MediaDeck players.
-          sudo apt-get install -y sddm qml6-module-qtmultimedia
+          sudo apt-get install -y sddm qml6-module-qtmultimedia qml6-module-qtquick-virtualkeyboard
           # Version-pinned Qt tools (must match scripts/qml-lint.sh): distro
           # qmlformat output drifts between Qt releases, so CI formats and
           # lints with the exact same binaries developers use.
