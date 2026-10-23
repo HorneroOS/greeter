@@ -7,6 +7,7 @@
 // No network, no shell, no absolute paths.
 
 import QtQuick
+import QtQuick.VirtualKeyboard
 import SddmComponents 2.0
 import "components"
 import "components/MediaCatalog.js" as Catalog
@@ -23,6 +24,24 @@ Rectangle {
     // Display font family (Qt6 FontLoader.name is read-only, and the
     // configured value is a family name, so bind it directly).
     property string displayFont: config.displayFont || ""
+    property bool largeText: config.largeText == "true"
+    property bool highContrast: config.highContrast == "true"
+    property bool virtualKeyboardAvailable: config.virtualKeyboardAvailable == "true"
+    property bool virtualKeyboardVisible: container.virtualKeyboardAvailable && Qt.inputMethod.visible
+    property real accessibilityScale: largeText ? 1.5 : 1.0
+    property color accessibleForeground: highContrast ? "#ffffff" : config.labelFontColor
+
+    function toggleVirtualKeyboard() {
+        if (!container.virtualKeyboardAvailable)
+            return;
+        if (Qt.inputMethod.visible) {
+            Qt.inputMethod.hide();
+        } else {
+            if (!username_input_box.activeFocus && !password_input_box.activeFocus)
+                username_input_box.forceActiveFocus();
+            Qt.inputMethod.show();
+        }
+    }
 
     // Inherited from SDDMComponents
     TextConstants {
@@ -110,11 +129,23 @@ Rectangle {
         anchors.fill: parent
         color: "transparent"
 
+        Rectangle {
+            id: clockContrastPlate
+            x: clock.x - 16
+            y: clock.y - 12
+            width: clock.width + 32
+            height: clock.height + 24
+            radius: 8
+            color: "#000000"
+            opacity: 0.9
+            visible: container.highContrast
+        }
+
         Column {
             id: clock
             property date dateTime: new Date()
-            property color color: config.clockFontColor
-            y: parent.height * config.relativePositionY - clock.height / 2
+            property color color: container.highContrast ? "#ffffff" : config.clockFontColor
+            y: container.virtualKeyboardVisible ? Math.max(actionBar.height + 12, (container.height - virtualKeyboard.height - clock.height - login_container.height - 30) / 2) : parent.height * config.relativePositionY - clock.height / 2
             x: parent.width * config.relativePositionX - clock.width / 2
 
             Timer {
@@ -129,11 +160,12 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: clock.color
                 text: Qt.formatTime(clock.dateTime, config.timeFormat || "hh:mm")
-                font.pointSize: config.clockFontSize
+                font.pointSize: config.clockFontSize * container.accessibilityScale
                 font.family: container.displayFont
                 font.bold: true
                 style: Text.Outline
                 styleColor: "#99000000"
+                Accessible.name: "Current time"
             }
 
             Text {
@@ -142,10 +174,11 @@ Rectangle {
                 color: clock.color
                 text: Qt.formatDate(clock.dateTime, config.dateFormat || "dddd, dd MMMM yyyy")
                 font.family: container.displayFont
-                font.pointSize: config.dateFontSize
+                font.pointSize: config.dateFontSize * container.accessibilityScale
                 font.bold: true
                 style: Text.Outline
                 styleColor: "#99000000"
+                Accessible.name: "Current date"
             }
         }
 
@@ -153,13 +186,13 @@ Rectangle {
             id: login_container
             y: clock.y + clock.height + 30
             width: clock.width
-            height: parent.height * 0.08
-            color: "transparent"
+            height: parent.height * (container.largeText ? 0.12 : 0.08)
+            color: container.highContrast ? "#e6000000" : "transparent"
             anchors.left: clock.left
 
             Rectangle {
                 id: username_row
-                height: parent.height * 0.36
+                height: parent.height * (container.largeText ? 0.42 : 0.36)
                 color: "transparent"
                 anchors.left: parent.left
                 anchors.leftMargin: 0
@@ -174,9 +207,9 @@ Rectangle {
                     height: parent.height * 0.66
                     horizontalAlignment: Text.AlignLeft
                     font.family: container.displayFont
-                    font.pixelSize: config.labelFontSize
+                    font.pixelSize: config.labelFontSize * container.accessibilityScale
                     font.bold: true
-                    color: config.labelFontColor
+                    color: container.accessibleForeground
                     text: "Username"
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -191,9 +224,12 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.rightMargin: 0
                     font.family: container.displayFont
+                    font.pixelSize: config.labelFontSize * container.accessibilityScale
                     color: "#25000000"
                     borderColor: "transparent"
-                    textColor: config.labelFontColor
+                    textColor: container.accessibleForeground
+                    Accessible.name: "Username"
+                    Accessible.description: "Enter your account name"
 
                     Keys.onPressed: {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -210,7 +246,7 @@ Rectangle {
             Rectangle {
                 id: password_row
                 y: username_row.height + 10
-                height: parent.height * 0.36
+                height: parent.height * (container.largeText ? 0.42 : 0.36)
                 color: "transparent"
                 anchors.right: parent.right
                 anchors.rightMargin: 0
@@ -225,14 +261,15 @@ Rectangle {
                     horizontalAlignment: Text.AlignLeft
                     font.family: container.displayFont
                     font.bold: true
-                    font.pixelSize: config.labelFontSize
-                    color: config.labelFontColor
+                    font.pixelSize: config.labelFontSize * container.accessibilityScale
+                    color: container.accessibleForeground
                 }
 
                 PasswordBox {
                     id: password_input_box
                     height: parent.height
                     font.family: container.displayFont
+                    font.pixelSize: config.labelFontSize * container.accessibilityScale
                     color: "#25000000"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
@@ -240,7 +277,9 @@ Rectangle {
                     anchors.left: password_label.right
                     anchors.leftMargin: config.passwordLeftMargin
                     borderColor: "transparent"
-                    textColor: config.labelFontColor
+                    textColor: container.accessibleForeground
+                    Accessible.name: "Password"
+                    Accessible.description: "Enter your password"
                     tooltipBG: "#25000000"
                     tooltipFG: "#dc322f"
                     // Absolute theme URL: SDDM resolves a relative image
@@ -272,8 +311,10 @@ Rectangle {
                     width: parent.height
                     color: "transparent"
                     text: "x"
-                    textColor: config.labelFontColor
+                    textColor: container.accessibleForeground
                     font.family: container.displayFont
+                    font.pixelSize: config.actionBarFontSize * container.accessibilityScale
+                    Accessible.name: "Clear password"
 
                     border.color: "transparent"
                     border.width: 0
@@ -304,20 +345,22 @@ Rectangle {
                     disabledColor: "#dc322f"
                     activeColor: "#268bd2"
                     pressedColor: "#2aa198"
-                    textColor: config.labelFontColor
+                    textColor: container.accessibleForeground
                     font.family: container.displayFont
+                    font.pixelSize: config.actionBarFontSize * container.accessibilityScale
+                    Accessible.name: "Log in"
 
                     onClicked: sddm.login(username_input_box.text, password_input_box.text, session.index)
 
                     KeyNavigation.backtab: password_input_box
-                    KeyNavigation.tab: reboot_button
+                    KeyNavigation.tab: container.virtualKeyboardAvailable ? keyboard_toggle : (sddm.canReboot ? reboot_button : (sddm.canPowerOff ? shutdown_button : session))
                 }
 
                 Text {
                     id: error_message
                     height: parent.height
                     font.family: container.displayFont
-                    font.pixelSize: config.errorMsgFontSize
+                    font.pixelSize: config.errorMsgFontSize * container.accessibilityScale
                     font.bold: true
                     //color: "white"
                     anchors.top: password_input_box.bottom
@@ -332,10 +375,10 @@ Rectangle {
     Rectangle {
         id: actionBar
         width: parent.width
-        height: parent.height * 0.04
+        height: parent.height * 0.04 * container.accessibilityScale
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "transparent"
+        color: container.highContrast ? "#000000" : "transparent"
         visible: config.showTopBar != "false"
 
         Row {
@@ -349,21 +392,22 @@ Rectangle {
                 id: session
                 // Wide enough for "Hyprland (uwsm-managed)" in the bold bar font
                 width: 240
-                height: 20
+                height: 20 * container.accessibilityScale
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"
                 arrowColor: "transparent"
-                textColor: config.brandingAccent || config.actionBarFontColor
+                textColor: container.highContrast ? "#ffffff" : (config.brandingAccent || config.actionBarFontColor)
                 borderColor: "transparent"
                 hoverColor: "#5692c4"
                 font.family: container.displayFont
-                font.pixelSize: config.actionBarFontSize
+                font.pixelSize: config.actionBarFontSize * container.accessibilityScale
                 font.bold: true
 
                 model: sessionModel
                 index: sessionModel.lastIndex
+                Accessible.name: "Desktop session"
 
-                KeyNavigation.backtab: shutdown_button
+                KeyNavigation.backtab: sddm.canPowerOff ? shutdown_button : (sddm.canReboot ? reboot_button : (container.virtualKeyboardAvailable ? keyboard_toggle : login_button))
                 KeyNavigation.tab: password_input_box
             }
 
@@ -373,13 +417,16 @@ Rectangle {
                 model: keyboard.layouts
                 index: keyboard.currentLayout
                 width: 50
-                height: 20
+                height: 20 * container.accessibilityScale
                 anchors.verticalCenter: parent.verticalCenter
                 color: "transparent"
                 arrowColor: "transparent"
-                //textColor: "white"
+                textColor: container.highContrast ? "#ffffff" : (config.brandingAccent || config.actionBarFontColor)
                 borderColor: "transparent"
                 hoverColor: "#5692c4"
+                font.family: container.displayFont
+                font.pixelSize: config.actionBarFontSize * container.accessibilityScale
+                Accessible.name: "Keyboard layout"
 
                 onValueChanged: keyboard.currentLayout = id
 
@@ -403,9 +450,9 @@ Rectangle {
 
                         text: modelItem ? modelItem.modelData.shortName : "zz"
                         font.family: container.displayFont
-                        font.pixelSize: config.actionBarFontSize
+                        font.pixelSize: config.actionBarFontSize * container.accessibilityScale
                         font.bold: true
-                        color: config.brandingAccent || config.actionBarFontColor
+                        color: container.highContrast ? "#ffffff" : (config.brandingAccent || config.actionBarFontColor)
                     }
                 }
                 KeyNavigation.backtab: session
@@ -420,6 +467,19 @@ Rectangle {
             anchors.margins: 5
             spacing: 10
 
+            KeyboardToggle {
+                id: keyboard_toggle
+                visible: container.virtualKeyboardAvailable
+                height: parent.height
+                accessibilityScale: container.accessibilityScale
+                highContrast: container.highContrast
+                accentColor: config.brandingAccent || config.actionBarFontColor
+                checked: container.virtualKeyboardVisible
+                onToggleRequested: container.toggleVirtualKeyboard()
+                KeyNavigation.backtab: login_button
+                KeyNavigation.tab: sddm.canReboot ? reboot_button : (sddm.canPowerOff ? shutdown_button : session)
+            }
+
             ImageButton {
                 id: reboot_button
                 height: parent.height
@@ -427,8 +487,9 @@ Rectangle {
 
                 visible: sddm.canReboot
                 onClicked: sddm.reboot()
-                KeyNavigation.backtab: login_button
-                KeyNavigation.tab: shutdown_button
+                KeyNavigation.backtab: container.virtualKeyboardAvailable ? keyboard_toggle : login_button
+                KeyNavigation.tab: sddm.canPowerOff ? shutdown_button : session
+                Accessible.name: "Restart computer"
             }
 
             ImageButton {
@@ -437,10 +498,20 @@ Rectangle {
                 source: "components/resources/shutdown.svg"
                 visible: sddm.canPowerOff
                 onClicked: sddm.powerOff()
-                KeyNavigation.backtab: reboot_button
+                KeyNavigation.backtab: sddm.canReboot ? reboot_button : (container.virtualKeyboardAvailable ? keyboard_toggle : login_button)
                 KeyNavigation.tab: session
+                Accessible.name: "Shut down computer"
             }
         }
+    }
+
+    InputPanel {
+        id: virtualKeyboard
+        z: 100
+        x: 0
+        y: container.virtualKeyboardVisible ? container.height - height : container.height
+        width: container.width
+        visible: container.virtualKeyboardVisible
     }
 
     // Optional HorneroOS branding layer (overlay only): a small symbolic
@@ -461,6 +532,10 @@ Rectangle {
 
     Component.onCompleted: {
         deck.focus = true;
+        if (container.virtualKeyboardAvailable && config.virtualKeyboardEnabled == "true") {
+            username_input_box.forceActiveFocus();
+            Qt.inputMethod.show();
+        }
         // Static fallback image (local file only), layered under the deck.
         var hour = new Date().getHours();
         var part = Catalog.daypartForHour(hour, config.dayTimeStart, config.dayTimeEnd, config.goldenHourStart, config.goldenHourEnd);
