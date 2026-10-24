@@ -15,11 +15,11 @@ Day/night (plus golden-hour) rotation is driven by `dayTimeStart` /
 Qt6 + Qt 6 Multimedia with the GStreamer backend, SDDM, and GStreamer
 "good" plugins:
 
-- Arch: `pacman -S sddm qt6-multimedia gst-plugins-good`
+- Arch: `pacman -S sddm qt6-multimedia qt6-virtualkeyboard gst-plugins-good`
   (+ `hornero-greeter-media-base` for the Argentina video pack; its package
   pulls in `gst-libav`, the H.264 decoder)
 - Debian/Ubuntu:
-  `apt install sddm qml6-module-qtmultimedia gstreamer1.0-plugins-good`
+  `apt install sddm qml6-module-qtmultimedia qml6-module-qtquick-virtualkeyboard gstreamer1.0-plugins-good`
 
 ## Installation
 
@@ -85,6 +85,12 @@ want to override selected values; copy just those values from `theme.conf`:
 - `displayFont` - font
 - `clockFontSize`, `dateFontSize`, `labelFontSize`,
   `errorMsgFontSize`, `actionBarFontSize` - font sizes
+- `largeText` - multiply greeter text sizes by 1.5 when true
+- `highContrast` - add dark control backplates and high contrast text when true
+- `virtualKeyboardAvailable` - show the on-screen keyboard toggle after the
+  administrator enables Qt Virtual Keyboard in SDDM
+- `virtualKeyboardEnabled` - show the on-screen keyboard at startup when true;
+  it can also be toggled from the keyboard button in the top bar
 - `clockFontColor`, `labelFontColor`, `errorMsgFontColor`,
   `actionBarFontColor` - font colors
 - `dateFormat` and `timeFormat` - customize
@@ -112,6 +118,17 @@ usernameLeftMargin=15
 showTopBar=true
 videoEnabled=true
 ```
+
+The factory defaults keep large text, high contrast, and the on-screen
+keyboard off. SDDM's input method is a system-wide greeter setting, so the
+package does not change it. To opt in on an X11 SDDM greeter, copy
+`/usr/share/doc/hornero-greeter/sddm-virtual-keyboard.conf.example` to
+`/etc/sddm.conf.d/20-hornero-virtual-keyboard.conf`, set
+`virtualKeyboardAvailable=true` in `theme.conf`, and restart SDDM. Set
+`virtualKeyboardEnabled=true` too if the keyboard should open at startup.
+SDDM's Wayland greeter clears `qtvirtualkeyboard`; use the compositor's own
+keyboard support there. The runtime module is installed as a package
+dependency, but it remains inactive unless the SDDM administrator opts in.
 
 ## Preview
 

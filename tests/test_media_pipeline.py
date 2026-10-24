@@ -59,7 +59,10 @@ def test_packaging_layout_and_no_sddm_conf_rewrite():
     assert "0644" in theme_pkg and "0644" in media_pkg
     snippet = REPO / "packaging/arch/hornero-greeter/hornero.conf"
     assert snippet.read_text().startswith("[Theme]\n")
+    assert "InputMethod=" not in snippet.read_text()
     assert "Current=hornero" in snippet.read_text()
+    keyboard_example = REPO / "packaging/arch/hornero-greeter/sddm-virtual-keyboard.conf.example"
+    assert "InputMethod=qtvirtualkeyboard" in keyboard_example.read_text()
 
 
 def test_audit_passes_offline():

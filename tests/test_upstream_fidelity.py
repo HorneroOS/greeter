@@ -101,8 +101,8 @@ def test_password_masked_and_keyboard_flow():
     for nav in (
         "KeyNavigation.tab: password_input_box",
         "KeyNavigation.tab: login_button",
-        "KeyNavigation.tab: reboot_button",
-        "KeyNavigation.tab: shutdown_button",
+        "KeyNavigation.tab: sddm.canReboot ? reboot_button",
+        "KeyNavigation.tab: sddm.canPowerOff ? shutdown_button",
         "KeyNavigation.tab: session",
         "KeyNavigation.tab: username_input_box",
     ):

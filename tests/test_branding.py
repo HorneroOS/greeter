@@ -64,7 +64,7 @@ def test_logo_asset_self_contained_and_credited():
 
 
 def test_accent_token_flows_to_topbar():
-    assert MAIN.count("config.brandingAccent || config.actionBarFontColor") == 2
+    assert MAIN.count("config.brandingAccent || config.actionBarFontColor") == 4
     # Error red stays hardcoded upstream; only the topbar accent is a token.
     assert 'tooltipFG: "#dc322f"' in MAIN
 

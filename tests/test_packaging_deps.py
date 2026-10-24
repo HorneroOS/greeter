@@ -20,6 +20,7 @@ QML_RUNTIME_MAP = {
     "QtMultimedia": "qt6-multimedia",
     "QtQuick.Effects": "qt6-declarative",
     "QtQuick": "qt6-declarative",
+    "QtQuick.VirtualKeyboard": "qt6-virtualkeyboard",
 }
 
 FORBIDDEN_DEPENDENCY_RES = (

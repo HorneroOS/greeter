@@ -50,6 +50,18 @@ def test_boolean_flags():
     conf = read_conf("theme.conf")
     assert conf["videoEnabled"] in ("true", "false")
     assert conf["testMode"] in ("true", "false")
+    assert conf["largeText"] in ("true", "false")
+    assert conf["highContrast"] in ("true", "false")
+    assert conf["virtualKeyboardAvailable"] in ("true", "false")
+    assert conf["virtualKeyboardEnabled"] in ("true", "false")
+
+
+def test_accessibility_options_are_off_by_default():
+    conf = read_conf("theme.conf")
+    assert conf["largeText"] == "false"
+    assert conf["highContrast"] == "false"
+    assert conf["virtualKeyboardAvailable"] == "false"
+    assert conf["virtualKeyboardEnabled"] == "false"
 
 
 def test_generated_catalog_present_and_in_sync():
