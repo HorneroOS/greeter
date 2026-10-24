@@ -314,8 +314,16 @@ Rectangle {
                                 username_input_box.forceActiveFocus();
                             else if (clear_passwd_button.visible)
                                 clear_passwd_button.forceActiveFocus();
-                            else
+                            else if (login_button.visible)
                                 login_button.forceActiveFocus();
+                            else if (container.virtualKeyboardAvailable && keyboard_toggle.visible)
+                                keyboard_toggle.forceActiveFocus();
+                            else if (sddm.canReboot && reboot_button.visible)
+                                reboot_button.forceActiveFocus();
+                            else if (sddm.canPowerOff && shutdown_button.visible)
+                                shutdown_button.forceActiveFocus();
+                            else
+                                session.forceActiveFocus();
                             event.accepted = true;
                         }
                     }
@@ -376,7 +384,7 @@ Rectangle {
 
                     onClicked: sddm.login(username_input_box.text, password_input_box.text, session.index)
 
-                    KeyNavigation.backtab: password_input_box
+                    KeyNavigation.backtab: clear_passwd_button.visible ? clear_passwd_button : password_input_box
                     KeyNavigation.tab: container.virtualKeyboardAvailable ? keyboard_toggle : (sddm.canReboot ? reboot_button : (sddm.canPowerOff ? shutdown_button : session))
                 }
 

@@ -15,7 +15,7 @@ Day/night (plus golden-hour) rotation is driven by `dayTimeStart` /
 Qt6 + Qt 6 Multimedia with the GStreamer backend, SDDM, and GStreamer
 "good" plugins:
 
-- Arch: `pacman -S sddm qt6-multimedia gst-plugins-good`
+- Arch: `pacman -S sddm qt6-multimedia qt6-virtualkeyboard gst-plugins-good`
   (+ `hornero-greeter-media-base` for the Argentina video pack; its package
   pulls in `gst-libav`, the H.264 decoder)
 - Debian/Ubuntu:
