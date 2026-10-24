@@ -26,6 +26,7 @@ def test_virtual_keyboard_can_be_toggled_and_is_off_by_default():
     assert "Qt.inputMethod.hide()" in MAIN
     assert 'config.virtualKeyboardEnabled == "true"' in MAIN
     assert "virtualKeyboard.height" in MAIN
+    assert 'fader.state = "on"' in MAIN
 
     assert "activeFocusOnTab: true" in TOGGLE
     assert "onClicked: control.toggleRequested()" in TOGGLE

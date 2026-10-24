@@ -39,6 +39,7 @@ Rectangle {
         } else {
             if (!username_input_box.activeFocus && !password_input_box.activeFocus)
                 username_input_box.forceActiveFocus();
+            fader.state = "on";
             Qt.inputMethod.show();
         }
     }
@@ -534,6 +535,7 @@ Rectangle {
         deck.focus = true;
         if (container.virtualKeyboardAvailable && config.virtualKeyboardEnabled == "true") {
             username_input_box.forceActiveFocus();
+            fader.state = "on";
             Qt.inputMethod.show();
         }
         // Static fallback image (local file only), layered under the deck.
