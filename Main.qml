@@ -106,11 +106,13 @@ Rectangle {
             }
         }
         Keys.onPressed: {
-            fader.state = "on";
-            if (username_input_box.text == "")
-                username_input_box.focus = true;
-            else
-                password_input_box.focus = true;
+            if (fader.state == "off") {
+                fader.state = "on";
+                if (username_input_box.text == "")
+                    username_input_box.focus = true;
+                else
+                    password_input_box.focus = true;
+            }
         }
     }
 
@@ -217,6 +219,7 @@ Rectangle {
 
                 TextBox {
                     id: username_input_box
+                    activeFocusOnTab: true
                     height: parent.height
                     text: userModel.lastUser
                     anchors.verticalCenter: parent.verticalCenter
@@ -236,10 +239,16 @@ Rectangle {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                             sddm.login(username_input_box.text, password_input_box.text, session.index);
                             event.accepted = true;
+                        } else if (event.key === Qt.Key_Tab) {
+                            if (event.modifiers & Qt.ShiftModifier)
+                                language.forceActiveFocus();
+                            else
+                                password_input_box.forceActiveFocus();
+                            event.accepted = true;
                         }
                     }
 
-                    KeyNavigation.backtab: password_input_box
+                    KeyNavigation.backtab: language
                     KeyNavigation.tab: password_input_box
                 }
             }
@@ -268,6 +277,7 @@ Rectangle {
 
                 PasswordBox {
                     id: password_input_box
+                    activeFocusOnTab: true
                     height: parent.height
                     font.family: container.displayFont
                     font.pixelSize: config.labelFontSize * container.accessibilityScale
@@ -299,6 +309,14 @@ Rectangle {
                         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
                             sddm.login(username_input_box.text, password_input_box.text, session.index);
                             event.accepted = true;
+                        } else if (event.key === Qt.Key_Tab) {
+                            if (event.modifiers & Qt.ShiftModifier)
+                                username_input_box.forceActiveFocus();
+                            else if (clear_passwd_button.visible)
+                                clear_passwd_button.forceActiveFocus();
+                            else
+                                login_button.forceActiveFocus();
+                            event.accepted = true;
                         }
                     }
 
@@ -308,6 +326,7 @@ Rectangle {
 
                 Button {
                     id: clear_passwd_button
+                    activeFocusOnTab: true
                     height: parent.height
                     width: parent.height
                     color: "transparent"
@@ -316,6 +335,9 @@ Rectangle {
                     font.family: container.displayFont
                     font.pixelSize: config.actionBarFontSize * container.accessibilityScale
                     Accessible.name: "Clear password"
+
+                    KeyNavigation.backtab: password_input_box
+                    KeyNavigation.tab: login_button
 
                     border.color: "transparent"
                     border.width: 0
@@ -336,6 +358,7 @@ Rectangle {
 
                 Button {
                     id: login_button
+                    activeFocusOnTab: true
                     height: parent.height
                     color: "#393939"
                     text: ">"
@@ -391,6 +414,7 @@ Rectangle {
 
             ComboBox {
                 id: session
+                activeFocusOnTab: true
                 // Wide enough for "Hyprland (uwsm-managed)" in the bold bar font
                 width: 240
                 height: 20 * container.accessibilityScale
@@ -409,11 +433,12 @@ Rectangle {
                 Accessible.name: "Desktop session"
 
                 KeyNavigation.backtab: sddm.canPowerOff ? shutdown_button : (sddm.canReboot ? reboot_button : (container.virtualKeyboardAvailable ? keyboard_toggle : login_button))
-                KeyNavigation.tab: password_input_box
+                KeyNavigation.tab: language
             }
 
             ComboBox {
                 id: language
+                activeFocusOnTab: true
 
                 model: keyboard.layouts
                 index: keyboard.currentLayout
@@ -483,6 +508,7 @@ Rectangle {
 
             ImageButton {
                 id: reboot_button
+                activeFocusOnTab: true
                 height: parent.height
                 source: "components/resources/reboot.svg"
 
@@ -495,6 +521,7 @@ Rectangle {
 
             ImageButton {
                 id: shutdown_button
+                activeFocusOnTab: true
                 height: parent.height
                 source: "components/resources/shutdown.svg"
                 visible: sddm.canPowerOff
