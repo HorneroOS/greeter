@@ -42,6 +42,7 @@ def test_virtual_keyboard_can_be_toggled_and_is_off_by_default():
     assert "clear_passwd_button.forceActiveFocus()" in MAIN
     assert "KeyNavigation.tab: language" in MAIN
     assert "KeyNavigation.backtab: clear_passwd_button.visible ? clear_passwd_button : password_input_box" in MAIN
+    assert "KeyNavigation.tab: login_button.visible ? login_button : (container.virtualKeyboardAvailable && keyboard_toggle.visible ? keyboard_toggle : (sddm.canReboot && reboot_button.visible ? reboot_button : (sddm.canPowerOff && shutdown_button.visible ? shutdown_button : session)))" in MAIN
     assert "else if (login_button.visible)" in MAIN
     assert "else if (container.virtualKeyboardAvailable && keyboard_toggle.visible)" in MAIN
     assert "else if (sddm.canReboot && reboot_button.visible)" in MAIN

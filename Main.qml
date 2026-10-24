@@ -329,7 +329,7 @@ Rectangle {
                     }
 
                     KeyNavigation.backtab: username_input_box
-                    KeyNavigation.tab: login_button
+                    KeyNavigation.tab: login_button.visible ? login_button : (container.virtualKeyboardAvailable && keyboard_toggle.visible ? keyboard_toggle : (sddm.canReboot && reboot_button.visible ? reboot_button : (sddm.canPowerOff && shutdown_button.visible ? shutdown_button : session)))
                 }
 
                 Button {
@@ -345,7 +345,7 @@ Rectangle {
                     Accessible.name: "Clear password"
 
                     KeyNavigation.backtab: password_input_box
-                    KeyNavigation.tab: login_button
+                    KeyNavigation.tab: login_button.visible ? login_button : (container.virtualKeyboardAvailable && keyboard_toggle.visible ? keyboard_toggle : (sddm.canReboot && reboot_button.visible ? reboot_button : (sddm.canPowerOff && shutdown_button.visible ? shutdown_button : session)))
 
                     border.color: "transparent"
                     border.width: 0
