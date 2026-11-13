@@ -39,6 +39,23 @@ and derivative hashes, processing notes, source pages, and license evidence in
 `NOTICE` records the attributions. Media licenses are independent of the
 theme's GPL source-code license.
 
+## Provider model and the Pexels rights gate
+
+Manifests are provider-neutral: `source.provider` (`wikimedia-commons` by
+default, or `pexels`) is recorded separately from `license`, and
+`review.distribution` records explicit approval for binary-package
+redistribution. The packaged set fails closed for any provider/license
+without recorded approval; existing Commons CC clips keep their exact
+previous behaviour and no catalogue entry changed.
+
+Pexels is a *candidate* provider only. Until written permission covering OS
+greeter-background redistribution in a downloadable media package is
+recorded (rights gate, issue #39; drafts in
+`docs/PEXELS_PERMISSION_REQUEST.md`), Pexels-shaped manifests stay parked in
+`media/candidates/`, `fetch.py` refuses them, and nothing non-Commons is
+downloaded or shipped. `ar-example-pexels-fixture` in `candidates/` is a
+synthetic shape fixture, not a clip.
+
 ## Editorial decisions
 
 The catalog excludes the older Buenos Aires video because its signage is

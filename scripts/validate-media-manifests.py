@@ -31,17 +31,28 @@ REPO = Path(__file__).resolve().parent.parent
 MANIFESTS = REPO / "media" / "manifests"
 CANDIDATES = REPO / "media" / "candidates"
 
-LICENSES = {"CC0-1.0", "CC-BY-3.0", "CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0"}
-SHIPPABLE = {"own-work", "reviewed", "written-permission"}
-PARKED = {"license-review-needed", "review-pending"}
-DAYPARTS = {"day", "night"}
+# Single source of truth: provider/license/daypart/container allowlists and
+# the fail-closed shippable computation live in scripts/media/common.py.
+# Do not re-declare them here (tests cross-check schema against common).
+sys.path.insert(0, str(REPO / "scripts" / "media"))
+from common import (CONTAINERS, DAYPARTS, DISTRIBUTION_STATES,  # noqa: E402
+                    KNOWN_LICENSES, LICENSES_BY_PROVIDER, PARKED_REVIEW,
+                    PROVIDERS, SHIPPABLE_REVIEW, is_shippable, provider_of)
+
+LICENSES = KNOWN_LICENSES
+SHIPPABLE = SHIPPABLE_REVIEW
+PARKED = PARKED_REVIEW
 AUDIO = {"strip", "none"}
-CONTAINERS = {"webm", "ogv"}
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
-SOURCE_PAGE = re.compile(r"^https://commons\.wikimedia\.org/wiki/File:.+")
-LICENSE_URL = re.compile(
-    r"^https://creativecommons\.org/(publicdomain/zero/1\.0|licenses/(by|by-sa)/[34]\.0)"
-)
+SOURCE_PAGES = {
+    "wikimedia-commons": re.compile(r"^https://commons\.wikimedia\.org/wiki/File:.+"),
+    "pexels": re.compile(r"^https://www\.pexels\.com/video/.+"),
+}
+LICENSE_URLS = {
+    "wikimedia-commons": re.compile(
+        r"^https://creativecommons\.org/(publicdomain/zero/1\.0|licenses/(by|by-sa)/[34]\.0)"),
+    "pexels": re.compile(r"^https://www\.pexels\.com/license/"),
+}
 
 REQUIRED_TOP = [
     "id", "title", "location", "creator", "source", "license",
@@ -96,22 +107,36 @@ def check_manifest(path, errors, shippable_dir):
         fail(errors, f"{path.name}: creator is empty")
 
     src = data["source"]
-    if not SOURCE_PAGE.match(src.get("page", "")):
-        fail(errors, f"{path.name}: source.page must be a Commons File: page")
+    provider = provider_of(data)
+    if src.get("provider") is not None and src["provider"] not in PROVIDERS:
+        fail(errors, f"{path.name}: source.provider '{src['provider']}' not allowed")
+    page_re = SOURCE_PAGES.get(provider)
+    if page_re is None or not page_re.match(src.get("page", "")):
+        fail(errors, f"{path.name}: source.page must be a {provider} file/video page")
     if not src.get("file"):
         fail(errors, f"{path.name}: source.file is empty")
 
     lic = data["license"]
     if lic.get("short") not in LICENSES:
         fail(errors, f"{path.name}: license.short '{lic.get('short')}' not allowed")
-    if not LICENSE_URL.match(lic.get("url", "")):
-        fail(errors, f"{path.name}: license.url '{lic.get('url')}' not canonical")
+    if lic.get("short") not in LICENSES_BY_PROVIDER.get(provider, set()):
+        fail(errors, f"{path.name}: license.short '{lic.get('short')}' does not "
+                     f"belong to provider '{provider}'")
+    url_re = LICENSE_URLS.get(provider)
+    if url_re is None or not url_re.match(lic.get("url", "")):
+        fail(errors, f"{path.name}: license.url '{lic.get('url')}' not canonical "
+                     f"for provider '{provider}'")
 
     status = data["review"].get("status")
     if not data["review"].get("evidence"):
         fail(errors, f"{path.name}: review.evidence is empty")
-    if shippable_dir and status not in SHIPPABLE:
-        fail(errors, f"{path.name}: status '{status}' must not ship in manifests/")
+    distribution = data["review"].get("distribution")
+    if distribution is not None and distribution not in DISTRIBUTION_STATES:
+        fail(errors, f"{path.name}: review.distribution '{distribution}' not allowed")
+    if shippable_dir and not is_shippable(data):
+        fail(errors, f"{path.name}: status '{status}' / provider '{provider}' / "
+                     f"distribution '{distribution}' must not ship in manifests/ "
+                     f"(fail-closed: no recorded distribution approval)")
     if not shippable_dir and status not in PARKED:
         fail(errors, f"{path.name}: candidates must stay parked ('{status}')")
 
@@ -133,7 +158,7 @@ def check_manifest(path, errors, shippable_dir):
         fail(errors, f"{path.name}: original.container '{orig.get('container')}'")
 
     if not data["dayparts"] or any(d not in DAYPARTS for d in data["dayparts"]):
-        fail(errors, f"{path.name}: dayparts must be non-empty day/night list")
+        fail(errors, f"{path.name}: dayparts must be non-empty day/golden-hour/night list")
 
     edit = data["edit"]
     if not (isinstance(edit.get("trim_start_s"), (int, float)) and edit["trim_start_s"] >= 0):

@@ -5,9 +5,46 @@ theme may include optimized still derivatives; each needs a provenance JSON
 record under `media/stills/` and must be listed in `NOTICE` and installed by
 the theme package.
 
+## Provider and license model
+
+A manifest records **where a clip comes from** separately from **under what
+license it may be redistributed**:
+
+- `source.provider`: `wikimedia-commons` (the default when absent, so every
+  pre-existing manifest keeps its meaning) or `pexels`.
+- `license.short` / `license.url`: the actual license. Commons sources use a
+  CC license below. Pexels sources use `Pexels` with
+  `https://www.pexels.com/license/` — the Pexels License is **not** a
+  Creative Commons license and must never be recorded as one.
+- `review.distribution`: explicit approval state for binary-package
+  redistribution (`approved`, `pending`, `not-approved`). The shippable set
+  **fails closed**: a provider/license without recorded approval evidence is
+  never packaged. Legacy Commons CC manifests carry no such field; for them
+  a shippable `review.status` remains the recorded approval, exactly as
+  before. Non-Commons sources need explicit `approved` with the permission
+  evidence quoted in `review.evidence`.
+
+Allowlists and the shippable computation have one source of truth,
+`scripts/media/common.py`; the validator, audit, and schema are cross-checked
+against it by `tests/test_media_pipeline.py`.
+
+### Rights gate for Pexels (issue #39)
+
+No Pexels clip ships today. The Pexels License does not by itself grant the
+redistribution this project performs (transcoded clips inside a downloadable
+OS media package), so each Pexels candidate stays in `media/candidates/`
+with `review.distribution: not-approved` until written permission is
+recorded. `scripts/media/fetch.py` refuses Pexels sources for the same
+reason — it never scrapes or invents download URLs. Ready-to-send permission
+requests live in `docs/PEXELS_PERMISSION_REQUEST.md`. The synthetic
+`media/candidates/ar-example-pexels-fixture.json` proves the manifest shape
+offline; it is a fixture, not a real clip.
+
 ## License policy (hard rules)
 
-- Accepted licenses: **CC0, CC-BY, CC-BY-SA** (any of 3.0 / 4.0 where versioned).
+- Accepted licenses for Commons sources: **CC0, CC-BY, CC-BY-SA** (any of
+  3.0 / 4.0 where versioned). Pexels sources are representable as candidates
+  under the Pexels License but ship only past the rights gate above.
 - Accepted provenance, one of:
   - `own-work`: the Commons uploader asserts it is their own work under
     the stated license (Self-published work category);
@@ -46,9 +83,11 @@ scene and must not appear in the runtime video catalog.
    - `review`: status, reviewer/date when applicable, and the evidence
      you saw (template text, category names).
    - `original`: byte size, SHA256 of the file you downloaded,
-     duration, dimensions, container. Never invent a hash: download the
-     original and hash it. Sizes must match the Commons file page.
-   - `dayparts`: `day`, `night`, or both (daylight footage is `day`).
+     duration, dimensions, container (`webm`, `ogv`, or `mp4`). Never invent
+     a hash: download the original and hash it. Sizes must match the
+     provider file page.
+   - `dayparts`: any of `day`, `golden-hour`, `night` (daylight footage is
+     `day`; sunset-lit footage is `golden-hour`).
    - `edit`: trim window inside the real duration, crop plan
      (portrait and 4:3 sources need a 16:9 center-crop note), scale
      target, and `audio` (`strip`, or `none` if the file has no audio
