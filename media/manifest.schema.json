@@ -39,12 +39,18 @@
       "type": "object",
       "required": ["page", "file"],
       "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["wikimedia-commons", "pexels"],
+          "default": "wikimedia-commons",
+          "description": "Source provider identity, separate from license. Absent means wikimedia-commons (all pre-existing manifests)."
+        },
         "page": {
           "type": "string",
-          "pattern": "^https://commons\\.wikimedia\\.org/wiki/File:",
-          "description": "Wikimedia Commons file description page (inspected for license)."
+          "pattern": "^https://(commons\\.wikimedia\\.org/wiki/File:|www\\.pexels\\.com/video/)",
+          "description": "Provider file/video page inspected for license: a Wikimedia Commons File: page, or a Pexels video page."
         },
-        "file": { "type": "string", "description": "Original filename on Commons." }
+        "file": { "type": "string", "description": "Original filename on Commons, or for Pexels the pinned rendition filename recorded at approval time (never an invented download URL)." }
       }
     },
     "license": {
@@ -53,13 +59,13 @@
       "properties": {
         "short": {
           "type": "string",
-          "enum": ["CC0-1.0", "CC-BY-3.0", "CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0"],
-          "description": "Ship policy: only CC0 / CC-BY / CC-BY-SA are accepted."
+          "enum": ["CC0-1.0", "CC-BY-3.0", "CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0", "Pexels"],
+          "description": "Representable licenses. CC values are the Commons ship policy; 'Pexels' is the Pexels License (not a CC license) and may ship only with recorded distribution approval (see review.distribution)."
         },
         "name": { "type": "string" },
         "url": {
           "type": "string",
-          "pattern": "^https://creativecommons\\.org/(publicdomain/zero/1\\.0|licenses/(by|by-sa)/[34]\\.0)"
+          "pattern": "^https://(creativecommons\\.org/(publicdomain/zero/1\\.0|licenses/(by|by-sa)/[34]\\.0)|www\\.pexels\\.com/license/)"
         }
       }
     },
@@ -71,6 +77,11 @@
           "type": "string",
           "enum": ["own-work", "reviewed", "written-permission", "license-review-needed", "review-pending"],
           "description": "Only own-work, reviewed, or written-permission may ship in media/manifests/. Anything else lives in media/candidates/."
+        },
+        "distribution": {
+          "type": "string",
+          "enum": ["approved", "pending", "not-approved"],
+          "description": "Explicit distribution-approval state for binary-package redistribution. Absent on legacy Commons CC manifests, where a shippable review status is the recorded approval. Any provider/license without approval fails closed: not shippable, never packaged."
         },
         "reviewer": { "type": ["string", "null"] },
         "date": { "type": ["string", "null"] },
@@ -85,18 +96,18 @@
         "sha256": {
           "type": ["string", "null"],
           "pattern": "^[0-9a-f]{64}$",
-          "description": "SHA256 of the original file as downloaded from Commons. Null only in media/candidates/ for files not yet fetched; must be filled before promotion to media/manifests/."
+          "description": "SHA256 of the original file as downloaded from the provider. Null only in media/candidates/ for files not yet fetched; must be filled before promotion to media/manifests/."
         },
         "duration_s": { "type": "number", "exclusiveMinimum": 0 },
         "width": { "type": "integer", "minimum": 1 },
         "height": { "type": "integer", "minimum": 1 },
-        "container": { "type": "string", "enum": ["webm", "ogv"] }
+        "container": { "type": "string", "enum": ["webm", "ogv", "mp4"] }
       }
     },
     "dayparts": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string", "enum": ["day", "night"] }
+      "items": { "type": "string", "enum": ["day", "golden-hour", "night"] }
     },
     "edit": {
       "type": "object",

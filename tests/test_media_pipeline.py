@@ -131,3 +131,76 @@ def test_package_script_builds_single_base_pack(tmp_path):
         "--strip-components=1", "hornero-greeter-media-base/base")
     assert (extracted / "base" / "ar-example-sample.mp4").is_file()
     packs[0].unlink()  # keep the tree clean; dist/ is gitignored anyway
+
+
+def _load_validator():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "validate_media_manifests", REPO / "scripts/validate-media-manifests.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_provider_allowlists_single_source_no_drift():
+    from common import (CONTAINERS, DAYPARTS, DISTRIBUTION_STATES,  # noqa: E402
+                        KNOWN_LICENSES, PROVIDERS)
+    validator = _load_validator()
+    assert validator.LICENSES == KNOWN_LICENSES
+    assert validator.CONTAINERS == CONTAINERS
+    assert validator.DAYPARTS == DAYPARTS
+    assert validator.PROVIDERS == PROVIDERS
+    assert validator.DISTRIBUTION_STATES == DISTRIBUTION_STATES
+    schema = json.loads((REPO / "media/manifest.schema.json").read_text())
+    props = schema["properties"]
+    assert set(props["source"]["properties"]["provider"]["enum"]) == PROVIDERS
+    assert set(props["license"]["properties"]["short"]["enum"]) == KNOWN_LICENSES
+    assert set(props["original"]["properties"]["container"]["enum"]) == CONTAINERS
+    assert set(props["dayparts"]["items"]["enum"]) == DAYPARTS
+    assert set(props["review"]["properties"]["distribution"]["enum"]) == DISTRIBUTION_STATES
+    assert "mp4" in CONTAINERS and "golden-hour" in DAYPARTS
+    assert "Pexels" in KNOWN_LICENSES
+
+
+def test_commons_regression_existing_manifests_unchanged_meaning():
+    from common import is_shippable, provider_of  # noqa: E402
+    manifests = load_manifests()
+    assert len(manifests) == 10
+    for _, data in manifests:
+        assert "provider" not in data["source"]  # zero migrated files
+        assert provider_of(data) == "wikimedia-commons"
+        assert is_shippable(data)
+
+
+def test_pexels_fixture_shape_and_fail_closed():
+    from common import is_shippable, provider_of  # noqa: E402
+    import copy
+    fixture = json.loads(
+        (REPO / "media/candidates/ar-example-pexels-fixture.json").read_text())
+    assert provider_of(fixture) == "pexels"
+    assert fixture["license"] == {"short": "Pexels", "name": "Pexels License",
+                                   "url": "https://www.pexels.com/license/"}
+    assert fixture["original"]["container"] == "mp4"
+    assert fixture["dayparts"] == ["golden-hour"]
+    assert not is_shippable(fixture)
+    # Even a shippable review status cannot ship without recorded approval.
+    promoted = copy.deepcopy(fixture)
+    promoted["review"]["status"] = "written-permission"
+    assert not is_shippable(promoted)
+    del promoted["review"]["distribution"]  # absent != approved for pexels
+    assert not is_shippable(promoted)
+    # The approval path exists and is explicit.
+    promoted["review"]["distribution"] = "approved"
+    assert is_shippable(promoted)
+    # The fixture is parked in candidates/, never in the shipped set.
+    assert fixture["id"] not in {d["id"] for _, d in load_manifests()}
+
+
+def test_fetch_refuses_pexels_and_commons_unchanged():
+    import fetch as fetch_mod  # noqa: E402 (scripts/media on sys.path)
+    fixture = json.loads(
+        (REPO / "media/candidates/ar-example-pexels-fixture.json").read_text())
+    with pytest.raises(RuntimeError, match="#39"):
+        fetch_mod.ensure_fetchable(fixture)
+    for _, data in load_manifests():
+        fetch_mod.ensure_fetchable(data)  # Commons path passes the gate

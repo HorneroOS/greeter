@@ -37,7 +37,13 @@ and packaged during the build.
    `python3 scripts/validate-media-manifests.py`.
 2. Review source rights for redistribution, editing, and packaging. A public
    URL or attribution is not permission. Keep uncertain media in
-   `candidates/` until evidence is recorded.
+   `candidates/` until evidence is recorded. Manifests name their provider
+   in `source.provider` (absent means `wikimedia-commons`) separately from
+   `license`; `review.distribution` records explicit redistribution
+   approval and the packaged set fails closed without it. Pexels sources
+   (Pexels License, not a CC license) are candidates only until the rights
+   gate in issue #39 clears — see `docs/PEXELS_PERMISSION_REQUEST.md` and
+   `CONTRIBUTING_MEDIA.md`. `fetch.py` refuses Pexels sources until then.
 3. Fetch the original by manifest ID. SHA256 is checked and originals are
    cached under ignored `.cache/`:
 

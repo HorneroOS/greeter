@@ -1,0 +1,45 @@
+{
+  "id": "ar-example-pexels-fixture",
+  "title": "FIXTURE - synthetic Pexels-shaped candidate, not a real clip",
+  "location": {
+    "place": "Example Place",
+    "province": "Example Province",
+    "region": "Example Region",
+    "country": "Argentina"
+  },
+  "creator": "Example Pexels Creator (fixture)",
+  "source": {
+    "provider": "pexels",
+    "page": "https://www.pexels.com/video/example-fixture-33053999/",
+    "file": "pexels-video-33053999.mp4"
+  },
+  "license": {
+    "short": "Pexels",
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/"
+  },
+  "review": {
+    "status": "review-pending",
+    "distribution": "not-approved",
+    "reviewer": null,
+    "date": null,
+    "evidence": "FIXTURE ONLY: proves the provider-neutral manifest shape offline. No distribution approval exists; binary-package redistribution is gated on written permission (issue #39, docs/PEXELS_PERMISSION_REQUEST.md). Must never ship, be fetched, or be packaged."
+  },
+  "original": {
+    "bytes": 1,
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "duration_s": 10.0,
+    "width": 1920,
+    "height": 1080,
+    "container": "mp4"
+  },
+  "dayparts": ["golden-hour"],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 10.0,
+    "crop": "none (fixture)",
+    "scale": "downscale selection to 1080p",
+    "audio": "strip"
+  },
+  "notes": "FIXTURE: synthetic values only (bytes=1, all-zero SHA256). No Pexels binary was downloaded. Promotion requires recorded distribution approval, a pinned authorized rendition, and a real fetched SHA256."
+}

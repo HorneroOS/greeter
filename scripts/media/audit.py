@@ -9,7 +9,8 @@ Checks (exit 1 on any failure):
      Main.qml/Qt5 stack is owned by the Qt6 port track, not this audit).
   3. No shell-exec / PAM / dotfile hooks in pipeline-owned runtime files
      (no QML runCommand/execute, no 'pam', no '~/' or '$HOME' paths).
-  4. Licenses: every shipped manifest uses an allowlisted CC license.
+  4. Licenses: every shipped manifest uses a license allowlisted for its
+     provider, with recorded distribution approval (fail closed).
   5. Git hygiene: no video binaries tracked or present; manifests stay
      small (<= 16 KiB each); cache/build/dist dirs stay untracked.
   6. Staging permissions (when build/media/base exists): files 0644.
@@ -26,7 +27,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import ALLOWED_LICENSES, BUILD_BASE_DIR, load_manifests  # noqa: E402
+from common import (BUILD_BASE_DIR, LICENSES_BY_PROVIDER, is_shippable,  # noqa: E402
+                    load_manifests, provider_of)
 
 REPO = Path(__file__).resolve().parent.parent.parent
 URL_RE = re.compile(r"https?://")
@@ -91,10 +93,15 @@ def check_no_qt5_exec_pam_dotfiles(errors):
 
 
 def check_licenses(errors):
+    # load_manifests() already applies the fail-closed is_shippable gate;
+    # re-check provider/license coherence here so audit agrees with it.
     for path, data in load_manifests():
         short = data.get("license", {}).get("short")
-        if short not in ALLOWED_LICENSES:
-            errors.append(f"{path.name}: license '{short}' not allowlisted")
+        if short not in LICENSES_BY_PROVIDER.get(provider_of(data), set()):
+            errors.append(f"{path.name}: license '{short}' not allowlisted "
+                          f"for provider '{provider_of(data)}'")
+        if not is_shippable(data):
+            errors.append(f"{path.name}: shipped set contains unapproved source")
 
 
 def check_git_hygiene(errors):

@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """Fetch original clips into the local cache with SHA256 enforcement.
 
-Reads media/manifests/*.json, downloads each original from Wikimedia
-Commons (Special:FilePath), and verifies byte size + SHA256 against the
-manifest. Cache hits (hash matches) are skipped, so re-runs are cheap.
+Reads media/manifests/*.json, downloads each original from its provider,
+and verifies byte size + SHA256 against the manifest. Cache hits (hash
+matches) are skipped, so re-runs are cheap.
+
+Providers: wikimedia-commons downloads via Special:FilePath (unchanged).
+pexels is refused: no lawful fetch route exists until the distribution
+rights gate (issue #39) records approval and a pinned authorized
+rendition; this script never scrapes Pexels, invents download URLs, or
+handles API credentials.
 
     python3 scripts/media/fetch.py --all
     python3 scripts/media/fetch.py --id ar-ba-buenos-aires
 
 Cache layout (.gitignore'd, never committed):
-    .cache/media-originals/<id>.<webm|ogv>
+    .cache/media-originals/<id>.<webm|ogv|mp4>
 
 Stdlib only. Network use is build-time only; runtime ships local files.
 """
@@ -21,7 +27,8 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (CACHE_DIR, commons_file_url, load_manifests)  # noqa: E402
+from common import (CACHE_DIR, commons_file_url, load_manifests,  # noqa: E402
+                    provider_of)
 
 
 def sha256_of(path, chunk=1 << 20):
@@ -33,6 +40,21 @@ def sha256_of(path, chunk=1 << 20):
                 break
             digest.update(block)
     return digest.hexdigest()
+
+
+def ensure_fetchable(data):
+    """Raise for providers with no lawful fetch route yet (fail closed)."""
+    provider = provider_of(data)
+    if provider == "pexels":
+        raise RuntimeError(
+            "pexels fetch refused: binary-package redistribution is not "
+            "approved yet (rights gate, issue #39). Record written "
+            "distribution approval (review.distribution=approved with "
+            "evidence; see docs/PEXELS_PERMISSION_REQUEST.md) and pin an "
+            "authorized rendition in the manifest before any fetch. "
+            "Scraping or inventing Pexels download URLs is not supported.")
+    if provider != "wikimedia-commons":
+        raise RuntimeError(f"unknown provider '{provider}': no fetch route")
 
 
 def fetch_one(manifest_id, filename, expected_bytes, expected_sha256, dest):
@@ -88,6 +110,7 @@ def main(argv=None):
             print(f"cached {manifest_id} ({dest.name})")
             continue
         try:
+            ensure_fetchable(data)
             fetch_one(manifest_id, data["source"]["file"],
                       expected_bytes, expected_sha, dest)
             print(f"fetched {manifest_id} ({dest.name})")
