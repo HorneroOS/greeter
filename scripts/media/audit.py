@@ -39,8 +39,9 @@ PAM_RE = re.compile(r"\bpam\b", re.IGNORECASE)
 HOME_RE = re.compile(r"~/|\$HOME|file:///home/")
 VIDEO_EXTS = {".webm", ".mp4", ".m4v", ".ogv", ".ogg", ".ogm", ".mov",
               ".mkv", ".avi", ".flv", ".wmv"}
-# Legacy upstream stack: owned by the Qt6 port track, exempt here.
-EXEMPT_RUNTIME = {"Main.qml", "components/WallpaperFader.qml"}
+# Main.qml imports SddmComponents 2.0 (the SDDM-provided module, not Qt5),
+# so it is exempt from the Qt5 import regex here; tests cover it instead.
+EXEMPT_RUNTIME = {"Main.qml"}
 
 
 def runtime_owned_files():

@@ -30,3 +30,37 @@ var CATALOG = {
   "fallbackImage": "background.jpg",
   "version": 1
 };
+// On-screen scene credits (Hornero Signal bottom rail), derived from the
+// rights-reviewed manifests of wired clips and shipped stills only.
+var CREDITS = {
+  "ar-ba-nocturno": {
+    "creator": "ProtoplasmaKid",
+    "license": "CC BY-SA 4.0",
+    "place": "Avenida Corrientes and Avenida 9 de Julio, Buenos Aires",
+    "title": "Corrientes Avenue after dark"
+  },
+  "ar-er-el-palmar-golden-hour": {
+    "creator": "Leandro Kibisz (Loco085)",
+    "license": "CC BY-SA 4.0",
+    "place": "Parque Nacional El Palmar",
+    "title": "Palmar at the last light"
+  },
+  "ar-mis-iguazu-falls-staggered": {
+    "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+    "license": "CC BY-SA 4.0",
+    "place": "Iguazú Falls, Misiones",
+    "title": "Iguazú in tiers of mist"
+  },
+  "ar-sc-perito-moreno-pan": {
+    "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+    "license": "CC BY-SA 4.0",
+    "place": "Los Glaciares National Park, Lago Argentino",
+    "title": "Across the Perito Moreno ice front"
+  },
+  "ar-tdf-ushuaia-penguins": {
+    "creator": "Brandon Antonio Segura Torres & Priscilla Vieto Bonilla",
+    "license": "CC BY-SA 4.0",
+    "place": "Les Eclaireurs lighthouse area, Beagle Channel, Ushuaia",
+    "title": "Penguin colony at the End of the World lighthouse, Ushuaia"
+  }
+};

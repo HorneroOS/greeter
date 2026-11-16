@@ -25,7 +25,47 @@ HEADER = """\
 // The greeter imports this module synchronously; it must never be fetched
 // over the network at runtime (see AGENTS.md no-runtime-network invariant).
 var CATALOG = %s;
+// On-screen scene credits (Hornero Signal bottom rail), derived from the
+// rights-reviewed manifests of wired clips and shipped stills only.
+var CREDITS = %s;
 """
+
+REPO_MEDIA = Path(__file__).resolve().parent.parent.parent / "media"
+
+
+def license_label(short: str) -> str:
+    """CC-BY-SA-4.0 -> CC BY-SA 4.0 (human form used in NOTICE)."""
+    parts = short.split("-")
+    if len(parts) >= 3 and parts[0] == "CC":
+        return "CC " + "-".join(parts[1:-1]) + " " + parts[-1]
+    return short
+
+
+def credit(manifest: dict) -> dict:
+    return {
+        "title": manifest["title"],
+        "place": manifest["location"]["place"],
+        "creator": manifest["creator"],
+        "license": license_label(manifest["license"]["short"]),
+    }
+
+
+def credits(doc: dict) -> dict:
+    wired = {
+        entry["id"]
+        for entries in doc["dayparts"].values()
+        for entry in entries
+        if isinstance(entry, dict) and "id" in entry
+    }
+    out = {}
+    for path in sorted((REPO_MEDIA / "manifests").glob("*.json")):
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        if manifest.get("id") in wired:
+            out[manifest["id"]] = credit(manifest)
+    for path in sorted((REPO_MEDIA / "stills").glob("*.json")):
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        out[manifest["id"]] = credit(manifest)
+    return out
 
 
 def build(source: Path) -> str:
@@ -36,7 +76,11 @@ def build(source: Path) -> str:
     if not isinstance(dayparts, dict):
         raise SystemExit(f"error: {source} dayparts must be an object")
     rel = source.name
-    return HEADER % (rel, json.dumps(doc, indent=2, sort_keys=True))
+    return HEADER % (
+        rel,
+        json.dumps(doc, indent=2, sort_keys=True),
+        json.dumps(credits(doc), indent=2, sort_keys=True, ensure_ascii=False),
+    )
 
 
 def main(argv):

@@ -45,7 +45,30 @@ footage, not the code.
 Qt6 reference consulted during the port: Keyitdev/sddm-astronaut-theme
 (unversioned `QtMultimedia` import, `QtQuick.Effects` usage).
 
-## Fidelity restoration (upstream look, Argentina footage)
+## Hornero Signal (RFC 0001, current)
+
+The greeter now follows Hornero Signal, the HorneroOS design language
+(`HorneroOS/docs/development/rfc-0001-hornero-signal.md`, tracked in
+HorneroOS/.github#28). This supersedes both sections below: the upstream
+fidelity contract and its `tests/test_upstream_fidelity.py` are removed on
+purpose.
+
+- Layout: telemetry clock (left), sign-in console (right), top rail (ident,
+  power), bottom rail (scene credit, daypart). The upstream SDDM components
+  `TextBox`, `PasswordBox`, `ComboBox`, `Button` and `ImageButton` were
+  replaced by first-party `SignalField`, `SignalSelect`, `ChoiceList` and
+  `SignalButton`; `WallpaperFader.qml` (KDE, GPL-2.0+) and
+  `KeyboardToggle.qml` were removed, as were the upstream `reboot.svg`,
+  `shutdown.svg` and `warning_red.png`.
+- Tokens: `components/Signal.js` (palette, type, radii, spacing, motion).
+  Pre-Signal `theme.conf` keys for fonts, colours, sizes and positions are
+  gone; `reducedMotion` is new.
+- Kept from upstream and the Qt6 port: the SDDM flows (login with masked
+  password and last-user default, session and keyboard layout selection,
+  login-failure message, reboot/power-off), the `MediaDeck` local sequencer
+  and the offline invariant. The code stays GPL-3.0.
+
+## Fidelity restoration (superseded by Hornero Signal)
 
 The `feat/hornero-identity` redesign (cinematic hero, location label,
 avatar, hairline fields, terracotta palette) was reverted: the greeter
@@ -65,7 +88,7 @@ keys (`videoEnabled`, `crossfadeDuration`, `testMode`, golden-hour
 window). Upstream `bgVidDay/bgVidNight` (`playlists/*.m3u`) stay out:
 streaming playlists violate the offline invariant.
 
-## Hornero identity (`feat/hornero-identity`, superseded)
+## Hornero identity (`feat/hornero-identity`, superseded twice)
 
 - `Main.qml` was redesigned around a Hornero-native cinematic hero: warm
   charcoal surfaces, earth browns, terracotta and burnt-orange accents,

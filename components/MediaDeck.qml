@@ -18,11 +18,18 @@ Item {
     property bool videoEnabled: true
     property int crossfadeDuration: 3000
     property bool testMode: false
+    // Reduced motion caps the clip crossfade at 90 ms (RFC 0001 §3.6); the
+    // handoff timing still uses effectiveCrossfade.
+    property bool reducedMotion: false
+    readonly property int fadeDuration: reducedMotion ? 90 : effectiveCrossfade
     property int maxErrors: 3
 
     property int effectiveCrossfade: Catalog.clampCrossfade(crossfadeDuration)
     property var sequencer: null
     property bool hasVideo: false
+    // Catalog id of the clip on screen (empty while no video plays); the
+    // greeter maps it to the rights-reviewed scene credit.
+    readonly property string currentId: hasVideo ? _activePlayer._currentId : ""
 
     property var _activePlayer: playerA
     property var _activeOutput: videoA
@@ -154,7 +161,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: deck.effectiveCrossfade
+                duration: deck.fadeDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -187,7 +194,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: deck.effectiveCrossfade
+                duration: deck.fadeDuration
                 easing.type: Easing.InOutQuad
             }
         }

@@ -6,6 +6,20 @@ The SDDM theme is derived from aerial-sddm-theme by Fabio Almeida (3ximus),
 https://github.com/3ximus/aerial-sddm-theme, under GNU GPL version 3. See
 `LICENSE` for the source-code license.
 
+## Glyph geometry
+
+`components/Glyph.qml` contains outline path data from Tabler Icons
+(https://github.com/tabler/tabler-icons), MIT License, Copyright (c)
+2020-2024 Paweł Kuna. The paths are reproduced unchanged except that
+relative move commands in the keyboard and refresh glyphs were rewritten
+as the equivalent absolute coordinates.
+
+## Fonts
+
+The greeter uses IBM Plex Sans, IBM Plex Mono and IBM Plex Sans Condensed
+(SIL Open Font License 1.1) from the system `ttf-ibm-plex` package. No font
+files are redistributed in this repository.
+
 ## Media included in the theme and base media pack
 
 Media is independently licensed; the GPL source-code license does not apply
