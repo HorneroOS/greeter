@@ -232,6 +232,7 @@ fi
 if [ -n "$GRAB" ]; then
   # Staged-only: grab the settled frame (after the scan-in) and quit.
   python3 - "$STAGE/Main.qml" "$GRAB" <<'EOF'
+import json
 import sys
 path, out = sys.argv[1], sys.argv[2]
 src = open(path, encoding="utf-8").read().rstrip()
@@ -241,12 +242,12 @@ src = src[:-1] + '''
         interval: 3500
         running: true
         onTriggered: container.grabToImage(function (r) {
-            r.saveToFile("%s");
+            r.saveToFile(%s);
             Qt.quit();
         })
     }
 }
-''' % out
+''' % json.dumps(out)
 open(path, "w", encoding="utf-8").write(src)
 EOF
 fi
@@ -373,6 +374,8 @@ if [ -n "$GRAB" ]; then
   W=${SIZE%x*}
   H=${SIZE#*x}
   printf '{"screens":[{"name":"preview","x":0,"y":0,"width":%s,"height":%s,"logicalDpiX":96,"logicalDpiY":96,"dpr":%s}]}\n' "$W" "$H" "$SCALE" > "$CONF"
+  # Never report a previous frame as this capture.
+  rm -f -- "$GRAB"
   QT_QPA_PLATFORM="offscreen:configfile=$CONF" timeout 60 \
     sddm-greeter-qt6 --test-mode --theme "$STAGE" >/dev/null 2>&1 || true
   [ -s "$GRAB" ] || { echo "offscreen grab failed: $GRAB" >&2; exit 1; }

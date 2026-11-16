@@ -5,6 +5,7 @@
 // cursor, so the footage mood on screen is explained, not decorative.
 import QtQuick
 import "Signal.js" as Signal
+import "MediaCatalog.js" as Catalog
 
 Item {
     id: ruler
@@ -36,12 +37,53 @@ Item {
         return Signal.alpha(ruler.sig.cue, 0.5);
     }
 
+    // Same classification the MediaDeck uses (inclusive window ends), so
+    // the bands always match the footage mood on screen.
+    function partAt(hour) {
+        var part = Catalog.daypartForHour(hour, ruler.dayStart, ruler.dayEnd, ruler.goldenStart, ruler.goldenEnd);
+        return part === "golden-hour" ? "golden" : part;
+    }
+
     function bandColor(hour) {
-        if (hour >= ruler.goldenStart && hour < ruler.goldenEnd)
-            return roleColor("golden");
-        if (hour >= ruler.dayStart && hour < ruler.dayEnd)
-            return roleColor("day");
-        return roleColor("night");
+        return roleColor(partAt(hour));
+    }
+
+    // Legend rows derived from the classified hours: contiguous ranges per
+    // mood, end hour exclusive (a 17-20 inclusive window reads 17–21).
+    function legendModel() {
+        var labels = {
+            "day": "DAY",
+            "golden": "GOLDEN",
+            "night": "NIGHT"
+        };
+        var ranges = {
+            "day": [],
+            "golden": [],
+            "night": []
+        };
+        var start = 0;
+        for (var h = 1; h <= 24; h++) {
+            if (h === 24 || partAt(h) !== partAt(start)) {
+                ranges[partAt(start)].push([start, h]);
+                start = h;
+            }
+        }
+        // A night range crossing midnight reads as one span (20–07).
+        var night = ranges.night;
+        if (night.length > 1 && night[0][0] === 0 && night[night.length - 1][1] === 24) {
+            night[night.length - 1] = [night[night.length - 1][0], night[0][1]];
+            night.shift();
+        }
+        var out = [];
+        ["day", "golden", "night"].forEach(function (role) {
+            ranges[role].forEach(function (r) {
+                out.push({
+                    "label": labels[role] + " " + pad(r[0]) + "–" + pad(r[1] % 24),
+                    "role": role
+                });
+            });
+        });
+        return out;
     }
 
     // Segmented daypart bands: one cell per hour, 2 px gaps (VU style).
@@ -112,20 +154,7 @@ Item {
         spacing: 20 * ruler.fontScale
 
         Repeater {
-            model: [
-                {
-                    "label": "DAY " + ruler.pad(ruler.dayStart) + "–" + ruler.pad(ruler.goldenStart),
-                    "role": "day"
-                },
-                {
-                    "label": "GOLDEN " + ruler.pad(ruler.goldenStart) + "–" + ruler.pad(ruler.goldenEnd),
-                    "role": "golden"
-                },
-                {
-                    "label": "NIGHT " + ruler.pad(ruler.goldenEnd) + "–" + ruler.pad(ruler.dayStart),
-                    "role": "night"
-                }
-            ]
+            model: ruler.legendModel()
 
             Row {
                 required property var modelData

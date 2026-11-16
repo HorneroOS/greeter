@@ -43,8 +43,18 @@ Rectangle {
 
     function hide(returnFocus) {
         list.open = false;
+        // Release the list's sub-focus first: otherwise the trigger's
+        // FocusScope hands active focus straight back to the hidden view.
+        view.focus = false;
         if (returnFocus && list.trigger)
             list.trigger.forceActiveFocus();
+    }
+
+    // Close (restoring trigger focus) before announcing the choice, so the
+    // caller's onChosen can move focus elsewhere.
+    function choose(i) {
+        list.hide(true);
+        list.chosen(i);
     }
 
     height: Math.min(view.contentHeight, 6 * 36 * fontScale) + 2
@@ -93,6 +103,7 @@ Rectangle {
 
         anchors.fill: parent
         anchors.margins: 1
+        enabled: list.open
         model: list.model
         clip: true
         boundsBehavior: Flickable.StopAtBounds
@@ -167,10 +178,7 @@ Rectangle {
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onEntered: view.currentIndex = row.index
-                onClicked: {
-                    list.chosen(row.index);
-                    list.hide(true);
-                }
+                onClicked: list.choose(row.index)
             }
         }
 
@@ -179,8 +187,7 @@ Rectangle {
                 list.hide(true);
                 event.accepted = true;
             } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space) {
-                list.chosen(view.currentIndex);
-                list.hide(true);
+                list.choose(view.currentIndex);
                 event.accepted = true;
             } else if (event.key === Qt.Key_Home) {
                 view.currentIndex = 0;

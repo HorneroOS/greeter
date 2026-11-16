@@ -61,6 +61,11 @@ Rectangle {
         chain[next].forceActiveFocus();
     }
 
+    // Credits come from manifests; escape them for StyledText.
+    function escapeHtml(text) {
+        return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
     // "-03" -> "UTC−03"; named zones (ART, CET) pass through unchanged.
     function zoneLabel(zone) {
         if (/^[+-]\d/.test(zone))
@@ -131,6 +136,7 @@ Rectangle {
         crossfadeDuration: parseInt(config.crossfadeDuration || "3000", 10)
         videoEnabled: config.videoEnabled != "false"
         testMode: config.testMode == "true"
+        reducedMotion: container.reducedMotion
         onBackgroundPressed: container.focusCredentials()
         // Typing before any field has focus lands in the right field: the
         // first keypress is never swallowed.
@@ -437,6 +443,9 @@ Rectangle {
         id: login_container
 
         readonly property real s: container.typeUnit * container.accessibilityScale
+        // With the on-screen keyboard up, the console drops its header rows
+        // so the fields, log in and session stay above the keyboard.
+        readonly property bool compact: container.virtualKeyboardVisible
         readonly property real restY: Math.max(topRail.height + 24, Math.round(container.height * 0.53 - height / 2))
 
         width: Math.round(Math.min(460 * container.typeUnit * (container.largeText ? 1.3 : 1), container.width - 2 * container.margin))
@@ -532,6 +541,7 @@ Rectangle {
             Item {
                 width: parent.width
                 height: consoleEyebrow.height
+                visible: !login_container.compact
 
                 Text {
                     id: consoleEyebrow
@@ -553,6 +563,7 @@ Rectangle {
 
             Text {
                 id: welcome
+                visible: !login_container.compact
                 width: parent.width
                 text: textConstants.welcomeText.arg(container.hostName)
                 elide: Text.ElideRight
@@ -563,6 +574,7 @@ Rectangle {
             }
 
             Rectangle {
+                visible: !login_container.compact
                 width: parent.width
                 height: 1
                 color: container.sig.rule
@@ -583,8 +595,8 @@ Rectangle {
                 trailingName: "Choose user"
                 onTrailingClicked: users.show()
                 onAccepted: container.login()
-                Accessible.name: "Username"
-                Accessible.description: "Enter your account name"
+                accessibleName: "Username"
+                accessibleDescription: "Enter your account name"
                 Keys.onTabPressed: function (event) {
                     container.moveFocus(username_input_box, false);
                     event.accepted = true;
@@ -643,8 +655,8 @@ Rectangle {
                     if (text !== "")
                         container.loginError = "";
                 }
-                Accessible.name: "Password"
-                Accessible.description: "Enter your password"
+                accessibleName: "Password"
+                accessibleDescription: "Enter your password"
                 Keys.onTabPressed: function (event) {
                     container.moveFocus(password_input_box, false);
                     event.accepted = true;
@@ -947,7 +959,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: Math.round(40 * s)
+        height: Math.max(Math.round(40 * s), creditText.height + 16)
         visible: !container.virtualKeyboardVisible
 
         Rectangle {
@@ -966,7 +978,6 @@ Rectangle {
             anchors.rightMargin: Signal.SPACING.large
             anchors.verticalCenter: parent.verticalCenter
             spacing: Signal.SPACING.normal
-            clip: true
 
             Text {
                 anchors.verticalCenter: parent.verticalCenter
@@ -988,22 +999,23 @@ Rectangle {
                 text: deck.hasVideo ? "LIVE" : "STILL"
             }
 
+            // Full credit, wrapping to a second line rather than clipping:
+            // title, creator and licence always stay readable.
             Text {
+                id: creditText
                 anchors.verticalCenter: parent.verticalCenter
+                width: Math.max(0, sceneRow.width - x)
                 visible: bottomRail.credit !== undefined
-                text: bottomRail.credit ? bottomRail.credit.title : ""
-                color: container.sig.ink
-                font.family: Signal.FONT_SANS
-                font.pixelSize: Signal.TYPE.normal * bottomRail.s
-            }
-
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                visible: bottomRail.credit !== undefined
-                text: bottomRail.credit ? (bottomRail.credit.place + "  ·  " + bottomRail.credit.creator + "  ·  " + bottomRail.credit.license) : ""
+                textFormat: Text.StyledText
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
+                elide: Text.ElideRight
+                text: bottomRail.credit ? ("<font color=\"" + container.sig.ink + "\">" + container.escapeHtml(bottomRail.credit.title) + "</font>  ·  " + container.escapeHtml(bottomRail.credit.creator) + "  ·  " + container.escapeHtml(bottomRail.credit.license) + "  ·  " + container.escapeHtml(bottomRail.credit.place)) : ""
                 color: container.sig.inkMuted
-                font.family: Signal.FONT_MONO
-                font.pixelSize: Signal.TYPE.small * bottomRail.s
+                font.family: Signal.FONT_SANS
+                font.pixelSize: Signal.TYPE.smaller * bottomRail.s
+                Accessible.role: Accessible.StaticText
+                Accessible.name: bottomRail.credit ? (bottomRail.credit.title + ", " + bottomRail.credit.creator + ", " + bottomRail.credit.license + ", " + bottomRail.credit.place) : ""
             }
         }
 

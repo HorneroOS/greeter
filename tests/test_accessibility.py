@@ -18,8 +18,8 @@ CHAIN = (
 
 def test_login_and_system_controls_have_accessible_names():
     for name in (
-        'Accessible.name: "Username"',
-        'Accessible.name: "Password"',
+        'accessibleName: "Username"',
+        'accessibleName: "Password"',
         'accessibleName: "Desktop session"',
         'accessibleName: "Keyboard layout"',
         'Accessible.name: "Log in"',
@@ -29,6 +29,11 @@ def test_login_and_system_controls_have_accessible_names():
     ):
         assert name in MAIN, name
     assert "Accessible.passwordEdit: field.password" in FIELD
+    # The wrapper's plaintext `text` alias is never exposed; only the
+    # native (masking) TextInput is an accessible node.
+    head, input_block = FIELD.split("TextInput {", 1)
+    assert "Accessible.ignored: true" in head
+    assert "Accessible.role: Accessible.EditableText" in input_block
     assert "Accessible.role: Accessible.ComboBox" in SELECT
     assert "Accessible.role: Accessible.Button" in BUTTON
     assert "Accessible.onPressAction: button.clicked()" in BUTTON
@@ -61,6 +66,10 @@ def test_enter_logs_in_and_buttons_take_keyboard_activation():
 def test_lists_are_keyboard_operable_and_return_focus():
     assert "Qt.Key_Escape" in LIST
     assert "list.trigger.forceActiveFocus()" in LIST
+    # A closed list drops its sub-focus and stops taking keys.
+    assert "view.focus = false;" in LIST and "enabled: list.open" in LIST
+    hide = LIST.split("function choose(i)", 1)[1].split("}", 1)[0]
+    assert hide.index("list.hide(true)") < hide.index("list.chosen(i)")
     assert "Qt.Key_Up" in SELECT and "Qt.Key_Down" in SELECT
     # User chooser: Down in the username field opens the user list.
     assert "event.key === Qt.Key_Down && userModel.count > 1" in MAIN

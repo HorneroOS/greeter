@@ -20,6 +20,8 @@ FocusScope {
     property bool invalid: false
     property string trailingGlyph: ""
     property string trailingName: ""
+    property string accessibleName: eyebrow
+    property string accessibleDescription: ""
     readonly property alias input: input
 
     signal accepted
@@ -32,10 +34,10 @@ FocusScope {
     implicitHeight: 52 * fontScale
     activeFocusOnTab: true
 
-    Accessible.role: Accessible.EditableText
-    Accessible.name: field.eyebrow
-    Accessible.passwordEdit: field.password
-    Accessible.focusable: true
+    // The wrapper is not an accessible node: its plaintext `text` alias must
+    // never be read by assistive technology. The native TextInput below is
+    // the accessible editable text and masks passwords itself.
+    Accessible.ignored: true
 
     Rectangle {
         id: well
@@ -101,7 +103,10 @@ FocusScope {
             visible: input.activeFocus
         }
         onAccepted: field.accepted()
-        Accessible.ignored: true
+        Accessible.role: Accessible.EditableText
+        Accessible.name: field.accessibleName
+        Accessible.description: field.accessibleDescription
+        Accessible.passwordEdit: field.password
     }
 
     MouseArea {
