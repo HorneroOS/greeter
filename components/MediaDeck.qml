@@ -23,6 +23,9 @@ Item {
     property int effectiveCrossfade: Catalog.clampCrossfade(crossfadeDuration)
     property var sequencer: null
     property bool hasVideo: false
+    // Catalog id of the clip on screen (empty while no video plays); the
+    // greeter maps it to the rights-reviewed scene credit.
+    readonly property string currentId: hasVideo ? _activePlayer._currentId : ""
 
     property var _activePlayer: playerA
     property var _activeOutput: videoA

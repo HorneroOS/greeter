@@ -19,6 +19,7 @@ GREETER_PKGBUILD = (
 QML_RUNTIME_MAP = {
     "QtMultimedia": "qt6-multimedia",
     "QtQuick.Effects": "qt6-declarative",
+    "QtQuick.Shapes": "qt6-declarative",
     "QtQuick": "qt6-declarative",
     "QtQuick.VirtualKeyboard": "qt6-virtualkeyboard",
 }
@@ -66,10 +67,14 @@ def test_pkgbuild_declares_qt6_multimedia():
     assert "qt6-multimedia" in _depends()
 
 
-def test_pkgbuild_declares_default_greeter_font():
-    theme_conf = (REPO_ROOT / "theme.conf").read_text(encoding="utf-8")
-    assert re.search(r'^displayFont="Rubik"$', theme_conf, re.MULTILINE)
-    assert "ttf-rubik-vf" in _depends()
+def test_pkgbuild_declares_signal_fonts():
+    # Hornero Signal type (RFC 0001 §3.3): IBM Plex Sans / Mono / Sans
+    # Condensed from ttf-ibm-plex. Rubik is gone with the old identity.
+    signal = (REPO_ROOT / "components" / "Signal.js").read_text(encoding="utf-8")
+    for family in ("IBM Plex Sans", "IBM Plex Mono", "IBM Plex Sans Condensed"):
+        assert f'"{family}"' in signal
+    assert "ttf-ibm-plex" in _depends()
+    assert "ttf-rubik-vf" not in _depends()
 
 
 def test_pkgbuild_version_matches_its_source_tag():

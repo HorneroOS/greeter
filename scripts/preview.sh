@@ -16,6 +16,15 @@
 #                   catalog instead of synthetic fixtures (needs build.py run)
 #   --clip ID       with --real-media: preview a single catalog entry by id,
 #                   forcing the deck to its daypart (per-clip visual QA)
+#   --grab FILE     render offscreen (QT_QPA_PLATFORM=offscreen, --size WxH,
+#                   default 1920x1080) and have the STAGED Main.qml grab its
+#                   own frame to FILE; no display or compositor needed. Video
+#                   frames are not captured on the offscreen platform (the
+#                   still fallback shows through); use --shot for footage.
+#   --power         staged-only: show restart/shut down even when test mode
+#                   reports no power permissions (layout QA)
+#   --high-contrast / --large-text / --reduced-motion
+#                   staged theme.conf accessibility toggles
 #   --no-branding   staged-only: set brandingEnabled=false (pure upstream
 #                   presentation) for branding-off QA
 #   --run-secs N    stop the greeter after N seconds (default 12 with --shot,
@@ -50,6 +59,12 @@ NO_BRANDING=0
 PREFILL_USER=""
 PREFILL_PASSWORD=""
 FAIL_LOGIN=0
+GRAB=""
+SIZE=1920x1080
+POWER=0
+HIGH_CONTRAST=0
+LARGE_TEXT=0
+REDUCED_MOTION=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -67,6 +82,12 @@ while [ $# -gt 0 ]; do
     --prefill-user) PREFILL_USER="$2"; shift 2;;
     --prefill-password) PREFILL_PASSWORD="$2"; shift 2;;
     --fail-login) FAIL_LOGIN=1; shift;;
+    --grab) GRAB="$2"; shift 2;;
+    --size) SIZE="$2"; shift 2;;
+    --power) POWER=1; shift;;
+    --high-contrast) HIGH_CONTRAST=1; shift;;
+    --large-text) LARGE_TEXT=1; shift;;
+    --reduced-motion) REDUCED_MOTION=1; shift;;
     *) echo "unknown flag: $1" >&2; exit 1;;
   esac
 done
@@ -146,6 +167,8 @@ STAGE_MAIN_NEEDS_COPY=0
 [ -n "$PREFILL_USER" ] && STAGE_MAIN_NEEDS_COPY=1
 [ -n "$PREFILL_PASSWORD" ] && STAGE_MAIN_NEEDS_COPY=1
 [ "$FAIL_LOGIN" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
+[ -n "$GRAB" ] && STAGE_MAIN_NEEDS_COPY=1
+[ "$POWER" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
 if [ "$STAGE_MAIN_NEEDS_COPY" = 1 ]; then
   cp "$ROOT/Main.qml" "$STAGE/Main.qml"
 else
@@ -197,20 +220,34 @@ path = sys.argv[1]
 src = open(path, encoding="utf-8").read()
 old = "deck.daypart = part;"
 assert src.count(old) == 1, "daypart assignment not found"
-src = src.replace(old, old + '\n        error_message.color = config.errorMsgFontColor;\n        error_message.text = textConstants.loginFailed;', 1)
+src = src.replace(old, old + '\n        container.loginError = textConstants.loginFailed;', 1)
 open(path, "w", encoding="utf-8").write(src)
 EOF
 fi
-if [ "$STAGE_MAIN_NEEDS_COPY" = 1 ] && { [ -n "$PREFILL_USER" ] || [ -n "$PREFILL_PASSWORD" ] || [ "$FAIL_LOGIN" = 1 ]; }; then
-  # Staged-only: start revealed so probe screenshots render the login
-  # surface (production starts hidden until first click/key, like upstream).
-  python3 - "$STAGE/Main.qml" <<'EOF'
+
+if [ "$POWER" = 1 ]; then
+  sed -i -e 's/visible: sddm.canReboot/visible: true/' \
+    -e 's/visible: sddm.canPowerOff/visible: true/' "$STAGE/Main.qml"
+fi
+if [ -n "$GRAB" ]; then
+  # Staged-only: grab the settled frame (after the scan-in) and quit.
+  python3 - "$STAGE/Main.qml" "$GRAB" <<'EOF'
 import sys
-path = sys.argv[1]
-src = open(path, encoding="utf-8").read()
-old = 'state: "off"'
-assert src.count(old) == 1, "fader state not found"
-open(path, "w", encoding="utf-8").write(src.replace(old, 'state: "on"', 1))
+path, out = sys.argv[1], sys.argv[2]
+src = open(path, encoding="utf-8").read().rstrip()
+assert src.endswith("}"), "Main.qml root not found"
+src = src[:-1] + '''
+    Timer {
+        interval: 3500
+        running: true
+        onTriggered: container.grabToImage(function (r) {
+            r.saveToFile("%s");
+            Qt.quit();
+        })
+    }
+}
+''' % out
+open(path, "w", encoding="utf-8").write(src)
 EOF
 fi
 
@@ -307,6 +344,9 @@ fi
 # reads of local files, so catalog.json alone would leave video dark).
 "$ROOT/scripts/media/build-catalog" "$STAGE/media/catalog.json" >/dev/null
 sed -e 's/^testMode=false/testMode=true/' "$ROOT/theme.conf" > "$STAGE/theme.conf"
+[ "$HIGH_CONTRAST" = 1 ] && sed -i -e 's/^highContrast=false/highContrast=true/' "$STAGE/theme.conf"
+[ "$LARGE_TEXT" = 1 ] && sed -i -e 's/^largeText=false/largeText=true/' "$STAGE/theme.conf"
+[ "$REDUCED_MOTION" = 1 ] && sed -i -e 's/^reducedMotion=false/reducedMotion=true/' "$STAGE/theme.conf"
 if [ "$NO_BRANDING" = 1 ]; then
   # Staged-only: pure upstream presentation for branding-off QA.
   sed -i -e 's/^brandingEnabled=true/brandingEnabled=false/' "$STAGE/theme.conf"
@@ -327,6 +367,18 @@ cleanup() {
   fi
 }
 trap cleanup EXIT INT TERM
+
+if [ -n "$GRAB" ]; then
+  CONF="$STAGE/offscreen.json"
+  W=${SIZE%x*}
+  H=${SIZE#*x}
+  printf '{"screens":[{"name":"preview","x":0,"y":0,"width":%s,"height":%s,"logicalDpiX":96,"logicalDpiY":96,"dpr":%s}]}\n' "$W" "$H" "$SCALE" > "$CONF"
+  QT_QPA_PLATFORM="offscreen:configfile=$CONF" timeout 60 \
+    sddm-greeter-qt6 --test-mode --theme "$STAGE" >/dev/null 2>&1 || true
+  [ -s "$GRAB" ] || { echo "offscreen grab failed: $GRAB" >&2; exit 1; }
+  echo "offscreen frame saved to $GRAB"
+  exit 0
+fi
 
 QT_SCALE_FACTOR="$SCALE" sddm-greeter-qt6 --test-mode --theme "$STAGE" &
 GREETER_PID=$!
