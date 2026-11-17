@@ -150,7 +150,7 @@ Rectangle {
             Text {
                 anchors.left: parent.left
                 anchors.leftMargin: Signal.SPACING.normal
-                anchors.right: tick.left
+                anchors.right: chip.visible ? chip.left : (tick.visible ? tick.left : parent.right)
                 anchors.rightMargin: Signal.SPACING.smaller
                 anchors.verticalCenter: parent.verticalCenter
                 text: row.text
@@ -158,6 +158,32 @@ Rectangle {
                 color: row.selected ? list.sig.onSignalWell : list.sig.ink
                 font.family: Signal.FONT_SANS
                 font.pixelSize: Signal.TYPE.normal * list.fontScale
+            }
+
+            // Experimental sessions carry a word chip, never colour alone.
+            Rectangle {
+                id: chip
+                readonly property bool flagged: row.model.experimental === true
+                visible: chip.flagged
+                anchors.right: tick.visible ? tick.left : parent.right
+                anchors.rightMargin: tick.visible ? Signal.SPACING.smaller : Signal.SPACING.normal
+                anchors.verticalCenter: parent.verticalCenter
+                width: chipText.width + 2 * Signal.SPACING.smaller
+                height: Math.round(18 * list.fontScale)
+                radius: Signal.RADIUS.small
+                color: "transparent"
+                border.width: 1
+                border.color: list.sig.ruleStrong
+
+                Text {
+                    id: chipText
+                    anchors.centerIn: parent
+                    text: "EXPERIMENTAL"
+                    color: list.sig.inkMuted
+                    font.family: Signal.FONT_MONO
+                    font.pixelSize: Signal.TYPE.small * list.fontScale
+                    font.letterSpacing: Signal.TYPE.small * list.fontScale * 0.08
+                }
             }
 
             Text {
