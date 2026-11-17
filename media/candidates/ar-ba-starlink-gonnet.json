@@ -1,0 +1,46 @@
+{
+  "id": "ar-ba-starlink-gonnet",
+  "title": "Starlink pass over Manuel B. Gonnet (night)",
+  "location": {
+    "place": "Manuel B. Gonnet, La Plata area",
+    "province": "Buenos Aires",
+    "region": "Pampeana",
+    "country": "Argentina"
+  },
+  "creator": "Juan Kulichevsky",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Starlink-18_Y_over_Buenos_Aires,_Argentina.webm",
+    "file": "Starlink-18 Y over Buenos Aires, Argentina.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "YouTube import via video2commons with category 'License reviewed by YouTubeReviewBot' (bot confirmation of the CC BY channel licence), read 2026-11-17."
+  },
+  "original": {
+    "bytes": 363667169,
+    "sha256": "c9d9f9554afe87132fbf4f37c16510c2459d05841b56686e042939b29bd0d7d7",
+    "duration_s": 42.35,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "night"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 42.35,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "True night footage with a verified location (description: Manuel B. Gonnet, Buenos Aires; Nikon D5600 night mode, 2021-02-07). REJECTED after frame review 2026-11-17: almost black frame, heavy sensor noise, only faint tree silhouette; the gradient night fallback reads better. 363 MB original, kept outside Git."
+}

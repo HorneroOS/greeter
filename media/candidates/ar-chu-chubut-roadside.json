@@ -1,0 +1,46 @@
+{
+  "id": "ar-chu-chubut-roadside",
+  "title": "Chubut (untitled roadside clip)",
+  "location": {
+    "place": "Chubut, place not stated",
+    "province": "Chubut",
+    "region": "Patagonia Sur",
+    "country": "Argentina"
+  },
+  "creator": "Chiloprod",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Chubut.webm",
+    "file": "Chubut.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-ShareAlike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "Self-published work ({{own}}) by Chiloprod, {{self|cc-by-sa-4.0}}, read 2026-11-17 via the MediaWiki API."
+  },
+  "original": {
+    "bytes": 7256980,
+    "sha256": "75f44944e1b2a9b6bbcf1a61fe2ac95c1c206b0fde07fa632f04a06cca4c9996",
+    "duration_s": 19.272,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "night"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 19.272,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "Description is only 'Chubut'. REJECTED after frame review 2026-11-17: blurred hand-held phone clip (moon close-up, dune blur, grey haze, road with car headlights); geography unverifiable and quality unusable."
+}
