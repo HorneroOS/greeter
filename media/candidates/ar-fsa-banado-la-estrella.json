@@ -1,0 +1,46 @@
+{
+  "id": "ar-fsa-banado-la-estrella",
+  "title": "Banado La Estrella wetlands, Pilcomayo river",
+  "location": {
+    "place": "Banado La Estrella, Pilcomayo river",
+    "province": "Formosa",
+    "region": "Noreste",
+    "country": "Argentina"
+  },
+  "creator": "Todo Noticias",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:El_para%C3%ADso_salvaje_de_Formosa_-_Ba%C3%B1ado_La_Estrella.webm",
+    "file": "El paraíso salvaje de Formosa - Bañado La Estrella.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "YouTube import via video2commons with category 'License reviewed by YouTubeReviewBot' (bot confirmation of the CC BY channel licence). Frame review pending."
+  },
+  "original": {
+    "bytes": 210369205,
+    "sha256": "a1e9c86b6462942835dffc82f39ef483d4f47575dd3d80e1748e22dcdeacb145",
+    "duration_s": 254.169,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "day"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 254.169,
+    "crop": "none",
+    "scale": "keep 1080p",
+    "audio": "strip"
+  },
+  "notes": "TV-news fragment: check for channel logos, captions and voice-over/people before any excerpt. REJECTED after frame review 2026-11-17: burned-in channel logo, social-media ticker, lower-third captions and identifiable interviewees throughout (TV news fragment)."
+}

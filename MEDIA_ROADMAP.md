@@ -18,7 +18,7 @@ gradient fallback instead of a weak clip. Rejected after frame review
 (2026-11-17, kept parked in `media/candidates/`): `ar-mis-iguazu-devils-throat`
 (handheld, identifiable people), `ar-ba-haedo-sunset-east` (static suburban
 rooftops), `ar-night-starlink-cc0` (near-black, noisy; the only verified CC0
-Argentine night source). Commons files marked "License review needed"
+Argentine night source). Also rejected: `ar-fsa-banado-la-estrella` (reviewed CC BY TV-news fragment, but burned-in channel logo, ticker and interviewees). Sources searched 2026-11-17 without a usable day or night find: Commons Argentina video categories, Commons CC0/self-published/YouTube-reviewed/Vimeo searches, Internet Archive (matches are NC/ND or non-scenic), NASA/NOAA public-domain (satellite imagery, not footage). Commons files marked "License review needed"
 (Hornocal, Uquía, Salinas Grandes, Tilcara timelapse, Purmamarca) are not
 usable until a reviewer confirms the YouTube license.
 
