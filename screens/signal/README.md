@@ -21,7 +21,7 @@ with these staged-only probes:
 | ---- | ----- |
 | `01-signal-night-golden-hour.jpg` | Signal Night, golden hour still (El Palmar) |
 | `02-signal-night-night.jpg` | Signal Night, night still (Buenos Aires) |
-| `03-signal-night-day-fallback.jpg` | Day fallback still (`background.jpg`, no credit entry) |
+| `03-signal-night-day-fallback.jpg` | Day fallback still (`components/resources/fallback-day.svg`, no credit entry) |
 | `04-high-contrast-large-text.jpg` | `highContrast=true`, `largeText=true` |
 | `05-login-failed.jpg` | Failed login: alert well, status line, username kept |
 | `06-session-list-open.jpg` | Session list open from the keyboard, notch and `ACTIVE` row |

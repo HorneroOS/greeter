@@ -28,11 +28,13 @@ def main(argv=None):
         return 2
 
     catalog = json.loads((ROOT / "media/catalog.json").read_text(encoding="utf-8"))
-    still_records = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "media/stills").glob("*.json"))]
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ROOT / "components/resources/hornero-symbolic.svg", output / "hornero-symbolic.svg")
 
+    if not any(catalog["dayparts"].values()):
+        print("no approved clips in media/catalog.json: nothing to export "
+              "(the website must show the designed fallback, not media)")
     for entries in catalog["dayparts"].values():
         for entry in entries:
             source = ROOT / "build" / entry["file"]
@@ -49,12 +51,6 @@ def main(argv=None):
                  "-c:v", "libwebp", "-quality", "76", "-an", str(poster)])
             print(f"{entry['id']}: {preview.stat().st_size} video bytes, {poster.stat().st_size} poster bytes")
 
-    for record in still_records:
-        source = ROOT / "media/stills" / record["derivative"]["file"]
-        target = output / f"{record['id']}.webp"
-        run(["ffmpeg", "-y", "-v", "error", "-i", str(source), "-vf", "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720",
-             "-frames:v", "1", "-c:v", "libwebp", "-quality", "76", "-an", str(target)])
-        print(f"{record['id']}: {target.stat().st_size} poster bytes")
     return 0
 
 

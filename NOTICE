@@ -20,13 +20,14 @@ The greeter uses IBM Plex Sans, IBM Plex Mono and IBM Plex Sans Condensed
 (SIL Open Font License 1.1) from the system `ttf-ibm-plex` package. No font
 files are redistributed in this repository.
 
-## Media included in the theme and base media pack
+## Media included in previously distributed versions (retired)
 
-Media is independently licensed; the GPL source-code license does not apply
-to these works. Adapted stills are installed with the theme. Video clips are
-downloaded and packaged by the reproducible media pipeline and are not stored
-in Git. Full source records, original hashes, dimensions, edits, and license
-evidence live in `media/stills/` and `media/manifests/`.
+These works were retired from the active catalogue and are no longer included
+in the theme or media pack. This notice is kept for versions that already
+distributed them. Media is independently licensed; the GPL source-code license
+does not apply. Archived source records live in
+`docs/archive/legacy-catalogue-2026/`; the greeter fallback gradients are
+original HorneroOS artwork.
 
 - **Iguazú in tiers of mist** — Brandon Antonio Segura Torres & Priscilla
   Vieto Bonilla; CC BY-SA 4.0;

@@ -2,7 +2,7 @@
 # Preview the Hornero greeter with sddm-greeter-qt6 in test mode.
 #
 # Builds short local fixture clips (no downloads: graded stills rendered
-# from background.jpg with ffmpeg), stages a throwaway theme directory in
+# from a synthetic gradient with ffmpeg), stages a throwaway theme directory in
 # /tmp that reuses this repo read-only via symlinks, and runs the greeter.
 #
 # Usage:
@@ -107,13 +107,18 @@ fi
 mkdir -p "$FIXDIR"
 if [ ! -f "$FIXDIR/day.mp4" ] || [ ! -f "$FIXDIR/night.mp4" ] || [ ! -f "$FIXDIR/golden.mp4" ]; then
   echo "building fixture clips in $FIXDIR ..."
-  ffmpeg -y -loglevel error -loop 1 -i "$ROOT/background.jpg" \
+  # Synthetic gradient source (no shipped art): fixtures exist only to
+  # exercise the player, never to resemble a real clip.
+  ffmpeg -y -loglevel error -f lavfi \
+    -i "gradients=s=1920x1080:c0=0x17304f:c1=0x8fd3c8:x0=0:y0=0:x1=1920:y1=1080:n=2:d=1" \
+    -frames:v 1 "$FIXDIR/source.png"
+  ffmpeg -y -loglevel error -loop 1 -i "$FIXDIR/source.png" \
     -filter_complex "[0:v]scale=1280:720,zoompan=z='1.0+0.03*on/150':d=150:s=1280x720:fps=30,eq=saturation=1.1:contrast=1.05,format=yuv420p[v]" \
     -map "[v]" -t 5 -c:v libx264 -preset veryfast -crf 23 "$FIXDIR/day.mp4"
-  ffmpeg -y -loglevel error -loop 1 -i "$ROOT/background.jpg" \
+  ffmpeg -y -loglevel error -loop 1 -i "$FIXDIR/source.png" \
     -filter_complex "[0:v]scale=1280:720,zoompan=z='1.0+0.03*on/150':d=150:s=1280x720:fps=30,eq=brightness=-0.25:saturation=0.9:contrast=1.05,colorbalance=rs=0.2:gs=-0.05:bs=-0.2,format=yuv420p[v]" \
     -map "[v]" -t 5 -c:v libx264 -preset veryfast -crf 23 "$FIXDIR/night.mp4"
-  ffmpeg -y -loglevel error -loop 1 -i "$ROOT/background.jpg" \
+  ffmpeg -y -loglevel error -loop 1 -i "$FIXDIR/source.png" \
     -filter_complex "[0:v]scale=1280:720,zoompan=z='1.0+0.03*on/150':d=150:s=1280x720:fps=30,eq=brightness=-0.08:saturation=1.35:contrast=1.08,colorbalance=rs=0.45:gs=0.05:bs=-0.35:rm=0.25:gm=0.0:bm=-0.2,format=yuv420p[v]" \
     -map "[v]" -t 5 -c:v libx264 -preset veryfast -crf 23 "$FIXDIR/golden.mp4"
 fi
@@ -129,9 +134,7 @@ fi
 # Probe flags (--daypart/--prefill-*/--fail-login) operate on a COPY of
 # Main.qml inside the throwaway stage dir; the repo file is never modified.
 mkdir -p "$STAGE/media"
-ln -s "$ROOT/media/stills" "$STAGE/media/stills"
 ln -s "$ROOT/components" "$STAGE/components"
-ln -s "$ROOT/background.jpg" "$STAGE/background.jpg"
 ln -s "$ROOT/metadata.desktop" "$STAGE/metadata.desktop"
 for f in "$ROOT"/media/*; do
   case "$(basename "$f")" in
@@ -312,7 +315,7 @@ elif [ "$STATIC" = 1 ]; then
   cat > "$STAGE/media/catalog.json" <<'EOF'
 {
   "version": 1,
-  "fallbackImage": "background.jpg",
+  "fallbackImage": "components/resources/fallback-day.svg",
   "dayparts": {
     "day": [],
     "night": []
@@ -328,7 +331,7 @@ elif [ -n "$DAYPART" ]; then
   cat > "$STAGE/media/catalog.json" <<EOF
 {
   "version": 1,
-  "fallbackImage": "background.jpg",
+  "fallbackImage": "components/resources/fallback-day.svg",
   "dayparts": {
     "day": [],
     "golden-hour": [],
@@ -347,7 +350,7 @@ else
   cat > "$STAGE/media/catalog.json" <<'EOF'
 {
   "version": 1,
-  "fallbackImage": "background.jpg",
+  "fallbackImage": "components/resources/fallback-day.svg",
   "dayparts": {
     "day": [
       {"id": "preview-day", "daypart": "day", "kind": "video", "file": "media/preview-day.mp4"}

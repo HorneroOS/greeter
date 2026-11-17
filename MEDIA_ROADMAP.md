@@ -1,21 +1,38 @@
 # Argentina media collection
 
-The greeter's active rotation is deliberately small and quality-led. Its
-runtime catalog contains three licensed daytime videos. Golden hour and night
-use dedicated local still backgrounds because no night video currently meets
-the editorial and rights bar. No daylight footage is mislabeled as night.
+The greeter's runtime catalogue is currently **empty by design**. The previous
+collection (three daytime videos and two stills) was fully retired for the
+cinematic Argentina replacement (HorneroOS/greeter#41). Until rights-cleared
+footage is approved, the greeter shows an original designed gradient per
+daypart (`components/resources/fallback-*.svg`) and the media pack is not
+released. **Release is blocked on the rights gate** (HorneroOS/greeter#39).
 
-## Active scenes
+## Rights state
 
-| ID / status | Place · province · region | Creator · source | Original | License / clearance evidence | Daypart · edit / quality note |
+Pexels does not clearly authorise redistributing clips in a separate media
+package (Terms of Service, last updated 2026-10-20, section 5: "You cannot sell
+or distribute the Content ... on a Standalone basis"). Evidence and decision:
+`docs/PEXELS_RIGHTS_EVIDENCE.md`. All Pexels clips are candidate-only.
+
+## Candidate clips (nothing is verified, cleared, packaged or released)
+
+| Ref | Manifest id | Pexels id | Place | Daypart | State |
 | --- | --- | --- | --- | --- | --- |
-| `ar-mis-iguazu-falls-staggered` · selected | Iguazú Falls · Misiones · Litoral | Brandon Antonio Segura Torres & Priscilla Vieto Bonilla · [Commons source](https://commons.wikimedia.org/wiki/File:Cascadas_del_Iguaz%C3%BA_en_varios_pisos_escalonadas.webm) | 1920×1080, 36.523 s, 18,767,613 bytes | CC BY-SA 4.0 · source marked own work, direct grant, Self-published work; WSC Argentina 2025 | Day · trim 1–31 s; staggered falls, greenery and mist in a broad moving panorama; native 16:9. |
-| `ar-sc-perito-moreno-pan` · selected | Los Glaciares National Park, Lago Argentino · Santa Cruz · Patagonia Austral | Brandon Antonio Segura Torres & Priscilla Vieto Bonilla · [Commons source](https://commons.wikimedia.org/wiki/File:Paneo_a_Glaciar_Perito_Moreno.webm) | 2160×3840, 37.805 s | CC BY-SA 4.0 · source marks the creators' own work and direct grant | Day · trim 0–37.8 s; crop centered 2160×1216 band to 1920×1080; checked at 4, 18, 30 s, retaining ice front, lake and ridge. |
-| `ar-tdf-ushuaia-penguins` · selected | Les Eclaireurs lighthouse, Ushuaia · Tierra del Fuego · Patagonia Austral | Brandon Antonio Segura Torres & Priscilla Vieto Bonilla · [Commons source](https://commons.wikimedia.org/wiki/File:Poblaci%C3%B3n_de_pinguinos_en_Faro_del_Fin_del_mundo_en_Ushuaia.webm) | 2160×3840, 11.0 s | CC BY-SA 4.0 · self-published work under direct uploader grant | Day · trim 0–11 s; cropped to a 16:9 band, keeping the colony and lighthouse area; short, so the player loops it. |
-| `ar-er-el-palmar-golden-hour` · selected fallback | Parque Nacional El Palmar · Entre Ríos · Litoral | Leandro Kibisz (Loco085) · [Commons source](https://commons.wikimedia.org/wiki/File:Argentina_-_Entre_R%C3%ADos_-_Parque_Nacional_El_Palmar_(atardecer).JPG) | 6000×4000 still, captured 2015-05-17 | CC BY-SA 4.0 · own-work file page with direct grant | Golden hour · center crop to 1920×1080; sunset light over native palms. |
-| `ar-ba-nocturno` · selected fallback | Corrientes / 9 de Julio avenues · CABA · Pampas | ProtoplasmaKid · [Commons source](https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_nocturna_de_Avenida_9_de_julio_y_Avenida_Corrientes_02.jpg) | 4021×2262 still, captured 2025-10-01 | CC BY-SA 4.0 · own-work file page with direct grant | Night · downscaled to 1920×1080; real city illumination, not a dimmed daytime scene. |
+| D1 | `ar-mza-potrerillos-drone` | 37382809 | Potrerillos, Mendoza | day | blocked: rights, API record unfetched |
+| D2 | `ar-mis-iguazu-cataratas-aerial` | 33053999 | Iguazú, Misiones | day | blocked |
+| D3 | `ar-ctc-piedra-pomez` | 37112523 | Piedra Pómez, Catamarca | day | blocked |
+| D4 | `ar-rn-bariloche-aerial` | 33665907 | Bariloche, Río Negro | day | blocked, loop risk (8 s) |
+| G1 | `ar-sc-fitz-roy-sunrise` | 33285416 | Fitz Roy, Santa Cruz | golden-hour | blocked, top priority |
+| G2 | `ar-ju-hornocal-golden` | 18210885 | Hornocal, Jujuy | golden-hour | blocked, loop risk (8 s) |
+| G3 | `ar-pat-river-sunset` | 38921813 | unconfirmed Patagonian river | golden-hour | blocked, geography unverified |
+| N1 | `ar-ba-dusk-skyscrapers` | 34075564 | Buenos Aires | golden-hour (dusk, not night) | blocked |
+| N2 | `ar-ba-skyline-sunset` | 36229695 | Buenos Aires | golden-hour (sunset, not night) | blocked |
+| R1 | `ar-sa-cafayate-red-rocks` | 36783241 | Cafayate, Salta | day (reserve) | blocked |
+| R2 | `ar-mza-andes-aerial` | 37382839 | unconfirmed Andes | day (reserve) | blocked |
 
-All video source byte sizes, original SHA256 values, exact edit notes, fallback derivative hashes, and review evidence are recorded in the linked manifest files under `media/manifests/` and `media/stills/`. Runtime video outputs are H.264/yuv420p with audio stripped.
+No genuine Argentine night footage has been sourced; the night bucket stays
+empty and shows the designed night gradient. Retired records are archived in
+`docs/archive/legacy-catalogue-2026/`.
 
 ## Other reviewed sources
 
@@ -35,7 +52,7 @@ All video source byte sizes, original SHA256 values, exact edit notes, fallback 
 
 The stills are authored, cropped derivatives with source resolution, original
 and derivative hashes, processing notes, source pages, and license evidence in
-`media/stills/*.json`. Full video provenance is in `media/manifests/`.
+`docs/archive/legacy-catalogue-2026/`. Full video provenance is in `media/manifests/`.
 `NOTICE` records the attributions. Media licenses are independent of the
 theme's GPL source-code license.
 

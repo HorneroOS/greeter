@@ -16,7 +16,7 @@ MAIN = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
 
 def _credits():
     text = (MEDIA / "catalog.js").read_text(encoding="utf-8")
-    match = re.search(r"var CREDITS = (\{.*?\n\});", text, re.DOTALL)
+    match = re.search(r"var CREDITS = (\{.*?\});", text, re.DOTALL)
     assert match, "CREDITS block missing from media/catalog.js"
     return json.loads(match.group(1))
 
@@ -27,13 +27,13 @@ def _wired_ids():
 
 
 def test_credits_cover_exactly_wired_clips_and_shipped_stills():
-    stills = {json.loads(p.read_text(encoding="utf-8"))["id"] for p in (MEDIA / "stills").glob("*.json")}
-    assert set(_credits()) == _wired_ids() | stills
+    # The designed gradient fallbacks are original art and carry no credit.
+    assert set(_credits()) == _wired_ids()
 
 
 def test_credits_match_manifests():
     manifests = {}
-    for path in list((MEDIA / "manifests").glob("*.json")) + list((MEDIA / "stills").glob("*.json")):
+    for path in (MEDIA / "manifests").glob("*.json"):
         doc = json.loads(path.read_text(encoding="utf-8"))
         manifests[doc["id"]] = doc
     for scene_id, credit in _credits().items():

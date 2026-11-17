@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <!-- Original HorneroOS Signal fallback (day). Pure gradient, no photographic or third-party artwork. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17304f"/>
+      <stop offset="0.62" stop-color="#2c6f8f"/>
+      <stop offset="1" stop-color="#0f2236"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.72" cy="0.78" r="0.55">
+      <stop offset="0" stop-color="#8fd3c8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8fd3c8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ridge1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c4468" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#0f2236"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#glow)"/>
+  <path d="M0 860 L220 740 L420 820 L690 650 L930 800 L1170 690 L1420 830 L1660 720 L1920 840 L1920 1080 L0 1080 Z" fill="url(#ridge1)"/>
+</svg>

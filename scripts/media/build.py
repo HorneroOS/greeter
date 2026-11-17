@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import (BUILD_BASE_DIR, CACHE_DIR, CRF, MAX_FPS, MAX_HEIGHT,  # noqa: E402
+from common import (FALLBACK_IMAGE, RETIRED_IDS, BUILD_BASE_DIR, CACHE_DIR, CRF, MAX_FPS, MAX_HEIGHT,  # noqa: E402
                     PIX_FMT, PRESET, ffprobe_json, fps_of, load_manifests,
                     output_path_for, parse_center_crop, video_stream)
 
@@ -196,7 +196,7 @@ def write_generated(manifests):
             "source_page": data["source"]["page"],
         })
     catalog = {"version": 1, "pack": "base", "profile": "mp4/h264/yuv420p/<=1080p/<=30fps/no-audio",
-               "fallbackImage": "background.jpg", "clips": entries}
+               "fallbackImage": FALLBACK_IMAGE, "clips": entries}
     (BUILD_BASE_DIR / "catalog.json").write_text(
         json.dumps(catalog, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     lines = ["id,file,sha256,title,place,province,region,creator,license,dayparts"]
@@ -257,6 +257,17 @@ def main(argv=None):
         active = {entry["id"] for entries in source["dayparts"].values()
                   for entry in entries}
         manifests = [(path, data) for path, data in manifests if data["id"] in active]
+        retired = active & RETIRED_IDS
+        if retired:
+            print(f"runtime catalog references retired clips: {', '.join(sorted(retired))}",
+                  file=sys.stderr)
+            return 1
+        # Strict pack membership: drop every staged artefact from earlier
+        # builds so a stale (or retired) clip can never be packaged.
+        if BUILD_BASE_DIR.is_dir():
+            for stale in BUILD_BASE_DIR.iterdir():
+                if stale.is_file():
+                    stale.unlink()
         missing = active - {data["id"] for _, data in manifests}
         if missing:
             print(f"runtime catalog references unshippable clips: {', '.join(sorted(missing))}",

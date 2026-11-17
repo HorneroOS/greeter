@@ -23,13 +23,15 @@ Requires: tar, zstd. Stdlib otherwise.
 """
 
 import argparse
+import json
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import BUILD_BASE_DIR, DIST_DIR, PACK_NAME, REPRO_MTIME  # noqa: E402
+from common import (BUILD_BASE_DIR, DIST_DIR, PACK_NAME, REPO,  # noqa: E402
+                    REPRO_MTIME, RETIRED_IDS)  # noqa: E402
 
 REQUIRED_GENERATED = ("catalog.json", "catalog.csv",
                       "MEDIA_LICENSES.md", "ATTRIBUTION.md")
@@ -52,6 +54,8 @@ def tar_supports(flag):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="package the media base pack")
     parser.add_argument("--version", default="1.0.0")
+    parser.add_argument("--catalog", type=Path, default=REPO / "media" / "catalog.json",
+                        help="runtime catalog that defines pack membership")
     args = parser.parse_args(argv)
     for tool in ("tar", "zstd"):
         if shutil.which(tool) is None:
@@ -64,6 +68,16 @@ def main(argv=None):
     mp4s = sorted(BUILD_BASE_DIR.glob("*.mp4"))
     if not mp4s:
         print(f"nothing to pack: no .mp4 in {BUILD_BASE_DIR}", file=sys.stderr)
+        return 1
+    # Strict membership: the pack holds exactly the clips the runtime
+    # catalog wires, and never a retired one.
+    source = json.loads(args.catalog.read_text(encoding="utf-8"))
+    active = {e["id"] for es in source["dayparts"].values() for e in es}
+    staged = {m.stem for m in mp4s}
+    if staged & RETIRED_IDS or staged != active:
+        print("pack membership mismatch: staged="
+              f"{sorted(staged)} catalog={sorted(active)} "
+              f"retired={sorted(staged & RETIRED_IDS)}", file=sys.stderr)
         return 1
     missing = [n for n in REQUIRED_GENERATED if not (BUILD_BASE_DIR / n).is_file()]
     if missing:

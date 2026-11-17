@@ -15,7 +15,7 @@ pass criteria.
 ## Procedure
 
 1. Boot to the SDDM greeter. Screenshot after ~15 s (reveal + first clip).
-   Expect: fullscreen video behind the clock/login, not `background.jpg`.
+   Expect: fullscreen video behind the clock/login, not `components/resources/fallback-day.svg`.
 2. Cover rotation: restart the greeter 6+ times
    (`systemctl restart sddm`), screenshotting each boot. Expect: different
    day clips across boots (Iguazu, Perito Moreno wall/calving, Ushuaia,
@@ -24,7 +24,7 @@ pass criteria.
    Expect: the mountain-lake clip, dim and calm.
 4. Missing pack: uninstall `hornero-greeter-media-base` (leaving the
    theme's `media/base` symlink dangling), restart SDDM, screenshot.
-   Expect: static `background.jpg` fallback, login fully usable, no QML
+   Expect: static designed gradient fallback, login fully usable, no QML
    errors in the journal.
 5. Reinstall the pack, restart, screenshot. Expect: video resumes.
 

@@ -1,0 +1,3 @@
+# Retired catalogue (archival provenance only)
+
+These records document the media that shipped in releases before the cinematic Argentina replacement (HorneroOS/greeter#41): videos `ar-mis-iguazu-falls-staggered`, `ar-sc-perito-moreno-pan`, `ar-tdf-ushuaia-penguins` and stills `ar-er-el-palmar-golden-hour`, `ar-ba-nocturno`. They are kept so the attribution and license obligations for already distributed versions stay verifiable. They are not scanned by the validator, are not wired in any catalogue, and their binaries are gone from the repository, the runtime and the media pack. Do not re-activate them.

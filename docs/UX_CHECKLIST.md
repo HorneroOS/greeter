@@ -6,7 +6,7 @@ unchecked blocks the change.
 
 ## First frame
 
-- [ ] A still (`background.jpg` or pack poster) paints before the
+- [ ] A still (`components/resources/fallback-day.svg` or pack poster) paints before the
   video pipeline is ready — never a black screen on slow disks.
 - [ ] Clock and login form are legible over the busiest frame of each
   pack (day, golden-hour, night windows in `theme.conf`).

@@ -37,7 +37,7 @@ def _clean_pipeline_artifacts():
 
 def test_manifests_load_and_licenses_allowlisted():
     manifests = load_manifests()
-    assert len(manifests) == 10
+    assert len(manifests) == 7
     allowed = {"CC0-1.0", "CC-BY-3.0", "CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0"}
     for _, data in manifests:
         assert data["license"]["short"] in allowed
@@ -116,7 +116,11 @@ def test_package_script_builds_single_base_pack(tmp_path):
                        ("MEDIA_LICENSES.md", "# licenses\n"),
                        ("ATTRIBUTION.md", "# attribution\n")):
         (BUILD_BASE_DIR / name).write_text(body)
-    run(sys.executable, "scripts/media/package.py", "--version", "0.0.0-test")
+    wired = tmp_path / "catalog.json"
+    wired.write_text(json.dumps({"version": 1, "dayparts": {"day": [
+        {"id": "ar-example-sample"}], "golden-hour": [], "night": []}}))
+    run(sys.executable, "scripts/media/package.py", "--version", "0.0.0-test",
+        "--catalog", str(wired))
     packs = sorted((REPO / "dist").glob("hornero-greeter-media-base-*.tar.zst"))
     assert len(packs) == 1
     out = subprocess.run(["tar", "--zstd", "-tf", str(packs[0])],
@@ -165,7 +169,7 @@ def test_provider_allowlists_single_source_no_drift():
 def test_commons_regression_existing_manifests_unchanged_meaning():
     from common import is_shippable, provider_of  # noqa: E402
     manifests = load_manifests()
-    assert len(manifests) == 10
+    assert len(manifests) == 7
     for _, data in manifests:
         assert "provider" not in data["source"]  # zero migrated files
         assert provider_of(data) == "wikimedia-commons"
@@ -228,3 +232,40 @@ def test_pexels_candidates_are_parked_and_unverified_never_ships():
     finally:
         bad.unlink()
     assert proc.returncode == 1
+
+
+def test_pack_membership_is_strict_and_retired_ids_rejected(tmp_path):
+    from common import RETIRED_IDS
+    run(sys.executable, "scripts/media/build.py", "--fixture")
+    for name, body in (("catalog.json", "{}"), ("catalog.csv", ""),
+                       ("MEDIA_LICENSES.md", ""), ("ATTRIBUTION.md", "")):
+        (BUILD_BASE_DIR / name).write_text(body)
+    # fixture is staged but the real (empty) catalog does not wire it
+    proc = subprocess.run([sys.executable, "scripts/media/package.py"],
+                          capture_output=True, text=True, cwd=REPO)
+    assert proc.returncode == 1 and "membership" in proc.stderr
+    # a retired id wired in the catalog is refused even when staged
+    legacy = sorted(RETIRED_IDS)[0]
+    (BUILD_BASE_DIR / f"{legacy}.mp4").write_bytes(b"x")
+    wired = tmp_path / "c.json"
+    wired.write_text(json.dumps({"version": 1, "dayparts": {"day": [
+        {"id": legacy}], "golden-hour": [], "night": []}}))
+    proc = subprocess.run([sys.executable, "scripts/media/package.py",
+                           "--catalog", str(wired)],
+                          capture_output=True, text=True, cwd=REPO)
+    assert proc.returncode == 1 and "retired" in proc.stderr
+
+
+def test_legacy_catalogue_absent_from_active_runtime():
+    from common import RETIRED_IDS
+    active = [REPO / "media/catalog.json", REPO / "media/catalog.js",
+              REPO / "theme.conf", REPO / "Main.qml",
+              REPO / "packaging/arch/hornero-greeter/PKGBUILD"]
+    for path in active:
+        text = path.read_text()
+        for legacy in RETIRED_IDS:
+            assert legacy not in text, f"{legacy} still in {path.name}"
+    assert not (REPO / "media/stills").exists()
+    assert not (REPO / "background.jpg").exists()
+    assert not any(p.stem in RETIRED_IDS
+                   for p in (REPO / "media/manifests").glob("*.json"))

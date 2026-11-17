@@ -12,7 +12,6 @@ visual_paths:
   - "media/**"
   - "screens/**"
   - "components/resources/**"
-  - "background.jpg"
 generated_paths:
   - source: "media/catalog.json"
     derivative: "media/catalog.js"

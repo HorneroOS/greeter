@@ -2,7 +2,7 @@
 
 English only, here and in every manifest. No video binaries in git. The
 theme may include optimized still derivatives; each needs a provenance JSON
-record under `media/stills/` and must be listed in `NOTICE` and installed by
+record under `media/stills/` (only for a future rights-cleared still) and must be listed in `NOTICE` and installed by
 the theme package.
 
 ## Provider and license model

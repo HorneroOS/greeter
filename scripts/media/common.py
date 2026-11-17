@@ -13,6 +13,14 @@ CACHE_DIR = REPO / ".cache" / "media-originals"
 BUILD_BASE_DIR = REPO / "build" / "media" / "base"
 DIST_DIR = REPO / "dist"
 
+FALLBACK_IMAGE = "components/resources/fallback-day.svg"
+# Retired by the 2026 cinematic replacement (HorneroOS/greeter#41). These
+# ids must never reappear in the runtime catalogue, staging or the pack.
+RETIRED_IDS = frozenset({
+    "ar-mis-iguazu-falls-staggered", "ar-sc-perito-moreno-pan",
+    "ar-tdf-ushuaia-penguins", "ar-er-el-palmar-golden-hour", "ar-ba-nocturno",
+})
+
 PACK_NAME = "hornero-greeter-media-base"
 PACK_VERSION = "1.0.0"
 
