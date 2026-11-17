@@ -34,3 +34,7 @@ Local, non-redistributed evaluation (a developer viewing clips for editorial rev
 ## What is not done and why
 
 Candidate manifests list `original.verified: false`: bytes, SHA256, duration and dimensions are null because the Pexels API record has not been fetched (no `PEXELS_API_KEY` is available to this workflow) and no download URL is ever guessed. Titles, creators, ids and dayparts come from the 2026-11-13 editorial research and are unverified.
+
+## Update 2026-11-17
+
+Pexels API key issuance is paused ("La emisión de nuevas claves de API se ha pausado temporalmente"), so no Pexels file can be fetched, even for local evaluation. Pages are never scraped for MP4 URLs. The permission-request drafts in `docs/PEXELS_PERMISSION_REQUEST.md` are the only Pexels path, and the user decides whether to send them. Source policy is redistributable footage first (Wikimedia Commons).
