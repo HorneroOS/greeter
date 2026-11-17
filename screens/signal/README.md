@@ -27,3 +27,6 @@ with these staged-only probes:
 | `06-session-list-open.jpg` | Session list open from the keyboard, notch and `ACTIVE` row |
 | `07-reduced-motion-first-frame.jpg` | `reducedMotion=true`, about 1 s after start: complete frame |
 | `08-1366x768.jpg` | 1366x768, type held at the RFC scale |
+
+| `09-login-failed-readable.jpg` | greeter#45: failure line at >= 13 px with alert glyph and word (offscreen, host session list) |
+| `10-session-list-experimental-last.jpg` | greeter#45: stable sessions first and default, experimental last with an `EXPERIMENTAL` chip (crop of the console, offscreen) |

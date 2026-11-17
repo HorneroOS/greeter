@@ -75,7 +75,7 @@ Rectangle {
 
     function login() {
         container.loginError = "";
-        sddm.login(username_input_box.text, password_input_box.text, session.index);
+        sddm.login(username_input_box.text, password_input_box.text, container.sessionSource(session.index));
     }
 
     function focusCredentials() {
@@ -99,6 +99,63 @@ Rectangle {
 
     TextConstants {
         id: textConstants
+    }
+
+    // Sessions in presentation order: stable sessions first (Hornero ones
+    // ahead of others), experimental ones last. `source` maps back to the
+    // SDDM session index used for login. The default is the last used
+    // session unless that one is experimental, then the first stable one.
+    ListModel {
+        id: sessionChoices
+    }
+
+    property var sessionRows: []
+    property int sessionDefault: 0
+
+    function sessionSource(i) {
+        return (i >= 0 && i < sessionChoices.count) ? sessionChoices.get(i).source : sessionModel.lastIndex;
+    }
+
+    function isExperimental(name) {
+        return /experimental/i.test(name);
+    }
+
+    function rebuildSessions() {
+        var rows = container.sessionRows.slice();
+        rows.sort(function (a, b) {
+            var ka = (a.experimental ? 2 : 0) + (/hornero/i.test(a.name) ? 0 : 1);
+            var kb = (b.experimental ? 2 : 0) + (/hornero/i.test(b.name) ? 0 : 1);
+            return ka !== kb ? ka - kb : a.source - b.source;
+        });
+        sessionChoices.clear();
+        var def = 0;
+        var last = -1;
+        for (var i = 0; i < rows.length; i++) {
+            sessionChoices.append(rows[i]);
+            if (rows[i].source === sessionModel.lastIndex)
+                last = i;
+        }
+        def = (last >= 0 && !rows[last].experimental) ? last : 0;
+        container.sessionDefault = def;
+    }
+
+    Repeater {
+        model: sessionModel
+        delegate: Item {
+            required property int index
+            required property string name
+            visible: false
+            Component.onCompleted: {
+                var rows = container.sessionRows.slice();
+                rows.push({
+                    "name": name,
+                    "source": index,
+                    "experimental": container.isExperimental(name)
+                });
+                container.sessionRows = rows;
+                Qt.callLater(container.rebuildSessions);
+            }
+        }
     }
 
     Connections {
@@ -671,7 +728,7 @@ Rectangle {
             Item {
                 id: statusLine
                 width: parent.width
-                height: Math.round(18 * login_container.s)
+                height: Math.round(24 * login_container.s)
 
                 Row {
                     spacing: Signal.SPACING.smaller
@@ -681,7 +738,7 @@ Rectangle {
                     Glyph {
                         anchors.verticalCenter: parent.verticalCenter
                         name: "alert-triangle"
-                        size: 14 * login_container.s
+                        size: 16 * login_container.s
                         color: container.sig.alert
                     }
 
@@ -691,8 +748,10 @@ Rectangle {
                         text: container.loginError !== "" ? container.loginError : (keyboard.capsLock ? textConstants.capslockWarning : "")
                         color: container.loginError !== "" ? container.sig.alert : container.sig.signal
                         font.family: Signal.FONT_MONO
-                        font.pixelSize: Signal.TYPE.smaller * login_container.s
-                        font.letterSpacing: Signal.TYPE.smaller * login_container.s * 0.04
+                        // Never below 13 px: the failure must stay readable at
+                        // every scale (greeter#45).
+                        font.pixelSize: Math.max(13, Signal.TYPE.normal * login_container.s)
+                        font.letterSpacing: 0.4
                         Accessible.role: Accessible.AlertMessage
                         Accessible.name: text
                     }
@@ -738,9 +797,9 @@ Rectangle {
                     opensUp: true
                     eyebrow: textConstants.session
                     accessibleName: "Desktop session"
-                    model: sessionModel
+                    model: sessionChoices
                     textRole: "name"
-                    index: sessionModel.lastIndex
+                    index: container.sessionDefault
                     Keys.onTabPressed: function (event) {
                         container.moveFocus(session, false);
                         event.accepted = true;

@@ -57,7 +57,7 @@ def test_tab_chain_is_explicit_and_skips_hidden_controls():
 def test_enter_logs_in_and_buttons_take_keyboard_activation():
     assert MAIN.count("onAccepted: container.login()") == 2
     assert "onClicked: container.login()" in MAIN
-    assert "sddm.login(username_input_box.text, password_input_box.text, session.index)" in MAIN
+    assert "sddm.login(username_input_box.text, password_input_box.text, container.sessionSource(session.index))" in MAIN
     for key in ("Qt.Key_Return", "Qt.Key_Enter", "Qt.Key_Space"):
         assert key in BUTTON
         assert key in SELECT
@@ -116,3 +116,24 @@ def test_reduced_motion_is_honoured():
     for text in (MAIN, FIELD, SELECT, BUTTON, LIST):
         for call in re.findall(r"Signal\.(?:duration|fadeDuration)\([^)]*\)", text):
             assert "reducedMotion" in call, call
+
+
+def test_login_failure_line_is_readable_and_has_icon_and_word():
+    # greeter#45: the failure line was ~9 px. It must keep a >= 13 px floor,
+    # an alert glyph and the localised word, never colour alone.
+    assert "font.pixelSize: Math.max(13, Signal.TYPE.normal * login_container.s)" in MAIN
+    assert 'name: "alert-triangle"' in MAIN
+    assert "textConstants.loginFailed" in MAIN
+    assert "Accessible.AlertMessage" in MAIN
+
+
+def test_experimental_sessions_are_listed_last_and_never_default():
+    # greeter#45: stable sessions first, experimental last with a word chip;
+    # the default is never an experimental session.
+    assert "id: sessionChoices" in MAIN
+    assert "(a.experimental ? 2 : 0)" in MAIN
+    assert "!rows[last].experimental" in MAIN
+    assert "model: sessionChoices" in MAIN
+    assert "index: container.sessionDefault" in MAIN
+    chips = (REPO_ROOT / "components" / "ChoiceList.qml").read_text(encoding="utf-8")
+    assert '"EXPERIMENTAL"' in chips

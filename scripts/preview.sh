@@ -37,13 +37,14 @@
 #   --prefill-user NAME / --prefill-password TEXT
 #                   staged-copy-only probe: preset login fields to render
 #                   avatar/focus-with-content states (never in the repo file)
+#   --open-sessions staged-copy-only probe: open the session list after start
 #   --fail-login    staged-copy-only probe: attempt a bogus login on startup
 #                   to render the production login-error path
 set -eu
 
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-FIXDIR=/tmp/greeter-fixtures
-STAGE=$(mktemp -d /tmp/greeter-preview-XXXXXX)
+FIXDIR=${TMPDIR:-/tmp}/greeter-fixtures
+STAGE=$(mktemp -d "${TMPDIR:-/tmp}/greeter-preview-XXXXXX")
 
 SHOT=""
 DELAY=8
@@ -59,6 +60,7 @@ NO_BRANDING=0
 PREFILL_USER=""
 PREFILL_PASSWORD=""
 FAIL_LOGIN=0
+OPEN_SESSIONS=0
 GRAB=""
 SIZE=1920x1080
 POWER=0
@@ -82,6 +84,7 @@ while [ $# -gt 0 ]; do
     --prefill-user) PREFILL_USER="$2"; shift 2;;
     --prefill-password) PREFILL_PASSWORD="$2"; shift 2;;
     --fail-login) FAIL_LOGIN=1; shift;;
+    --open-sessions) OPEN_SESSIONS=1; shift;;
     --grab) GRAB="$2"; shift 2;;
     --size) SIZE="$2"; shift 2;;
     --power) POWER=1; shift;;
@@ -167,6 +170,7 @@ STAGE_MAIN_NEEDS_COPY=0
 [ -n "$PREFILL_USER" ] && STAGE_MAIN_NEEDS_COPY=1
 [ -n "$PREFILL_PASSWORD" ] && STAGE_MAIN_NEEDS_COPY=1
 [ "$FAIL_LOGIN" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
+[ "$OPEN_SESSIONS" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
 [ -n "$GRAB" ] && STAGE_MAIN_NEEDS_COPY=1
 [ "$POWER" = 1 ] && STAGE_MAIN_NEEDS_COPY=1
 if [ "$STAGE_MAIN_NEEDS_COPY" = 1 ]; then
@@ -221,6 +225,24 @@ src = open(path, encoding="utf-8").read()
 old = "deck.daypart = part;"
 assert src.count(old) == 1, "daypart assignment not found"
 src = src.replace(old, old + '\n        container.loginError = textConstants.loginFailed;', 1)
+open(path, "w", encoding="utf-8").write(src)
+EOF
+fi
+
+if [ "$OPEN_SESSIONS" = 1 ]; then
+  python3 - "$STAGE/Main.qml" <<'EOF'
+import sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read().rstrip()
+assert src.endswith("}"), "Main.qml root not found"
+src = src[:-1] + """
+    Timer {
+        interval: 2500
+        running: true
+        onTriggered: session.openList()
+    }
+}
+"""
 open(path, "w", encoding="utf-8").write(src)
 EOF
 fi
