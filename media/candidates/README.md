@@ -28,3 +28,4 @@ on the Wikimedia Commons file page.
 | `ar-noa-purmamarca-salinas-cafayate` | YouTube CC BY 3.0 claim, bare `LicenseReview`, `License review needed (video)`. Highest-value NOA file once cleared. |
 | `ar-ju-purmamarca-salinas-vlog` | YouTube CC BY 3.0 claim, bare `LicenseReview`, `License review needed (video)`; 703 MB vlog, lowest priority. |
 | `ar-rn-dina-huapi-timelapse` | Vimeo CC BY 3.0 claim via video2commons with no reviewer confirmation; verify the archived Vimeo source license first. |
+| `ar-mza-potrerillos-drone` and 10 more Pexels clips (`ar-mis-iguazu-cataratas-aerial`, `ar-ctc-piedra-pomez`, `ar-rn-bariloche-aerial`, `ar-sc-fitz-roy-sunrise`, `ar-ju-hornocal-golden`, `ar-pat-river-sunset`, `ar-ba-dusk-skyscrapers`, `ar-ba-skyline-sunset`, `ar-sa-cafayate-red-rocks`, `ar-mza-andes-aerial`) | Pexels binary-package redistribution is not authorised (see `docs/PEXELS_RIGHTS_EVIDENCE.md`); `original.verified: false` until the API record is fetched. |

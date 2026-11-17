@@ -92,15 +92,19 @@
       "type": "object",
       "required": ["bytes", "sha256", "duration_s", "width", "height", "container"],
       "properties": {
-        "bytes": { "type": "integer", "minimum": 1 },
+        "verified": {
+          "type": "boolean",
+          "description": "false only in media/candidates/: the provider API record has not been fetched, so bytes/sha256/duration_s/width/height (and edit.trim_end_s) may be null. Never valid in media/manifests/."
+        },
+        "bytes": { "type": ["integer", "null"], "minimum": 1 },
         "sha256": {
           "type": ["string", "null"],
           "pattern": "^[0-9a-f]{64}$",
           "description": "SHA256 of the original file as downloaded from the provider. Null only in media/candidates/ for files not yet fetched; must be filled before promotion to media/manifests/."
         },
-        "duration_s": { "type": "number", "exclusiveMinimum": 0 },
-        "width": { "type": "integer", "minimum": 1 },
-        "height": { "type": "integer", "minimum": 1 },
+        "duration_s": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "width": { "type": ["integer", "null"], "minimum": 1 },
+        "height": { "type": ["integer", "null"], "minimum": 1 },
         "container": { "type": "string", "enum": ["webm", "ogv", "mp4"] }
       }
     },
@@ -114,7 +118,7 @@
       "required": ["trim_start_s", "trim_end_s", "crop", "scale", "audio"],
       "properties": {
         "trim_start_s": { "type": "number", "minimum": 0 },
-        "trim_end_s": { "type": "number", "exclusiveMinimum": 0 },
+        "trim_end_s": { "type": ["number", "null"], "exclusiveMinimum": 0 },
         "crop": { "type": "string", "minLength": 1 },
         "scale": { "type": "string", "minLength": 1 },
         "audio": { "type": "string", "enum": ["strip", "none"] }

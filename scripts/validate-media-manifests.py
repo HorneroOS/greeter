@@ -141,7 +141,21 @@ def check_manifest(path, errors, shippable_dir):
         fail(errors, f"{path.name}: candidates must stay parked ('{status}')")
 
     orig = data["original"]
-    if not isinstance(orig.get("bytes"), int) or orig["bytes"] < 1:
+    # Unverified candidates (provider API record not fetched yet) may leave
+    # technical fields null. This is only legal when parked, and never
+    # without the explicit flag, so a forgotten field still fails.
+    unverified = orig.get("verified") is False
+    if unverified and shippable_dir:
+        fail(errors, f"{path.name}: original.verified=false must not ship")
+    if "verified" in orig and not isinstance(orig["verified"], bool):
+        fail(errors, f"{path.name}: original.verified must be boolean")
+
+    def pos(value, kind):
+        if value is None:
+            return unverified
+        return isinstance(value, kind) and not isinstance(value, bool) and value > 0
+
+    if not pos(orig.get("bytes"), int):
         fail(errors, f"{path.name}: original.bytes must be a positive int")
     sha = orig.get("sha256")
     if shippable_dir:
@@ -149,10 +163,10 @@ def check_manifest(path, errors, shippable_dir):
             fail(errors, f"{path.name}: shipped manifests need original.sha256")
     elif sha is not None and not SHA256.match(sha):
         fail(errors, f"{path.name}: original.sha256 malformed")
-    if not (isinstance(orig.get("duration_s"), (int, float)) and orig["duration_s"] > 0):
+    if not pos(orig.get("duration_s"), (int, float)):
         fail(errors, f"{path.name}: original.duration_s must be positive")
     for dim in ("width", "height"):
-        if not isinstance(orig.get(dim), int) or orig[dim] < 1:
+        if not pos(orig.get(dim), int):
             fail(errors, f"{path.name}: original.{dim} must be a positive int")
     if orig.get("container") not in CONTAINERS:
         fail(errors, f"{path.name}: original.container '{orig.get('container')}'")
@@ -163,12 +177,15 @@ def check_manifest(path, errors, shippable_dir):
     edit = data["edit"]
     if not (isinstance(edit.get("trim_start_s"), (int, float)) and edit["trim_start_s"] >= 0):
         fail(errors, f"{path.name}: edit.trim_start_s must be >= 0")
-    if not (isinstance(edit.get("trim_end_s"), (int, float)) and edit["trim_end_s"] > 0):
+    if edit.get("trim_end_s") is None and unverified:
+        pass  # excerpt not chosen yet: editorial review pending
+    elif not (isinstance(edit.get("trim_end_s"), (int, float)) and edit["trim_end_s"] > 0):
         fail(errors, f"{path.name}: edit.trim_end_s must be > 0")
-    if edit["trim_end_s"] <= edit["trim_start_s"]:
-        fail(errors, f"{path.name}: edit.trim_end_s must exceed trim_start_s")
-    if edit["trim_end_s"] > orig.get("duration_s", 0):
-        fail(errors, f"{path.name}: edit.trim_end_s exceeds original duration")
+    else:
+        if edit["trim_end_s"] <= edit["trim_start_s"]:
+            fail(errors, f"{path.name}: edit.trim_end_s must exceed trim_start_s")
+        if orig.get("duration_s") is not None and edit["trim_end_s"] > orig["duration_s"]:
+            fail(errors, f"{path.name}: edit.trim_end_s exceeds original duration")
     if not edit.get("crop"):
         fail(errors, f"{path.name}: edit.crop is empty")
     if not edit.get("scale"):

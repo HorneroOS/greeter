@@ -204,3 +204,27 @@ def test_fetch_refuses_pexels_and_commons_unchanged():
         fetch_mod.ensure_fetchable(fixture)
     for _, data in load_manifests():
         fetch_mod.ensure_fetchable(data)  # Commons path passes the gate
+
+
+def test_pexels_candidates_are_parked_and_unverified_never_ships():
+    from common import is_shippable, provider_of
+    cands = [json.loads(p.read_text()) for p in
+             (REPO / "media/candidates").glob("*.json")]
+    px = [c for c in cands if provider_of(c) == "pexels"
+          and not c["id"].endswith("fixture")]
+    assert len(px) == 11
+    for c in px:
+        assert c["review"]["distribution"] == "not-approved"
+        assert not is_shippable(c)
+        assert c["original"]["verified"] is False
+        assert c["original"]["sha256"] is None
+    # an unverified clip placed in manifests/ must fail validation
+    bad = REPO / "media/manifests" / "zz-unverified-probe.json"
+    bad.write_text(json.dumps(px[0]))
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(REPO / "scripts/validate-media-manifests.py")],
+            capture_output=True, text=True)
+    finally:
+        bad.unlink()
+    assert proc.returncode == 1

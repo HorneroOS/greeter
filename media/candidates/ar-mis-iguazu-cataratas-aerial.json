@@ -1,0 +1,48 @@
+{
+  "id": "ar-mis-iguazu-cataratas-aerial",
+  "title": "Majestuosa Vista Aerea De Las Cataratas Del Iguazu",
+  "location": {
+    "place": "Iguazu Falls",
+    "province": "Misiones",
+    "region": "Noreste",
+    "country": "Argentina"
+  },
+  "creator": "Sergey Guk",
+  "source": {
+    "provider": "pexels",
+    "page": "https://www.pexels.com/video/33053999/",
+    "file": "unpinned: Pexels API video record not fetched (no API key); never an invented download URL"
+  },
+  "license": {
+    "short": "Pexels",
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/"
+  },
+  "review": {
+    "status": "review-pending",
+    "distribution": "not-approved",
+    "reviewer": null,
+    "date": null,
+    "evidence": "Candidate-only (rights gate, issue #39). Pexels License (https://www.pexels.com/license/, read 2026-11-17): \"All photos and videos on Pexels are free to use.\" / \"Don't redistribute or sell the photos and videos on other stock photo or wallpaper platforms.\" Pexels Terms of Service (https://www.pexels.com/terms-of-service/, last updated October 20th, 2026, section 5): \"You cannot sell or distribute the Content (either in digital or physical form) on a Standalone basis.\" A separate downloadable media package of transcoded clips is not clearly outside that clause, so no distribution approval exists. Full record: docs/PEXELS_RIGHTS_EVIDENCE.md. Never fetched, packaged or shipped until written permission is recorded here."
+  },
+  "original": {
+    "verified": false,
+    "bytes": null,
+    "sha256": null,
+    "duration_s": null,
+    "width": null,
+    "height": null,
+    "container": "mp4"
+  },
+  "dayparts": [
+    "day"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": null,
+    "crop": "unset: editorial frame review pending",
+    "scale": "downscale to at most 1920x1080, at most 30fps",
+    "audio": "strip"
+  },
+  "notes": "Editorial ref D2, Pexels video id 33053999. Title, creator and daypart come from the 2026-11-13 editorial research, NOT yet re-verified against the Pexels API. ~18s. Reject excerpts where waterfall motion hurts login legibility."
+}
