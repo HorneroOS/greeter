@@ -3,7 +3,14 @@
   "fallbackImage": "components/resources/fallback-day.svg",
   "dayparts": {
     "day": [],
-    "golden-hour": [],
+    "golden-hour": [
+      {
+        "id": "ar-rn-dina-huapi-sunset",
+        "file": "media/base/ar-rn-dina-huapi-sunset.mp4",
+        "daypart": "golden-hour",
+        "kind": "video"
+      }
+    ],
     "night": []
   }
 }

@@ -1,6 +1,7 @@
 """Shared helpers for the greeter media pipeline (stdlib only)."""
 
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -9,7 +10,10 @@ REPO = Path(__file__).resolve().parent.parent.parent
 MANIFESTS_DIR = REPO / "media" / "manifests"
 CANDIDATES_DIR = REPO / "media" / "candidates"
 
-CACHE_DIR = REPO / ".cache" / "media-originals"
+# Originals never enter Git. HORNERO_MEDIA_CACHE points the cache at a
+# durable directory outside the checkout (e.g. a worktree-independent store).
+CACHE_DIR = Path(os.environ.get("HORNERO_MEDIA_CACHE")
+                 or REPO / ".cache" / "media-originals")
 BUILD_BASE_DIR = REPO / "build" / "media" / "base"
 DIST_DIR = REPO / "dist"
 

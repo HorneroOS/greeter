@@ -1,0 +1,46 @@
+{
+  "id": "ar-ba-haedo-sunset-east",
+  "title": "Haedo to the east at January sunset (drone)",
+  "location": {
+    "place": "Haedo, Buenos Aires Province",
+    "province": "Buenos Aires",
+    "region": "Pampeana",
+    "country": "Argentina"
+  },
+  "creator": "Miguel Moreno",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Haedo_hacia_el_este_vista_aérea.webm",
+    "file": "Haedo hacia el este vista aérea.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-3.0",
+    "name": "Creative Commons Attribution-ShareAlike 3.0",
+    "url": "https://creativecommons.org/licenses/by-sa/3.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "Self-published own work ({{own}}) by the credited author, licence template {{self|cc-by-sa-3.0}} on the Commons file page, read 2026-11-17 via the MediaWiki API; no external-source claim, so no LicenseReview is needed. Pending frame review before promotion."
+  },
+  "original": {
+    "bytes": 4598172,
+    "sha256": "f74701d2d1375a9a27960e9cccb3f2e8bf85fe449729c4d311cf96c7b077149b",
+    "duration_s": 10.08,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "golden-hour"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 10.08,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "Drone at 20-30 m, January sunset (description). Suburban rooftops: check for signage/people. REJECTED after frame review 2026-11-17: near-static pale suburban rooftops, no cinematic value; would be a weak clip filling a daypart."
+}

@@ -1,0 +1,46 @@
+{
+  "id": "ar-night-starlink-cc0",
+  "title": "Starlink pass in the night sky (Argentina)",
+  "location": {
+    "place": "Night sky, location not stated",
+    "province": "Unspecified",
+    "region": "Argentina",
+    "country": "Argentina"
+  },
+  "creator": "Martin Bernardi",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Starlink_3_Argentina.webm",
+    "file": "Starlink 3 Argentina.webm"
+  },
+  "license": {
+    "short": "CC0-1.0",
+    "name": "Creative Commons Zero 1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "Self-published own work ({{own}}) by the credited author, licence template {{self|cc-zero}} on the Commons file page, read 2026-11-17 via the MediaWiki API; no external-source claim, so no LicenseReview is needed. Pending frame review before promotion."
+  },
+  "original": {
+    "bytes": 52879856,
+    "sha256": "f2fe595a9ef53703e71f2d3b12336652fc0e34cfce9d6b35bc7139fff63fdc9a",
+    "duration_s": 34.763,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "night"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 34.763,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "True night footage (filmed 2020-01-31 at 21:02, Nikon D7100). Commons category 'Night sky in Argentina'; exact place not stated, so the claim is Argentina-level only. Colour curves edited by the author in Kdenlive. REJECTED after frame review 2026-11-17: almost black, heavy sensor noise and brightness pumping from grading; the gradient night fallback reads better. Kept parked as the only verified CC0 Argentine night-sky source."
+}

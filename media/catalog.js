@@ -6,7 +6,14 @@
 var CATALOG = {
   "dayparts": {
     "day": [],
-    "golden-hour": [],
+    "golden-hour": [
+      {
+        "daypart": "golden-hour",
+        "file": "media/base/ar-rn-dina-huapi-sunset.mp4",
+        "id": "ar-rn-dina-huapi-sunset",
+        "kind": "video"
+      }
+    ],
     "night": []
   },
   "fallbackImage": "components/resources/fallback-day.svg",
@@ -14,4 +21,11 @@ var CATALOG = {
 };
 // On-screen scene credits (Hornero Signal bottom rail), derived from the
 // rights-reviewed manifests of wired clips and shipped stills only.
-var CREDITS = {};
+var CREDITS = {
+  "ar-rn-dina-huapi-sunset": {
+    "creator": "Jmmuguerza",
+    "license": "CC BY-SA 4.0",
+    "place": "Dina Huapi, Nahuel Huapi lake",
+    "title": "Sunset over Nahuel Huapi from Dina Huapi"
+  }
+};

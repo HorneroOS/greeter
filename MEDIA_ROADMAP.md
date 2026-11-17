@@ -1,11 +1,26 @@
 # Argentina media collection
 
-The greeter's runtime catalogue is currently **empty by design**. The previous
-collection (three daytime videos and two stills) was fully retired for the
-cinematic Argentina replacement (HorneroOS/greeter#41). Until rights-cleared
-footage is approved, the greeter shows an original designed gradient per
-daypart (`components/resources/fallback-*.svg`) and the media pack is not
-released. **Release is blocked on the rights gate** (HorneroOS/greeter#39).
+The previous collection (three daytime videos and two stills) was fully retired
+for the cinematic Argentina replacement (HorneroOS/greeter#41). Source policy:
+redistributable footage first (Wikimedia Commons CC0/CC-BY/CC-BY-SA, other
+explicitly licensed sources). Pexels clips stay candidate-only; Pexels API key
+issuance is paused as of 2026-11-17, so the permission-request drafts
+(`docs/PEXELS_PERMISSION_REQUEST.md`) are the only Pexels path.
+
+## Active scenes
+
+| ID | Place | Creator / source | License | Daypart |
+| --- | --- | --- | --- | --- |
+| `ar-rn-dina-huapi-sunset` | Dina Huapi, Nahuel Huapi · Río Negro · Patagonia | Jmmuguerza · [Commons](https://commons.wikimedia.org/wiki/File:Atardecer_en_Dina_Huapi.webm) | CC BY-SA 4.0, own work | golden-hour |
+
+Day and night have **no approved clip**: those dayparts show the designed
+gradient fallback instead of a weak clip. Rejected after frame review
+(2026-11-17, kept parked in `media/candidates/`): `ar-mis-iguazu-devils-throat`
+(handheld, identifiable people), `ar-ba-haedo-sunset-east` (static suburban
+rooftops), `ar-night-starlink-cc0` (near-black, noisy; the only verified CC0
+Argentine night source). Commons files marked "License review needed"
+(Hornocal, Uquía, Salinas Grandes, Tilcara timelapse, Purmamarca) are not
+usable until a reviewer confirms the YouTube license.
 
 ## Rights state
 

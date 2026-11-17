@@ -195,8 +195,13 @@ def write_generated(manifests):
             "dayparts": data["dayparts"],
             "source_page": data["source"]["page"],
         })
+    # The pack catalog.json is runtime-owned and must stay URL-free (audit
+    # enforces it); source/license URLs live in MEDIA_LICENSES.md only.
+    runtime_entries = [{k: v for k, v in e.items()
+                        if k not in ("source_page", "license_url")}
+                       for e in entries]
     catalog = {"version": 1, "pack": "base", "profile": "mp4/h264/yuv420p/<=1080p/<=30fps/no-audio",
-               "fallbackImage": FALLBACK_IMAGE, "clips": entries}
+               "fallbackImage": FALLBACK_IMAGE, "clips": runtime_entries}
     (BUILD_BASE_DIR / "catalog.json").write_text(
         json.dumps(catalog, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     lines = ["id,file,sha256,title,place,province,region,creator,license,dayparts"]

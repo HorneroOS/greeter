@@ -1,0 +1,46 @@
+{
+  "id": "ar-rn-dina-huapi-sunset",
+  "title": "Sunset over Nahuel Huapi from Dina Huapi",
+  "location": {
+    "place": "Dina Huapi, Nahuel Huapi lake",
+    "province": "Rio Negro",
+    "region": "Patagonia Norte",
+    "country": "Argentina"
+  },
+  "creator": "Jmmuguerza",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Atardecer_en_Dina_Huapi.webm",
+    "file": "Atardecer en Dina Huapi.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-ShareAlike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "own-work",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "Self-published work ({{own}}) by Jmmuguerza, licence template {{self|cc-by-sa-4.0}} (CC BY-SA 4.0) on the Commons file page, read 2026-11-17 via the MediaWiki API; categories 'Self-published work', 'Dina Huapi', 'Videos of Nahuel Huapi Lake'. No external-source import, so no licence review is pending. Geography: description names Nahuel Huapi from Dina Huapi and the source of the Limay river. Frame review 2026-11-17 (contact sheet in evidence): saturated dusk sky, lake and silhouettes, no text, no people, no signage."
+  },
+  "original": {
+    "bytes": 2560535,
+    "sha256": "767397f0346f59ae18b318d43a6bb82410a2c881ec617530bf0571384270dda6",
+    "duration_s": 12.185,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "golden-hour"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 12.1,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p, 29.97 fps",
+    "audio": "none"
+  },
+  "notes": "Approved golden-hour clip. Slow pan over the lake at sunset; very saturated sky, keep the login grade overlay. Only 12 s, so the deck crossfade/loop must hide the repeat; it is the only approved clip for the golden-hour daypart."
+}

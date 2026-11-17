@@ -1,0 +1,46 @@
+{
+  "id": "ar-mis-iguazu-devils-throat",
+  "title": "Devil's Throat from the Argentine viewpoint, Iguazu",
+  "location": {
+    "place": "Garganta del Diablo, Iguazu Falls",
+    "province": "Misiones",
+    "region": "Noreste",
+    "country": "Argentina"
+  },
+  "creator": "JosepMGracia",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:GD_-_Devil's_Throat_from_the_Argentine_viewpoint_at_Iguazu_Falls,_2023.webm",
+    "file": "GD - Devil's Throat from the Argentine viewpoint at Iguazu Falls, 2023.webm"
+  },
+  "license": {
+    "short": "CC-BY-SA-4.0",
+    "name": "Creative Commons Attribution-ShareAlike 4.0",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0"
+  },
+  "review": {
+    "status": "review-pending",
+    "reviewer": null,
+    "date": "2026-11-17",
+    "evidence": "Self-published own work ({{own}}) by the credited author, licence template {{self|cc-by-sa-4.0}} on the Commons file page, read 2026-11-17 via the MediaWiki API; no external-source claim, so no LicenseReview is needed. Pending frame review before promotion."
+  },
+  "original": {
+    "bytes": 4345620,
+    "sha256": "66874bd9b2b251c3b435712e63e86a1ec4d506b8029514aecfca9a743755f6f9",
+    "duration_s": 14.126,
+    "width": 1920,
+    "height": 1080,
+    "container": "webm"
+  },
+  "dayparts": [
+    "day"
+  ],
+  "edit": {
+    "trim_start_s": 0,
+    "trim_end_s": 14.126,
+    "crop": "none (native 16:9)",
+    "scale": "keep 1080p",
+    "audio": "none"
+  },
+  "notes": "Day candidate; waterfall motion and tourists need frame review for login legibility. REJECTED after frame review 2026-11-17: handheld shake, tourists with identifiable people, flat grey sky; unsuitable behind a login form."
+}
