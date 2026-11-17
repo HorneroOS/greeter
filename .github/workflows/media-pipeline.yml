@@ -64,7 +64,11 @@ jobs:
           test -r "$f"
       - name: Package fixture pack
         run: |
-          python3 scripts/media/package.py --version 0.0.0-ci
+          # Pack membership is strict against the runtime catalog. The synthetic
+          # fixture is never wired there, so check it against a throwaway
+          # catalog that lists only the fixture.
+          printf '{"version":1,"fallbackImage":"x","dayparts":{"day":[{"id":"ar-example-sample"}],"golden-hour":[],"night":[]}}' > "$RUNNER_TEMP/fixture-catalog.json"
+          python3 scripts/media/package.py --version 0.0.0-ci --catalog "$RUNNER_TEMP/fixture-catalog.json"
           ls -l dist/*.tar.zst
 
   packaging:
