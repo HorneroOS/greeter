@@ -12,6 +12,12 @@ var CATALOG = {
         "file": "media/base/ar-rn-dina-huapi-sunset.mp4",
         "id": "ar-rn-dina-huapi-sunset",
         "kind": "video"
+      },
+      {
+        "daypart": "golden-hour",
+        "file": "media/base/ar-ba-dusk-timelapse.mp4",
+        "id": "ar-ba-dusk-timelapse",
+        "kind": "video"
       }
     ],
     "night": []
@@ -22,6 +28,12 @@ var CATALOG = {
 // On-screen scene credits (Hornero Signal bottom rail), derived from the
 // rights-reviewed manifests of wired clips and shipped stills only.
 var CREDITS = {
+  "ar-ba-dusk-timelapse": {
+    "creator": "Mariano Cirigliano",
+    "license": "CC BY 3.0",
+    "place": "Buenos Aires city (title card: 'Buenos Aires')",
+    "title": "Buenos Aires rooftops from sunset into blue hour (time-lapse)"
+  },
   "ar-rn-dina-huapi-sunset": {
     "creator": "Jmmuguerza",
     "license": "CC BY-SA 4.0",

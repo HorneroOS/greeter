@@ -1,0 +1,46 @@
+{
+  "id": "ar-ba-dusk-timelapse",
+  "title": "Buenos Aires rooftops from sunset into blue hour (time-lapse)",
+  "location": {
+    "place": "Buenos Aires city (title card: 'Buenos Aires')",
+    "province": "Ciudad Autonoma de Buenos Aires",
+    "region": "Pampeana",
+    "country": "Argentina"
+  },
+  "creator": "Mariano Cirigliano",
+  "source": {
+    "provider": "wikimedia-commons",
+    "page": "https://commons.wikimedia.org/wiki/File:Eclipse_Parcial_Lunar.webm",
+    "file": "Eclipse Parcial Lunar.webm"
+  },
+  "license": {
+    "short": "CC-BY-3.0",
+    "name": "Creative Commons Attribution 3.0",
+    "url": "https://creativecommons.org/licenses/by/3.0"
+  },
+  "review": {
+    "status": "reviewed",
+    "reviewer": "LicenseReviewerBot (Wikimedia Commons)",
+    "date": "2026-11-17",
+    "evidence": "YouTube import via video2commons. File page carries {{YouTube CC-BY}} and {{LicenseReview|site=https://www.youtube.com/watch?v=1vx5OUxxTno|user=LicenseReviewerBot|date=2021-12-07}}; categories 'Files from external sources with reviewed licenses' and 'July 2019 in Buenos Aires', read 2026-11-17 via the MediaWiki API. Geography: the clip's own title card says 'Eclipse Parcial Lunar 16/07/2019 - Buenos Aires' and the file description says 'desde la Ciudad de Buenos Aires'. Frame review 2026-11-17 (contact sheets in evidence): trimmed window shows only rooftops and towers, no people, no signage, no text; the title card (first ~4 s) and the author's end logo are excluded by the trim."
+  },
+  "original": {
+    "bytes": 14167666,
+    "sha256": "37fd11f9815af56dd446d8b609ca41952ac77926c80970f6d958c2d1407b062d",
+    "duration_s": 20.021,
+    "width": 3840,
+    "height": 2160,
+    "container": "webm"
+  },
+  "dayparts": [
+    "golden-hour"
+  ],
+  "edit": {
+    "trim_start_s": 4.6,
+    "trim_end_s": 12.0,
+    "crop": "none (native 16:9)",
+    "scale": "downscale 4K to 1080p, 30 fps",
+    "audio": "none"
+  },
+  "notes": "Static-camera time-lapse of a Buenos Aires skyline: warm sunset into violet blue hour, partially eclipsed moon appears at the end. Classified golden-hour (it ends in blue hour, NOT true night: the footage after ~12 s is near-black and is excluded). 7.4 s, so the deck crossfade must hide the repeat. Source colour grade is soft and pastel; keep the login grade overlay."
+}

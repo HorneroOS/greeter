@@ -9,6 +9,12 @@
         "file": "media/base/ar-rn-dina-huapi-sunset.mp4",
         "daypart": "golden-hour",
         "kind": "video"
+      },
+      {
+        "id": "ar-ba-dusk-timelapse",
+        "file": "media/base/ar-ba-dusk-timelapse.mp4",
+        "daypart": "golden-hour",
+        "kind": "video"
       }
     ],
     "night": []

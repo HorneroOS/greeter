@@ -12,8 +12,9 @@ issuance is paused as of 2026-11-17, so the permission-request drafts
 | ID | Place | Creator / source | License | Daypart |
 | --- | --- | --- | --- | --- |
 | `ar-rn-dina-huapi-sunset` | Dina Huapi, Nahuel Huapi · Río Negro · Patagonia | Jmmuguerza · [Commons](https://commons.wikimedia.org/wiki/File:Atardecer_en_Dina_Huapi.webm) | CC BY-SA 4.0, own work | golden-hour |
+| `ar-ba-dusk-timelapse` | Buenos Aires rooftops, sunset into blue hour · CABA · Pampeana | Mariano Cirigliano · [Commons](https://commons.wikimedia.org/wiki/File:Eclipse_Parcial_Lunar.webm) | CC BY 3.0, YouTube import reviewed by LicenseReviewerBot | golden-hour (ends in blue hour, not night) |
 
-Day and night have **no approved clip**: those dayparts show the designed
+Golden-hour has two approved clips. Day and night have **no approved clip**: those dayparts show the designed
 gradient fallback instead of a weak clip. Rejected after frame review
 (2026-11-17, kept parked in `media/candidates/`): `ar-mis-iguazu-devils-throat`
 (handheld, identifiable people), `ar-ba-haedo-sunset-east` (static suburban

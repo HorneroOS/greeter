@@ -91,9 +91,10 @@ def test_wired_entries_match_shippable_manifests(catalog):
 
 def test_empty_video_moods_are_intentional_and_static_fallbacks_exist(catalog):
     assert catalog["dayparts"]["night"] == []
-    # golden-hour is served by the one approved clip; day and night stay
+    # golden-hour is served by two approved clips; day and night stay
     # empty (designed gradient) until a strong rights-cleared clip exists.
-    assert [e["id"] for e in catalog["dayparts"]["golden-hour"]] == ["ar-rn-dina-huapi-sunset"]
+    assert [e["id"] for e in catalog["dayparts"]["golden-hour"]] == [
+        "ar-rn-dina-huapi-sunset", "ar-ba-dusk-timelapse"]
     assert catalog["dayparts"]["day"] == []
     conf = {}
     for line in (REPO_ROOT / "theme.conf").read_text(encoding="utf-8").splitlines():

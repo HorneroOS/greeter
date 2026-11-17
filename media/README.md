@@ -1,10 +1,11 @@
 # Local media packs
 
 The greeter plays video only from local files. It makes no network requests at
-login. The editorial runtime catalog (`catalog.json`) is currently empty: no
-rights-cleared clip is approved (see `../MEDIA_ROADMAP.md`). Every daypart then
-shows an original designed gradient (`components/resources/fallback-*.svg`),
-also used when video is disabled, unavailable, or broken.
+login. The editorial runtime catalog (`catalog.json`) holds two golden-hour
+clips; day and night have no rights-cleared clip yet (see
+`../MEDIA_ROADMAP.md`). A daypart without a clip shows an original designed
+gradient (`components/resources/fallback-*.svg`), also used when video is
+disabled, unavailable, or broken.
 
 ## Catalog and playback
 

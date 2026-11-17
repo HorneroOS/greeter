@@ -37,7 +37,7 @@ def _clean_pipeline_artifacts():
 
 def test_manifests_load_and_licenses_allowlisted():
     manifests = load_manifests()
-    assert len(manifests) == 8
+    assert len(manifests) == 9
     allowed = {"CC0-1.0", "CC-BY-3.0", "CC-BY-4.0", "CC-BY-SA-3.0", "CC-BY-SA-4.0"}
     for _, data in manifests:
         assert data["license"]["short"] in allowed
@@ -169,7 +169,7 @@ def test_provider_allowlists_single_source_no_drift():
 def test_commons_regression_existing_manifests_unchanged_meaning():
     from common import is_shippable, provider_of  # noqa: E402
     manifests = load_manifests()
-    assert len(manifests) == 8
+    assert len(manifests) == 9
     for _, data in manifests:
         assert provider_of(data) == "wikimedia-commons"
         assert is_shippable(data)
