@@ -31,7 +31,7 @@ var CREDITS = {
   "ar-ba-dusk-timelapse": {
     "creator": "Mariano Cirigliano",
     "license": "CC BY 3.0",
-    "place": "Buenos Aires city (title card: 'Buenos Aires')",
+    "place": "Buenos Aires city",
     "title": "Buenos Aires rooftops from sunset into blue hour (time-lapse)"
   },
   "ar-rn-dina-huapi-sunset": {
