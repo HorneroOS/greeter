@@ -28,8 +28,8 @@ FocusScope {
     readonly property int count: users.length + (allowOther ? 1 : 0)
     readonly property bool otherSelected: allowOther && currentIndex === users.length
     // Tiles share the strip width up to 116 px each (scaled); past a
-    // 92 px floor the strip scrolls instead of squeezing names.
-    readonly property real tileWidth: count > 0 ? Math.round(Math.max(92 * fontScale, Math.min(116 * fontScale, (width - (count - 1) * Signal.SPACING.smaller) / count))) : 0
+    // 80 px floor the strip scrolls instead of squeezing names.
+    readonly property real tileWidth: count > 0 ? Math.round(Math.max(80 * fontScale, Math.min(116 * fontScale, (width - (count - 1) * Signal.SPACING.smaller) / count))) : 0
     readonly property real tileHeight: Math.round(96 * fontScale)
 
     signal tuned(int index)

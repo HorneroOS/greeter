@@ -26,8 +26,10 @@ FocusScope {
     signal clicked
 
     implicitHeight: (primary ? 52 : 32) * fontScale
-    // Disabled (no sessions, signing in): dimmed, skipped by the Tab chain.
-    opacity: enabled ? 1 : 0.5
+    // Disabled (no sessions, signing in): a primary button drops its amber
+    // fill to a quiet raised face, so it never reads as the live action;
+    // the Tab chain skips it.
+    readonly property bool live: primary && enabled
     implicitWidth: row.implicitWidth + 2 * (primary ? Signal.SPACING.larger : Signal.SPACING.smaller)
     activeFocusOnTab: true
 
@@ -42,6 +44,8 @@ FocusScope {
         anchors.fill: parent
         radius: Signal.RADIUS.small
         color: {
+            if (button.primary && !button.enabled)
+                return button.sig.raised;
             if (button.primary)
                 return button.pressed ? Qt.darker(button.sig.signal, 1.12) : (button.hovered ? Qt.lighter(button.sig.signal, 1.06) : button.sig.signal);
             if (button.checked)
@@ -50,8 +54,8 @@ FocusScope {
         }
         // Quiet buttons are rail segments (Signal Visual Language §4, §8):
         // no boundary at rest, raised on hover, lifted when pressed.
-        border.width: button.checked ? 1 : 0
-        border.color: button.sig.signal
+        border.width: button.checked || (button.primary && !button.enabled) ? 1 : 0
+        border.color: button.checked ? button.sig.signal : button.sig.rule
 
         Behavior on color {
             ColorAnimation {
@@ -70,14 +74,14 @@ FocusScope {
             anchors.verticalCenter: parent.verticalCenter
             name: button.glyph
             size: (button.primary ? 18 : 16) * button.fontScale
-            color: button.primary ? button.sig.onSignal : (button.checked ? button.sig.onSignalWell : (button.activeFocus || button.hovered ? button.sig.ink : button.sig.inkMuted))
+            color: button.live ? button.sig.onSignal : (button.primary ? button.sig.inkMuted : (button.checked ? button.sig.onSignalWell : (button.activeFocus || button.hovered ? button.sig.ink : button.sig.inkMuted)))
         }
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
             visible: button.showLabel && button.text !== ""
             text: button.primary ? button.text : button.text.toUpperCase()
-            color: button.primary ? button.sig.onSignal : (button.checked ? button.sig.onSignalWell : (button.activeFocus || button.hovered ? button.sig.ink : button.sig.inkMuted))
+            color: button.live ? button.sig.onSignal : (button.primary ? button.sig.inkMuted : (button.checked ? button.sig.onSignalWell : (button.activeFocus || button.hovered ? button.sig.ink : button.sig.inkMuted)))
             font.family: button.primary ? Signal.FONT_SANS : Signal.FONT_MONO
             font.weight: button.primary ? Font.DemiBold : Font.Normal
             font.pixelSize: (button.primary ? Signal.TYPE.larger : Signal.TYPE.small) * button.fontScale

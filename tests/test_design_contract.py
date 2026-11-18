@@ -78,5 +78,5 @@ def test_compact_layouts_switch_instead_of_overflowing():
 
 def test_channel_tiles_fit_or_scroll():
     strip = (COMPONENTS / "ChannelStrip.qml").read_text(encoding="utf-8")
-    assert "Math.max(92 * fontScale, Math.min(116 * fontScale" in strip
+    assert "Math.max(80 * fontScale, Math.min(116 * fontScale" in strip
     assert "interactive: contentWidth > width" in strip

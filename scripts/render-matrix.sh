@@ -46,6 +46,14 @@ frame 19-many-users --many-users
 frame 20-plain-background --plain
 frame 21-morning-day --scheme day --time 08:15
 frame 22-hidpi-scale2 --size 1280x720 --scale 2
+# Opt-in administrator media: a locally generated stand-in picture (never
+# shipped), to check the ground wash and legibility over user content.
+if command -v magick >/dev/null 2>&1; then
+  BACKDROP="${TMPDIR:-/tmp}/greeter-user-backdrop.png"
+  magick -size 1920x1080 gradient:'#3A6E8F-#C98A4B' -swirl 40 "$BACKDROP"
+  frame 23-opt-in-user-image --background "$BACKDROP"
+  rm -f "$BACKDROP"
+fi
 
 if [ "$SHEET" = "--sheet" ]; then
   montage -label '%t' "$OUT"/[0-9][0-9]-*.png -tile 4x -geometry 480x270+8+8 \

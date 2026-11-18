@@ -28,7 +28,6 @@ administrator's own video. What remains from upstream is the SDDM theme
 scaffolding (`metadata.desktop`, `theme.conf` loading) and the GPL-3.0
 licence. The notes below describe earlier stages and are kept as history.
 
-
 HorneroOS replaces the Apple TV footage (non-redistributable) with freely
 licensed footage of Argentina, curated under `media/` with per-clip source
 manifests, and ports the theme to Qt6. The upstream code remains credited

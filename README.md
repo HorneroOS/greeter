@@ -119,9 +119,12 @@ QtQuick.VirtualKeyboard), SDDM and IBM Plex:
 - Arch: `pacman -S sddm qt6-declarative qt6-virtualkeyboard ttf-ibm-plex`.
   For an opt-in video background, also install `qt6-multimedia` and
   `gst-plugins-good`.
-- Debian/Ubuntu:
-  `apt install sddm qml6-module-qtquick-virtualkeyboard qml6-module-qtquick-shapes fonts-ibm-plex`
-  (plus `qml6-module-qtmultimedia` for an opt-in video).
+- Debian/Ubuntu (plus `qml6-module-qtmultimedia` for an opt-in video):
+
+  ```bash
+  apt install sddm qml6-module-qtquick-virtualkeyboard \
+    qml6-module-qtquick-shapes fonts-ibm-plex
+  ```
 
 `hornero-greeter-media-base`, the retired Argentina video pack, is no
 longer used. If it is still installed, the theme ignores it and you can

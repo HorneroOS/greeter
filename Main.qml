@@ -1360,7 +1360,6 @@ Rectangle {
                     sig: container.sig
                     fontScale: confirmPanel.s
                     reducedMotion: container.reducedMotion
-                    glyph: "chevron-up"
                     text: container.tr("cancel")
                     accessibleName: container.tr("a11y.cancel")
                     onClicked: container.cancelPower()

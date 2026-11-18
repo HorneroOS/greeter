@@ -278,8 +278,24 @@ if [ -n "$GRAB" ]; then
   fi
   # Never report a previous frame as this capture.
   rm -f -- "$GRAB"
+  # The greeter does not always honour Qt.quit() in test mode: stop it as
+  # soon as every expected frame is on disk (60 s hard cap).
   QT_QPA_PLATFORM="offscreen:configfile=$CONF" timeout 60 \
-    sddm-greeter-qt6 --test-mode --theme "$STAGE" >"$STAGE/greeter.log" 2>&1 || true
+    sddm-greeter-qt6 --test-mode --theme "$STAGE" >"$STAGE/greeter.log" 2>&1 &
+  GREETER_PID=$!
+  SECONDARY="${GRAB%.*}-secondary.${GRAB##*.}"
+  i=0
+  while kill -0 "$GREETER_PID" 2>/dev/null && [ "$i" -lt 600 ]; do
+    if [ -s "$GRAB" ] && { [ "$SCREENS" = 1 ] || [ -s "$SECONDARY" ]; }; then
+      sleep 1
+      break
+    fi
+    sleep 0.1
+    i=$((i + 1))
+  done
+  kill "$GREETER_PID" 2>/dev/null || true
+  wait "$GREETER_PID" 2>/dev/null || true
+  GREETER_PID=""
   if [ ! -s "$GRAB" ]; then
     echo "offscreen grab failed: $GRAB" >&2
     tail -n 30 "$STAGE/greeter.log" >&2 || true
