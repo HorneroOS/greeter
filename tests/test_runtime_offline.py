@@ -13,8 +13,6 @@ NO_NETWORK_FILES = sorted(
     [REPO_ROOT / "Main.qml"]
     + list((REPO_ROOT / "components").glob("*.qml"))
     + list((REPO_ROOT / "components").glob("*.js"))
-    + [REPO_ROOT / "media" / "catalog.json"]
-    + [REPO_ROOT / "media" / "catalog.js"]
     + [REPO_ROOT / "theme.conf"]
 )
 
@@ -76,10 +74,6 @@ def test_no_remote_urls_in_runtime(offline_text):
 
 
 def test_no_home_or_dotfile_references(runtime_text):
-    # components/MediaCatalog.js implements the ban itself (it rejects $HOME
-    # paths); that logic is covered functionally in test_sequencer_js.py.
-    if "function isLocalRelativePath" in runtime_text:
-        return
     assert not HOME_RE.search(runtime_text)
 
 
@@ -87,16 +81,6 @@ def test_no_remote_playlists_left_behind():
     assert not (REPO_ROOT / "playlists").exists()
 
 
-def test_no_xhr_for_local_files():
-    # Qt disables XMLHttpRequest GET on local files by default: an
-    # XHR-loaded catalog silently never arrives and no video ever plays.
-    # The runtime catalog must be imported synchronously instead.
-    # (The word may appear in comments documenting this ban.)
-    main = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
-    assert "new XMLHttpRequest" not in main
-
-
-def test_runtime_catalog_is_generated_module():
-    text = (REPO_ROOT / "media" / "catalog.js").read_text(encoding="utf-8")
-    assert "var CATALOG" in text
-    assert "build-catalog" in text
+def test_no_xhr_or_network_types(offline_text):
+    for token in ("XMLHttpRequest", "WebSocket", "NetworkAccessManager"):
+        assert token not in _code_body(offline_text), token

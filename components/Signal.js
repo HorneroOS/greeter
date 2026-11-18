@@ -2,9 +2,10 @@
 // Hornero Signal tokens for the greeter (RFC 0001 §3, HorneroOS/docs).
 //
 // The greeter runs as the sddm user before any session exists, so it cannot
-// read the live scheme written by horneroctl. It carries the factory
-// palettes verbatim instead: Signal Night (default) and Signal High
-// Contrast (theme.conf highContrast=true). Role names match
+// read the live Chromatic scheme written by horneroctl. It carries the
+// factory palettes verbatim instead: Signal Night (default), Signal Day
+// (theme.conf colorScheme=day, or auto when the platform reports a light
+// preference) and Signal High Contrast (theme.conf highContrast=true). Role names match
 // HorneroOS/config profiles/themes/tokens.schema.json (schema v2) exactly;
 // values include RFC 0001 amendment 2 (ruleStrong, optional glow role).
 
@@ -47,6 +48,45 @@ var NIGHT = {
     "glow": "#FFB650"
 };
 
+// Signal Day (HorneroOS/config profiles/themes/hornero-signal-day): warm
+// technical-drawing paper, ink-black text, burnt-amber signal.
+var DAY = {
+    "ground": "#E6E1D5",
+    "sunken": "#DCD6C8",
+    "base": "#F2EEE5",
+    "panel": "#F7F4EE",
+    "raised": "#FBF9F5",
+    "lifted": "#FFFFFF",
+    "ink": "#1B1E22",
+    "inkMuted": "#4E545B",
+    "inkFaint": "#7A8086",
+    "rule": "#D3CCBD",
+    "ruleStrong": "#736D62",
+    "focus": "#1A5F88",
+    "signal": "#8F4B00",
+    "onSignal": "#FFFFFF",
+    "signalWell": "#F6DDB8",
+    "onSignalWell": "#3D2200",
+    "cue": "#1A5F88",
+    "onCue": "#FFFFFF",
+    "cueWell": "#D3E7F3",
+    "onCueWell": "#0B2E44",
+    "phosphor": "#256A3B",
+    "onPhosphor": "#FFFFFF",
+    "phosphorWell": "#D5EBD9",
+    "onPhosphorWell": "#0E2E17",
+    "alert": "#A8341C",
+    "onAlert": "#FFFFFF",
+    "alertWell": "#F7D7D0",
+    "onAlertWell": "#4A1209",
+    "inverse": "#1B1E22",
+    "onInverse": "#F2EEE5",
+    "inverseSignal": "#F2A33A",
+    "scrim": "#000000",
+    "shadow": "#000000",
+    "glow": "#8F4B00"
+};
+
 // Signal High Contrast: same roles, black ground, white ink, brighter
 // signal/cue and a pure white ruleStrong (RFC 0001 §3.2).
 var CONTRAST = {
@@ -87,8 +127,24 @@ var CONTRAST = {
     "glow": "#FFC247"
 };
 
-function palette(highContrast) {
-    return highContrast ? CONTRAST : NIGHT;
+// High Contrast always wins; otherwise Day for a light scheme, Night for
+// everything else (the factory default).
+function palette(highContrast, light) {
+    if (highContrast)
+        return CONTRAST;
+    return light ? DAY : NIGHT;
+}
+
+// theme.conf colorScheme -> light? "day" and "night" are explicit; "auto"
+// follows the platform preference (Qt.styleHints.colorScheme: 1 = light,
+// 2 = dark, 0 = unknown) and falls back to Night when SDDM's platform does
+// not report one, which is the common case before any session exists.
+function isLight(setting, platformScheme) {
+    if (setting === "day")
+        return true;
+    if (setting === "night")
+        return false;
+    return platformScheme === 1;
 }
 
 // Typography (RFC 0001 §3.3). Families are system fonts from the

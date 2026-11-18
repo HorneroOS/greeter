@@ -51,7 +51,9 @@ def _palettes():
         "const fs=require('fs');const vm=require('vm');"
         f"const src=fs.readFileSync({json.dumps(str(SIGNAL_JS))},'utf8').replace('.pragma library','');"
         "const ctx={};vm.createContext(ctx);vm.runInContext(src,ctx);"
-        "process.stdout.write(JSON.stringify({night:ctx.NIGHT,contrast:ctx.CONTRAST,"
+        "process.stdout.write(JSON.stringify({night:ctx.NIGHT,day:ctx.DAY,contrast:ctx.CONTRAST,"
+        "pick:[ctx.palette(false,false)===ctx.NIGHT,ctx.palette(false,true)===ctx.DAY,ctx.palette(true,true)===ctx.CONTRAST],"
+        "scheme:[ctx.isLight('auto',0),ctx.isLight('auto',1),ctx.isLight('auto',2),ctx.isLight('day',2),ctx.isLight('night',1)],"
         "fonts:[ctx.FONT_SANS,ctx.FONT_MONO,ctx.FONT_DISPLAY],dur:ctx.DURATION,"
         "reduced:[ctx.duration('scan',true),ctx.fadeDuration('medium',true),ctx.fadeDuration('medium',false)]}))"
     )
@@ -79,6 +81,33 @@ def test_night_palette_matches_rfc(tokens):
     assert tokens["night"] == RFC_NIGHT
 
 
+# HorneroOS/config profiles/themes/hornero-signal-day/theme.json palette.
+CONFIG_DAY = {
+    "ground": "#E6E1D5", "sunken": "#DCD6C8", "base": "#F2EEE5",
+    "panel": "#F7F4EE", "raised": "#FBF9F5", "lifted": "#FFFFFF",
+    "ink": "#1B1E22", "inkMuted": "#4E545B", "inkFaint": "#7A8086",
+    "rule": "#D3CCBD", "ruleStrong": "#736D62", "signal": "#8F4B00",
+    "onSignal": "#FFFFFF", "signalWell": "#F6DDB8", "onSignalWell": "#3D2200",
+    "cue": "#1A5F88", "onCue": "#FFFFFF", "cueWell": "#D3E7F3",
+    "onCueWell": "#0B2E44", "phosphor": "#256A3B", "onPhosphor": "#FFFFFF",
+    "phosphorWell": "#D5EBD9", "onPhosphorWell": "#0E2E17", "alert": "#A8341C",
+    "onAlert": "#FFFFFF", "alertWell": "#F7D7D0", "onAlertWell": "#4A1209",
+    "inverse": "#1B1E22", "onInverse": "#F2EEE5", "inverseSignal": "#F2A33A",
+    "scrim": "#000000", "shadow": "#000000", "focus": "#1A5F88", "glow": "#8F4B00",
+}
+
+
+def test_day_palette_matches_config(tokens):
+    assert tokens["day"] == CONFIG_DAY
+
+
+def test_palette_selection_and_scheme_preference(tokens):
+    # High Contrast wins; Day only for an explicit or reported light
+    # preference; an unknown platform preference stays on Night.
+    assert tokens["pick"] == [True, True, True]
+    assert tokens["scheme"] == [False, True, False, True, False]
+
+
 def test_contrast_palette_has_every_role_and_rfc_anchors(tokens):
     hc = tokens["contrast"]
     assert set(hc) == set(RFC_NIGHT)
@@ -87,7 +116,7 @@ def test_contrast_palette_has_every_role_and_rfc_anchors(tokens):
     assert hc["ruleStrong"] == "#FFFFFF"
 
 
-@pytest.mark.parametrize("palette", ["night", "contrast"])
+@pytest.mark.parametrize("palette", ["night", "day", "contrast"])
 def test_text_roles_pass_aa_on_greeter_surfaces(tokens, palette):
     p = tokens[palette]
     for surface in ("ground", "sunken", "base", "panel", "raised", "lifted"):
@@ -101,7 +130,7 @@ def test_text_roles_pass_aa_on_greeter_surfaces(tokens, palette):
     assert contrast(p["onSignal"], p["signal"]) >= 4.5
 
 
-@pytest.mark.parametrize("palette", ["night", "contrast"])
+@pytest.mark.parametrize("palette", ["night", "day", "contrast"])
 def test_boundaries_and_focus_pass_three_to_one(tokens, palette):
     p = tokens[palette]
     for surface in ("sunken", "base", "panel"):
@@ -143,15 +172,17 @@ def test_motion_uses_named_curves_and_settle_only_moves_geometry():
 
 
 def test_glow_is_rationed():
-    # §9: glow only on the on-air chip, static, <= 40 % alpha, <= 4 px blur,
-    # off in High Contrast.
+    # §9: one glowing item, the clock's signal hairline (as on the lock
+    # screen): static, <= 40 % alpha, <= 4 px blur, off in High Contrast
+    # and on paper (Day).
     users = [p.name for p in QML_FILES if "sig.glow" in p.read_text(encoding="utf-8")]
-    assert users == ["OnAirChip.qml"]
-    chip = (COMPONENTS / "OnAirChip.qml").read_text(encoding="utf-8")
-    assert "blur: 4" in chip and "spread: 0" in chip
-    assert "Signal.alpha(chip.sig.glow, 0.4)" in chip
-    assert "Behavior" not in chip and "Animation" not in chip
-    assert "glow: !container.highContrast" in MAIN
+    assert users == ["Main.qml"]
+    assert MAIN.count("sig.glow") == 1
+    block = MAIN.split("The one accent", 1)[1].split("id: accent", 1)[0]
+    assert "blur: 4" in block and "spread: 0" in block
+    assert "Signal.alpha(container.sig.glow, 0.4)" in block
+    assert "visible: !container.highContrast && !container.light" in block
+    assert "Behavior" not in block and "Animation" not in block
 
 
 def test_no_material_or_legacy_controls():
@@ -170,7 +201,7 @@ def test_colours_come_from_tokens():
     for path in QML_FILES:
         text = path.read_text(encoding="utf-8")
         literals = re.findall(r'"#[0-9A-Fa-f]{6,8}"', text)
-        allowed = ['"#ECE6DA"', '"#F2A33A"'] if path.name in ("Glyph.qml", "DiagonalHatch.qml") else []
+        allowed = ['"#ECE6DA"', '"#F2A33A"'] if path.name in ("Glyph.qml", "DiagonalHatch.qml", "HorneroMark.qml") else []
         assert all(lit in allowed for lit in literals), (path.name, literals)
 
 
@@ -206,5 +237,5 @@ def test_legacy_theme_keys_removed():
 def test_legacy_assets_removed():
     for name in ("reboot.svg", "shutdown.svg", "warning_red.png"):
         assert not (COMPONENTS / "resources" / name).exists()
-    for name in ("WallpaperFader.qml", "KeyboardToggle.qml"):
+    for name in ("WallpaperFader.qml", "KeyboardToggle.qml", "MediaDeck.qml", "OnAirChip.qml", "DayScale.qml", "MediaCatalog.js"):
         assert not (COMPONENTS / name).exists()

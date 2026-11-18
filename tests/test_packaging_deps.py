@@ -42,11 +42,23 @@ def _depends() -> list[str]:
     return [a or b for a, b in values]
 
 
-def _qml_imports() -> set[str]:
+def _optdepends() -> list[str]:
+    values = _array_values(GREETER_PKGBUILD, "optdepends")
+    return [(a or b).split(":", 1)[0] for a, b in values]
+
+
+# Files loaded on demand through a Loader: their imports are optional
+# runtime dependencies (the theme keeps working when the module is absent).
+OPTIONAL_QML = {"UserVideo.qml"}
+
+
+def _qml_imports(optional: bool = False) -> set[str]:
     imports: set[str] = set()
     for path in (
         [REPO_ROOT / "Main.qml", *sorted((REPO_ROOT / "components").glob("*.qml"))]
     ):
+        if (path.name in OPTIONAL_QML) != optional:
+            continue
         for line in path.read_text(encoding="utf-8").splitlines():
             match = re.match(r"\s*import\s+(\S+)", line)
             if match:
@@ -63,8 +75,20 @@ def test_pkgbuild_has_no_qt5_dependency():
             assert not forbidden.match(base), f"Qt5 regression: depends has {dep!r}"
 
 
-def test_pkgbuild_declares_qt6_multimedia():
-    assert "qt6-multimedia" in _depends()
+def test_multimedia_is_optional():
+    # The default greeter plays no media. QtMultimedia is only imported by
+    # the opt-in UserVideo.qml (Loader), so it is an optional dependency,
+    # and the retired media pack is no longer referenced at all.
+    assert "QtMultimedia" not in _qml_imports()
+    assert "QtMultimedia" in _qml_imports(optional=True)
+    assert "qt6-multimedia" not in _depends()
+    assert "gst-plugins-good" not in _depends()
+    assert "qt6-multimedia" in _optdepends()
+    text = GREETER_PKGBUILD.read_text(encoding="utf-8")
+    assert "hornero-greeter-media-base" not in text
+    assert "media/base" not in text
+    main = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
+    assert 'source: active ? "components/UserVideo.qml" : ""' in main
 
 
 def test_pkgbuild_declares_signal_fonts():
@@ -88,7 +112,6 @@ def test_pkgbuild_version_matches_its_source_tag():
 
 def test_qml_imports_covered_by_depends():
     imports = _qml_imports()
-    assert "QtMultimedia" in imports, "expected the MediaDeck to import QtMultimedia"
     depends = _depends()
     for module, package in QML_RUNTIME_MAP.items():
         if module in imports:

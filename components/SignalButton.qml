@@ -26,6 +26,8 @@ FocusScope {
     signal clicked
 
     implicitHeight: (primary ? 52 : 32) * fontScale
+    // Disabled (no sessions, signing in): dimmed, skipped by the Tab chain.
+    opacity: enabled ? 1 : 0.5
     implicitWidth: row.implicitWidth + 2 * (primary ? Signal.SPACING.larger : Signal.SPACING.smaller)
     activeFocusOnTab: true
 

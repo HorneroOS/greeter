@@ -20,30 +20,14 @@ The greeter uses IBM Plex Sans, IBM Plex Mono and IBM Plex Sans Condensed
 (SIL Open Font License 1.1) from the system `ttf-ibm-plex` package. No font
 files are redistributed in this repository.
 
-## Media included in the theme and base media pack
+## Media
 
-Media is independently licensed; the GPL source-code license does not apply
-to these works. Adapted stills are installed with the theme. Video clips are
-downloaded and packaged by the reproducible media pipeline and are not stored
-in Git. Full source records, original hashes, dimensions, edits, and license
-evidence live in `media/stills/` and `media/manifests/`.
+The theme bundles no photographs, video or other third-party media. The
+background is drawn in code (`components/HorneroSprite.qml` and
+`components/HorneroMark.qml` reproduce HorneroOS's own mascot sprite and
+mark geometry from HorneroOS/shell and HorneroOS/config). Earlier releases
+shipped licensed Argentine stills and an optional video pack; their credits
+and rights records remain in the Git history of this repository.
 
-- **Iguazú in tiers of mist** — Brandon Antonio Segura Torres & Priscilla
-  Vieto Bonilla; CC BY-SA 4.0;
-  https://commons.wikimedia.org/wiki/File:Cascadas_del_Iguaz%C3%BA_en_varios_pisos_escalonadas.webm
-- **Across the Perito Moreno ice front** — Brandon Antonio Segura Torres &
-  Priscilla Vieto Bonilla; CC BY-SA 4.0;
-  https://commons.wikimedia.org/wiki/File:Paneo_a_Glaciar_Perito_Moreno.webm
-- **Penguin colony at the End of the World lighthouse, Ushuaia** — Brandon
-  Antonio Segura Torres & Priscilla Vieto Bonilla; CC BY-SA 4.0;
-  https://commons.wikimedia.org/wiki/File:Poblaci%C3%B3n_de_pinguinos_en_Faro_del_Fin_del_mundo_en_Ushuaia.webm
-- **Palmar at the last light** — Leandro Kibisz (Loco085); adapted still;
-  CC BY-SA 4.0;
-  https://commons.wikimedia.org/wiki/File:Argentina_-_Entre_R%C3%ADos_-_Parque_Nacional_El_Palmar_(atardecer).JPG
-- **Corrientes Avenue after dark** — ProtoplasmaKid; adapted still;
-  CC BY-SA 4.0;
-  https://commons.wikimedia.org/wiki/File:Vista_a%C3%A9rea_nocturna_de_Avenida_9_de_julio_y_Avenida_Corrientes_02.jpg
-
-License texts:
-https://creativecommons.org/licenses/by/3.0/
-https://creativecommons.org/licenses/by-sa/4.0/
+An administrator may point `backgroundImage` at their own picture or video;
+that content is theirs and is not distributed with the theme.
