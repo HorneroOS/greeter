@@ -31,8 +31,7 @@ def test_preview_instructions_use_qt6_greeter():
 
 def test_arch_package_installs_qt6_theme_runtime():
     recipe = PKGBUILD.read_text()
-    assert "'qt6-multimedia'" in recipe
     assert "'qt6-declarative'" in recipe
     assert "'qt5-multimedia'" not in recipe
-    assert "for f in theme.conf metadata.desktop background.jpg; do\n" in recipe
+    assert "for f in theme.conf metadata.desktop; do\n" in recipe
     assert '"$src/theme.conf.user"' not in recipe

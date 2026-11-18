@@ -1,10 +1,8 @@
 # Build and tooling output
 **/*.qmlc
 
-# Transcoded clips and staging (originals are fetched at build time,
-# verified against media/manifests, and never committed)
-/playlist_videos/*
-/videos/*
+# No photos or videos are bundled (the background is generated in code;
+# tests/test_no_bundled_media.py). Keep stray clips out of the tree.
 *.webm
 *.mp4
 *.m4v

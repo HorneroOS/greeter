@@ -19,6 +19,7 @@ FocusScope {
     property real fontScale: 1.0
     property bool opensUp: false
     property bool reducedMotion: false
+    property string lang: "en"
     readonly property int count: values.count
     readonly property string currentText: values.count > 0 && values.itemAt(Math.max(0, Math.min(index, values.count - 1))) ? values.itemAt(Math.max(0, Math.min(index, values.count - 1))).text : ""
     readonly property bool popupOpen: popup.open
@@ -188,6 +189,7 @@ FocusScope {
         fontScale: select.fontScale
         trigger: select
         label: select.accessibleName
+        lang: select.lang
         width: select.width
         x: 0
         y: select.opensUp ? -height - 4 : select.height + 4

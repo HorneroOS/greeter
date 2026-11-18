@@ -10,10 +10,6 @@ RUNTIME_PATHS = [
     REPO_ROOT / "Main.qml",
     REPO_ROOT / "theme.conf",
     REPO_ROOT / "metadata.desktop",
-    REPO_ROOT / "background.jpg",
-    REPO_ROOT / "media" / "stills" / "ar-ba-nocturno.jpg",
-    REPO_ROOT / "media" / "stills" / "ar-er-el-palmar-golden-hour.jpg",
-    REPO_ROOT / "media" / "catalog.json",
     REPO_ROOT / "LICENSE",
     *sorted((REPO_ROOT / "components").glob("*.qml")),
     *sorted((REPO_ROOT / "components").glob("*.js")),
@@ -30,6 +26,6 @@ def test_runtime_files_exist_and_world_readable():
 
 
 def test_runtime_dirs_world_traversable():
-    for path in (REPO_ROOT, REPO_ROOT / "components", REPO_ROOT / "media"):
+    for path in (REPO_ROOT, REPO_ROOT / "components", REPO_ROOT / "components" / "resources"):
         mode = os.stat(path).st_mode
         assert mode & 0o011 == 0o011, f"not traversable: {path}"

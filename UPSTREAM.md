@@ -14,6 +14,20 @@ SDDM login screen.
 
 ## What HorneroOS changes
 
+### Original Signal greeter (supersedes everything below)
+
+On 2026-11-18 HorneroOS dropped the Argentine landscape media direction
+(HorneroOS/greeter#50), so the greeter no longer depends on third-party
+photo or video licensing. The theme no longer plays media by default. The
+`MediaDeck` sequencer, the media catalogue and pipeline, the stills,
+`background.jpg` and the `hornero-greeter-media-base` packaging were
+removed. The composition is HorneroOS's own instrument panel in the
+lock-screen family over a generative background (`HorizonField.qml`).
+QtMultimedia is used only by the opt-in `UserVideo.qml` for an
+administrator's own video. What remains from upstream is the SDDM theme
+scaffolding (`metadata.desktop`, `theme.conf` loading) and the GPL-3.0
+licence. The notes below describe earlier stages and are kept as history.
+
 HorneroOS replaces the Apple TV footage (non-redistributable) with freely
 licensed footage of Argentina, curated under `media/` with per-clip source
 manifests, and ports the theme to Qt6. The upstream code remains credited

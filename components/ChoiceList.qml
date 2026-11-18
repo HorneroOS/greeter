@@ -8,6 +8,7 @@
 // Return/Enter/Space choose.
 import QtQuick
 import "Signal.js" as Signal
+import "Strings.js" as Strings
 
 Rectangle {
     id: list
@@ -22,6 +23,7 @@ Rectangle {
     property real fontScale: 1.0
     property Item trigger: null
     property string label: ""
+    property string lang: "en"
 
     signal chosen(int index)
 
@@ -178,7 +180,7 @@ Rectangle {
                 Text {
                     id: chipText
                     anchors.centerIn: parent
-                    text: "EXPERIMENTAL"
+                    text: Strings.t(list.lang, "experimental")
                     color: list.sig.inkMuted
                     font.family: Signal.FONT_MONO
                     font.pixelSize: Signal.TYPE.small * list.fontScale
@@ -191,7 +193,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.rightMargin: Signal.SPACING.normal
                 anchors.verticalCenter: parent.verticalCenter
-                text: "ACTIVE"
+                text: Strings.t(list.lang, "active")
                 visible: row.selected
                 color: list.sig.onSignalWell
                 font.family: Signal.FONT_MONO

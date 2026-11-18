@@ -16,9 +16,12 @@ def read_conf(name):
 
 
 def test_branding_keys_present():
+    # Default ident: the Hornero mark drawn in the palette's signal colour
+    # (follows Night, Day and High Contrast). A logo file is opt-in.
     conf = read_conf("theme.conf")
     assert conf["brandingEnabled"] == "true"
-    assert conf["brandingLogo"] == "components/resources/hornero-symbolic.svg"
+    assert conf["brandingLogo"] == ""
+    assert "HorneroMark {" in MAIN and "visible: !brandMark.visible" in MAIN
 
 
 def test_branding_enabled_gate_and_single_instance():
@@ -28,11 +31,10 @@ def test_branding_enabled_gate_and_single_instance():
     assert "status === Image.Ready" in MARK
 
 
-def test_branding_logo_resolves_offline():
-    logo = read_conf("theme.conf")["brandingLogo"]
-    assert "http://" not in logo and "https://" not in logo
-    assert not logo.startswith(("/", "~"))
-    assert (REPO_ROOT / logo).is_file()
+def test_optional_logo_asset_resolves_offline():
+    # The bundled symbolic logo stays available as an opt-in brandingLogo.
+    assert LOGO.is_file()
+    assert 'source: config.brandingLogo || ""' in MAIN
 
 
 def test_logo_asset_self_contained_and_credited():
@@ -50,7 +52,7 @@ def test_mark_has_no_interaction():
 
 def test_la_plata_diagonal_only_on_brand_surfaces():
     # RFC 0001 §2: the 45° diagonal appears on brand surfaces, never inside
-    # controls. The greeter uses it in the console header and bottom rail.
+    # controls. The greeter uses it in the sign-in header and bottom rail.
     assert MAIN.count("DiagonalHatch {") == 2
     for control in ("SignalField", "SignalSelect", "SignalButton", "ChoiceList"):
         text = (REPO_ROOT / "components" / f"{control}.qml").read_text(encoding="utf-8")
