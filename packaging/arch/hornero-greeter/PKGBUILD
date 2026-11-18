@@ -1,7 +1,7 @@
 # Maintainer: HorneroOS contributors <https://github.com/HorneroOS/greeter>
 pkgname=hornero-greeter
 pkgver=1.0.3
-pkgrel=5
+pkgrel=1
 pkgdesc='HorneroOS SDDM greeter theme on Hornero Signal (Argentina footage, offline)'
 arch=('any')
 url='https://github.com/HorneroOS/greeter'
