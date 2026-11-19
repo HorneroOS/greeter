@@ -1,5 +1,9 @@
 # Hornero Greeter (HorneroOS SDDM theme)
 
+[![ci](https://github.com/HorneroOS/greeter/actions/workflows/ci.yml/badge.svg)](https://github.com/HorneroOS/greeter/actions/workflows/ci.yml)
+[![qml](https://github.com/HorneroOS/greeter/actions/workflows/qml.yml/badge.svg)](https://github.com/HorneroOS/greeter/actions/workflows/qml.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+
 The HorneroOS login screen on **Hornero Signal** (RFC 0001,
 `HorneroOS/docs/development/rfc-0001-hornero-signal.md`). It is an original
 instrument-panel sign-in from the same family as the shell's lock screen
@@ -9,7 +13,13 @@ sign-in module, where user accounts are channels. The background is a quiet
 Pampa horizon drawn in code. It works fully offline, and no photos or
 videos are bundled.
 
-![Hornero greeter on Signal Night](screens/screenshot.png)
+![Hornero Greeter on Signal Night: clock 21:40, four demo sign-in channels and HorneroOS Desktop session selected](screens/screenshot.png)
+
+<sub>The Hornero Greeter (SDDM) with demo accounts — not the Shell lock
+screen.</sub>
+
+See also: [HorneroOS/shell](https://github.com/HorneroOS/shell) ·
+[Website](https://horneroos.com/) · [Docs](https://horneroos.com/docs/)
 
 The theme started as a Qt6 port of
 [aerial-sddm-theme](https://github.com/3ximus/aerial-sddm-theme) by Fabio
