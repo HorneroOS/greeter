@@ -35,4 +35,8 @@ target_link_libraries(hornero-greetd-selftest PRIVATE greetd_client)
 
 install(TARGETS hornero-greetd-greeter RUNTIME DESTINATION bin)
 install(FILES config/config.toml.example
+              config/greetd-greeter.pam.example
+        DESTINATION share/doc/hornero-greetd-greeter)
+install(PROGRAMS config/hornero-greetd-session.example
+        RENAME hornero-greetd-session
         DESTINATION share/doc/hornero-greetd-greeter)

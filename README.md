@@ -123,6 +123,14 @@ cmake --build greetd/build -j2
 sudo systemctl enable greetd
 ```
 
+Seat-validated in a clean Arch VM: real greetd + PAM completed a full
+conversation (`Password:` → auth success → `start_session`), and the
+greeter ran under cage with a logind greeter session on seat0 (DRM
+modeset, Virtual-1). Two seat prerequisites were found the hard way
+and are documented in `greetd/config/`: `/etc/pam.d/greetd-greeter`
+must run `pam_systemd` (otherwise cage gets no seat), and the greeter
+needs an `XDG_RUNTIME_DIR` (the example session wrapper creates one).
+
 The C++ client is covered by protocol tests that run the real code
 against a scripted greetd double (`tests/test_greetd_protocol.py`, CI
 job `greetd.yml`): password flow, wrong-password `auth_error` (no

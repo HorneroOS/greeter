@@ -1,0 +1,11 @@
+#!/bin/sh
+# Example greeter session wrapper for greetd + cage.
+#
+# pam_systemd does not create /run/user/<uid> for the greeter system
+# user, so XDG_RUNTIME_DIR arrives unset and cage aborts ("XDG_RUNTIME_DIR
+# is not set"). Give the greeter a private per-session runtime dir,
+# then start cage + the greeter. HOME also needs care on distros where
+# the greeter account's home is "/" (Qt would try //.cache): point it
+# at a writable state dir if your greeter user has none.
+export XDG_RUNTIME_DIR="$(mktemp -d /tmp/greeter-rt-XXXXXX)"
+exec cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter
