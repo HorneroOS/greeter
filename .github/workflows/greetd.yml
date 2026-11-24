@@ -1,0 +1,37 @@
+name: greetd greeter
+
+on:
+  push:
+    paths:
+      - "greetd/**"
+      - "components/**"
+      - "tests/test_greetd_protocol.py"
+      - "tests/fake_greetd.py"
+      - ".github/workflows/greetd.yml"
+  pull_request:
+    paths:
+      - "greetd/**"
+      - "components/**"
+      - "tests/test_greetd_protocol.py"
+      - "tests/fake_greetd.py"
+      - ".github/workflows/greetd.yml"
+
+jobs:
+  build-and-protocol:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Qt6 toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build g++ \
+            qt6-base-dev qt6-base-dev-tools \
+            qt6-declarative-dev qt6-tools-dev \
+            python3-pytest
+      - name: Build greeter + self-test
+        run: |
+          cmake -S greetd -B greetd/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build greetd/build -j2
+      - name: Protocol tests (real client vs scripted greetd double)
+        run: python3 -m pytest tests/test_greetd_protocol.py -q

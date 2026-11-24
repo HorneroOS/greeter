@@ -93,6 +93,43 @@ wells, channel eyebrows and registration ticks.
   90 ms, the scan hairline and the blink stop, and the screen is complete
   without animation.
 
+## greetd greeter (new)
+
+`greetd/` holds a complete **graphical greeter for
+[greetd](https://git.sr.ht/~kennylevinsen/greetd)** — a native Qt6/QML
+program (`hornero-greetd-greeter`) that speaks the greetd IPC protocol
+(`greetd-ipc(7)`) directly, runs fullscreen under
+[cage](https://github.com/cage-kiosk/cage), and renders the same
+Hornero Signal instrument panel as the SDDM theme (palette and copy are
+embedded verbatim from `components/`, one source for both greeters).
+
+- **Real PAM conversation.** greetd may ask any number of questions
+  (password, one-time codes) and post notices; the UI renders each
+  prompt (`visible`, `secret`, `info`, `error`) as it arrives, counts
+  failed attempts, and never starts a session after an `auth_error`.
+- **Users and sessions from the system.** Accounts are channels read
+  from `/etc/passwd` (UID ≥ 1000, real shells; last account remembered);
+  sessions come from `<datadir>/{wayland,x}-sessions/*.desktop` with
+  stable entries first and experimental ones never the default.
+- **Power via logind.** Suspend / Restart / Shut down appear only when
+  logind's `Can*` answers "yes", and always ask first.
+- **Honest offline state.** Without `GREETD_SOCK` the greeter shows its
+  disconnected state instead of pretending to offer login.
+
+```bash
+cmake -S greetd -B greetd/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build greetd/build -j2
+# install as /etc/greetd/config.toml (see greetd/config/config.toml.example)
+sudo systemctl enable greetd
+```
+
+The C++ client is covered by protocol tests that run the real code
+against a scripted greetd double (`tests/test_greetd_protocol.py`, CI
+job `greetd.yml`): password flow, wrong-password `auth_error` (no
+`start_session` ever sent) and a two-prompt conversation. AUR
+packaging for `hornero-greeter-greetd` is defined in
+`greetd/packaging/PKGBUILD.example`.
+
 ## Honest states
 
 - **Wrong password.** The status line reads "That password did not work.
