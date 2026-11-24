@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Network Qml Quick DBus)
+find_package(Qt6 6.2 REQUIRED COMPONENTS Core Gui Network Qml Quick DBus)
 
 # The speakable greetd protocol lives in its own library so the headless
 # self-test binary (used by the protocol tests) links exactly the same
