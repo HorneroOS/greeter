@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="Main.qml">qml/Main.qml</file>
+    <!-- Design tokens and copy stay single-sourced with the SDDM theme:
+         these aliases embed the repo's components/ files verbatim. -->
+    <file alias="Signal.js">../components/Signal.js</file>
+    <file alias="Strings.js">../components/Strings.js</file>
+  </qresource>
+</RCC>

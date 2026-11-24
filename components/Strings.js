@@ -72,7 +72,11 @@ var EN = {
     "a11y.computer": "Computer %1",
     "a11y.users": "Users",
     "experimental": "EXPERIMENTAL",
-    "active": "ACTIVE"
+    "active": "ACTIVE",
+    "continue": "Continue",
+    "authFor": "Sign in · %1",
+    "started": "Starting your session…",
+    "daemonDown": "The login service is not reachable. Ask your administrator."
 };
 
 var ES = {
@@ -137,7 +141,11 @@ var ES = {
     "a11y.computer": "Computadora %1",
     "a11y.users": "Usuarios",
     "experimental": "EXPERIMENTAL",
-    "active": "ACTIVA"
+    "active": "ACTIVA",
+    "continue": "Continuar",
+    "authFor": "Ingreso · %1",
+    "started": "Iniciando tu sesión…",
+    "daemonDown": "El servicio de ingreso no responde. Consultá a quien administra el equipo."
 };
 
 var TABLES = {

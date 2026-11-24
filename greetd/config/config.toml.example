@@ -1,0 +1,15 @@
+# greetd configuration for the Hornero greeter.
+#
+# Install as /etc/greetd/config.toml. The greeter runs fullscreen under
+# cage (a kiosk Wayland compositor) as the unprivileged `greeter` user;
+# greetd itself handles PAM and the session start. See greetd(5).
+#
+# The `-s` flag tells cage to allow VT switching away from the greeter,
+# so a broken greeter can never trap you without a console.
+
+[terminal]
+vt = 1
+
+[default_session]
+command = "cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter"
+user = "greeter"
