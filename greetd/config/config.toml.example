@@ -6,10 +6,19 @@
 #
 # The `-s` flag tells cage to allow VT switching away from the greeter,
 # so a broken greeter can never trap you without a console.
+#
+# Seat requirements (validated in a clean Arch VM):
+# - /etc/pam.d/greetd-greeter must run pam_systemd so logind gives the
+#   greeter a seat session; see greetd-greeter.pam.example. Without it
+#   cage exits with "No backend was able to open a seat".
+# - XDG_RUNTIME_DIR is not created for the greeter system user; the
+#   session wrapper below creates a private one. If your greeter user
+#   already has a runtime dir and home, the direct cage command works:
+#   command = "cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter"
 
 [terminal]
 vt = 1
 
 [default_session]
-command = "cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter"
+command = "/usr/share/doc/hornero-greetd-greeter/hornero-greetd-session"
 user = "greeter"
