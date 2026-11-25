@@ -1,0 +1,57 @@
+---
+# Continuous AUR publishing for the greetd greeter uses its own
+# package-scoped tag namespace so SDDM theme releases cannot trigger it
+# (and vice versa).
+
+name: aur-publish-greetd
+
+on:
+  push:
+    tags:
+      - "pkg/hornero-greeter-greetd-v*"
+
+jobs:
+  aur-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # yamllint disable rule:line-length
+      - name: Checkout release tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        # yamllint enable rule:line-length
+        with:
+          fetch-depth: 0
+      - name: Verify release commit is on main
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          git fetch --no-tags origin \
+            "+refs/heads/main:refs/remotes/origin/main"
+          if ! git merge-base --is-ancestor \
+            "${RELEASE_SHA}" refs/remotes/origin/main; then
+            echo "Refusing to publish an AUR package from a commit outside main." >&2
+            exit 1
+          fi
+      - name: Stamp pkgver and source commit
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          pkgbuild=packaging/arch/hornero-greeter-greetd/PKGBUILD
+          python3 scripts/stamp_aur_package.py \
+            "${pkgbuild}" \
+            "${GITHUB_REF_NAME}" \
+            "${RELEASE_SHA}"
+          grep -E '^(pkgver|source)=' "${pkgbuild}"
+      - name: Publish AUR package
+        # yamllint disable rule:line-length
+        uses: ulises-jeremias/github-actions-aur-publish@507f0dba7755bdc2ad351232405bd7e4cd4a4a67  # v1
+        # yamllint enable rule:line-length
+        with:
+          pkgname: hornero-greeter-greetd
+          pkgbuild: packaging/arch/hornero-greeter-greetd/PKGBUILD
+          allow_empty_commits: "false"
+          commit_username: ${{ secrets.AUR_USERNAME }}
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: Release ${{ github.ref_name }}
