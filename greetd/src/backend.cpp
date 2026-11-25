@@ -46,6 +46,10 @@ Backend::Backend(QObject *parent) : QObject(parent)
         emit promptChanged();
     });
     connect(m_client, &GreetdClient::succeeded, this, [this] {
+        if (m_cancelAckPending) {
+            m_cancelAckPending = false;
+            return;
+        }
         if (m_state == "authenticating")
             startPendingSession();
         else if (m_state == "starting") {
@@ -56,12 +60,31 @@ Backend::Backend(QObject *parent) : QObject(parent)
     });
     connect(m_client, &GreetdClient::failed, this,
             [this](const QString &errorType, const QString &description) {
-        if (errorType == "auth_error")
+        if (m_cancelAckPending) {
+            // Answer to our cleanup cancel: greetd's worker is gone,
+            // so this is expected noise, not a user-facing failure.
+            m_cancelAckPending = false;
+            return;
+        }
+        const bool wasAuthenticating = (m_state == "authenticating");
+        m_lastFailureWasAuth = (errorType == "auth_error");
+        if (m_lastFailureWasAuth)
             ++m_attempts;
         m_error = description.isEmpty() ? errorType : description;
         resetPrompt();
         setState("idle");
         emit messagesChanged();
+        // greetd keeps the failed session "under configuration" until
+        // the greeter cancels it: a second create_session is rejected
+        // with "a session is already being configured". Cancel now
+        // (state is already idle, so the cancel acknowledgement cannot
+        // be mistaken for an authentication success) so the next
+        // begin() starts from a clean slate. Validated against real
+        // greetd 0.10.3 on a seat.
+        if (wasAuthenticating) {
+            m_cancelAckPending = true;
+            m_client->cancelSession();
+        }
     });
     connect(m_client, &GreetdClient::transportError, this, [this](const QString &description) {
         m_error = description;
@@ -132,6 +155,9 @@ void Backend::cancel()
 {
     if (m_state != "authenticating")
         return;
+    // Mark the acknowledgement as expected so it cannot be mistaken
+    // for an authentication success if the user retries quickly.
+    m_cancelAckPending = true;
     m_client->cancelSession();
     resetPrompt();
     setState("idle");

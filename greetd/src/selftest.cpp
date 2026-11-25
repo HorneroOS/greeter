@@ -19,6 +19,11 @@
 // Answers are consumed in order for visible/secret prompts; info/error
 // prompts are acknowledged with an absent response. On auth success it
 // starts the literal session `true` (the test double never executes).
+//
+// With `--retry` as the last argument, an auth_error does not end the
+// run: the driver mirrors Backend::begin-after-failure and issues a
+// second create_session on the same connection (regression coverage
+// for the retry-after-wrong-password path).
 
 static void emitEvent(const QJsonObject &obj)
 {
@@ -36,7 +41,11 @@ int main(int argc, char *argv[])
 
     GreetdClient client;
     QStringList answers = args.mid(3);
+    const bool retry = answers.contains("--retry");
+    answers.removeAll("--retry");
     bool authDone = false;
+    bool retried = false;
+    bool cancelAckPending = false;
 
     QObject::connect(&client, &GreetdClient::authMessage, &client,
                      [&](const QString &type, const QString &message) {
@@ -46,7 +55,14 @@ int main(int argc, char *argv[])
         client.postAuthMessageResponse(answer, typed);
     });
     QObject::connect(&client, &GreetdClient::succeeded, &client, [&] {
-        if (!authDone) {
+        if (cancelAckPending) {
+            // The cancel was acknowledged: greetd has dropped the
+            // failed session-under-configuration, so a fresh
+            // create_session is accepted again.
+            cancelAckPending = false;
+            emitEvent({ { "event", "cancel_ack" } });
+            client.createSession(args.at(2));
+        } else if (!authDone) {
             authDone = true;
             emitEvent({ { "event", "auth_success" } });
             client.startSession({ "true" }, { "XDG_SESSION_TYPE=wayland" });
@@ -60,6 +76,16 @@ int main(int argc, char *argv[])
         emitEvent({ { "event", "error" },
                     { "error_type", errorType },
                     { "description", description } });
+        if (retry && !retried && errorType == "auth_error") {
+            // Mirror Backend: greetd keeps the failed session under
+            // configuration until cancelled, so cancel first and only
+            // re-create once the cancel is acknowledged.
+            retried = true;
+            cancelAckPending = true;
+            emitEvent({ { "event", "retrying" } });
+            client.cancelSession();
+            return;
+        }
         app.exit(0); // an auth failure is a complete, valid conversation
     });
     QObject::connect(&client, &GreetdClient::transportError, &client,

@@ -58,6 +58,36 @@ def test_wrong_password_is_an_auth_error(tmp_path):
     assert all(r["type"] != "start_session" for r in fake.requests)
 
 
+def test_retry_after_auth_error_on_same_connection(tmp_path):
+    # Regression: after a wrong password, a second create_session on the
+    # same connection must reach the daemon and be able to succeed
+    # (the graphical greeter stalled here on a real seat).
+    fake, proc, events = run_conversation(
+        tmp_path, "ok", ["wrong-pass", "mate-2026", "--retry"]
+    )
+    assert proc.returncode == 0, proc.stderr
+    kinds = [e["event"] for e in events]
+    assert kinds == [
+        "auth_message",
+        "error",
+        "retrying",
+        "cancel_ack",
+        "auth_message",
+        "auth_success",
+        "session_started",
+    ]
+    creates = [r for r in fake.requests if r["type"] == "create_session"]
+    assert len(creates) == 2
+    assert all(c["username"] == "juan" for c in creates)
+    # The failed session must be cancelled before re-creating: real
+    # greetd otherwise answers "a session is already being configured".
+    order = [r["type"] for r in fake.requests]
+    first_create = order.index("create_session")
+    cancel = order.index("cancel_session")
+    second_create = order.index("create_session", first_create + 1)
+    assert first_create < cancel < second_create
+
+
 def test_two_prompt_conversation(tmp_path):
     fake, proc, events = run_conversation(tmp_path, "two-prompts", ["anything", "123456"])
     assert proc.returncode == 0, proc.stderr
