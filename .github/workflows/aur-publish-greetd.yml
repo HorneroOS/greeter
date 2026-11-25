@@ -50,6 +50,11 @@ jobs:
         with:
           pkgname: hornero-greeter-greetd
           pkgbuild: packaging/arch/hornero-greeter-greetd/PKGBUILD
+          # The install scriptlet must live beside the PKGBUILD in the
+          # AUR repository (makepkg validates `install=` when the action
+          # generates .SRCINFO).
+          assets: |
+            packaging/arch/hornero-greeter-greetd/hornero-greeter-greetd.install
           allow_empty_commits: "false"
           commit_username: ${{ secrets.AUR_USERNAME }}
           commit_email: ${{ secrets.AUR_EMAIL }}

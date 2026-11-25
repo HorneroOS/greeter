@@ -125,6 +125,9 @@ def test_aur_workflow_only_listens_to_the_greetd_package_namespace() -> None:
     assert '"pkg/hornero-greeter-v*"' not in workflow
     assert "pkgname: hornero-greeter-greetd" in workflow
     assert "packaging/arch/hornero-greeter-greetd/PKGBUILD" in workflow
+    # The .install scriptlet must be published as an asset or the
+    # action's .SRCINFO generation fails (learned from the v0.1.0 run).
+    assert "hornero-greeter-greetd.install" in workflow
 
 
 def test_stamp_greetd_tag_uses_longest_prefix(tmp_path: Path) -> None:
