@@ -28,6 +28,7 @@ class Backend : public QObject {
     Q_PROPERTY(QString infoMessage READ infoMessage NOTIFY messagesChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY messagesChanged)
     Q_PROPERTY(int failedAttempts READ failedAttempts NOTIFY messagesChanged)
+    Q_PROPERTY(bool lastFailureWasAuth READ lastFailureWasAuth NOTIFY messagesChanged)
     Q_PROPERTY(bool daemonConnected READ daemonConnected NOTIFY stateChanged)
 
 public:
@@ -43,6 +44,7 @@ public:
     QString infoMessage() const { return m_info; }
     QString errorMessage() const { return m_error; }
     int failedAttempts() const { return m_attempts; }
+    bool lastFailureWasAuth() const { return m_lastFailureWasAuth; }
     bool daemonConnected() const;
 
     // Begin authenticating `username`; on success start session `index`
@@ -76,6 +78,7 @@ private:
     QString m_info;
     QString m_error;
     int m_attempts = 0;
+    bool m_lastFailureWasAuth = false;
     QString m_pendingUser;
     QStringList m_pendingCmd;
     QStringList m_pendingEnv;

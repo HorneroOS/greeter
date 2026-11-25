@@ -58,9 +58,13 @@ Window {
         if (!backend.daemonConnected) return tr("daemonDown")
         if (noSessions) return tr("noSessions")
         if (backend.errorMessage !== "") {
-            if (backend.failedAttempts > 1)
+            // Only a genuine auth failure gets the friendly retry copy;
+            // protocol/daemon errors must surface their own description
+            // (masking them once hid "a session is already being
+            // configured" behind the wrong-password text).
+            if (backend.lastFailureWasAuth && backend.failedAttempts > 1)
                 return tr("loginFailedCount").arg(backend.failedAttempts)
-            if (backend.failedAttempts === 1)
+            if (backend.lastFailureWasAuth && backend.failedAttempts === 1)
                 return tr("loginFailed")
             return backend.errorMessage
         }

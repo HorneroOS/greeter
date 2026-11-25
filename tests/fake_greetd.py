@@ -72,6 +72,19 @@ class FakeGreetd:
                     return
                 kind = req.get("type")
                 if kind == "create_session":
+                    # Real greetd keeps a session "under configuration"
+                    # after auth_error until the greeter cancels it; a
+                    # second create_session is rejected. Model that so
+                    # retry flows must cancel first (seat-verified
+                    # against greetd 0.10.3).
+                    if getattr(self, "_configured", False):
+                        self._send(conn, {
+                            "type": "error",
+                            "error_type": "error",
+                            "description": "a session is already being configured",
+                        })
+                        continue
+                    self._configured = True
                     self._send(conn, {
                         "type": "auth_message",
                         "auth_message_type": "secret",
@@ -95,8 +108,10 @@ class FakeGreetd:
                     else:
                         self._send(conn, {"type": "success"})
                 elif kind == "start_session":
+                    self._configured = False
                     self._send(conn, {"type": "success"})
                 elif kind == "cancel_session":
+                    self._configured = False
                     self._send(conn, {"type": "success"})
                 else:
                     self._send(conn, {
