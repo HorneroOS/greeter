@@ -116,6 +116,13 @@ embedded verbatim from `components/`, one source for both greeters).
 - **Honest offline state.** Without `GREETD_SOCK` the greeter shows its
   disconnected state instead of pretending to offer login.
 
+Real-seat captures from the clean-Arch VM validation (greetd + cage on
+seat0, QMP screendump, no fixtures):
+
+![greetd greeter sign-in: user channel, Hyprland session, power rail](screens/greetd/01-sign-in.png)
+![greetd greeter password prompt from PAM](screens/greetd/02-password-prompt.png)
+![greetd greeter after a wrong password: That password did not work](screens/greetd/03-login-failed.png)
+
 ```bash
 cmake -S greetd -B greetd/build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cmake --build greetd/build -j2
