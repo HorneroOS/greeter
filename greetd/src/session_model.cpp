@@ -103,6 +103,15 @@ QVector<DesktopSession> discoverSessions(const QStringList &extraDirs)
                 const QStringList exec = splitExec(keys.value("Exec"));
                 if (exec.isEmpty())
                     continue;
+                // TryExec names a binary that must exist for the
+                // session to be offered (desktop entry spec). Without
+                // this check, e.g. hyprland's uwsm-managed entry is
+                // offered on systems where uwsm is not installed and
+                // the login silently bounces back to the greeter.
+                const QString tryExec = keys.value("TryExec").trimmed();
+                if (!tryExec.isEmpty()
+                    && QStandardPaths::findExecutable(tryExec).isEmpty())
+                    continue;
                 seen.insert(probe);
                 sessions.push_back(DesktopSession {
                     id,
