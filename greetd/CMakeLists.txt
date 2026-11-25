@@ -37,6 +37,8 @@ install(TARGETS hornero-greetd-greeter RUNTIME DESTINATION bin)
 install(FILES config/config.toml.example
               config/greetd-greeter.pam.example
         DESTINATION share/doc/hornero-greetd-greeter)
+# The session wrapper is the greetd default_session command: it
+# creates the greeter's private XDG_RUNTIME_DIR, then runs cage.
 install(PROGRAMS config/hornero-greetd-session.example
         RENAME hornero-greetd-session
-        DESTINATION share/doc/hornero-greetd-greeter)
+        DESTINATION bin)

@@ -136,7 +136,8 @@ against a scripted greetd double (`tests/test_greetd_protocol.py`, CI
 job `greetd.yml`): password flow, wrong-password `auth_error` (no
 `start_session` ever sent) and a two-prompt conversation. AUR
 packaging for `hornero-greeter-greetd` is defined in
-`greetd/packaging/PKGBUILD.example`.
+`packaging/arch/hornero-greeter-greetd/` (published from
+`pkg/hornero-greeter-greetd-v*` tags like the SDDM theme).
 
 ## Honest states
 

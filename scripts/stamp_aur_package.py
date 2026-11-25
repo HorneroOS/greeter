@@ -9,15 +9,20 @@ from pathlib import Path
 
 REPOSITORY = "git+https://github.com/HorneroOS/greeter.git"
 TAG_PREFIX = "pkg/hornero-greeter-v"
+# Package-scoped tag namespaces published from this repository. Each
+# package has its own tag prefix so releases cannot cross-trigger;
+# longest match wins (hornero-greeter-greetd before hornero-greeter).
+TAG_PREFIXES = ("pkg/hornero-greeter-greetd-v", TAG_PREFIX)
 
 
 def stamp(pkgbuild: Path, tag: str, release_sha: str) -> None:
     """Update pkgver and pin the source to the release commit."""
-    if not tag.startswith(TAG_PREFIX):
+    prefix = next((p for p in TAG_PREFIXES if tag.startswith(p)), None)
+    if prefix is None:
         raise ValueError(f"invalid release tag: {tag}")
     if not re.fullmatch(r"[0-9a-fA-F]{40}", release_sha):
         raise ValueError("release commit must be a full 40-character SHA-1")
-    upstream_version = tag.removeprefix(TAG_PREFIX)
+    upstream_version = tag.removeprefix(prefix)
     if not re.fullmatch(r"[0-9][A-Za-z0-9._+]*", upstream_version):
         raise ValueError(f"invalid Arch package version in release tag: {tag}")
 
@@ -52,7 +57,7 @@ def stamp(pkgbuild: Path, tag: str, release_sha: str) -> None:
 def main() -> int:
     if len(sys.argv) != 4:
         print(
-            "usage: stamp_aur_package.py PKGBUILD pkg/hornero-greeter-vX.Y.Z RELEASE_SHA",
+            "usage: stamp_aur_package.py PKGBUILD pkg/<pkgname>-vX.Y.Z RELEASE_SHA",
             file=sys.stderr,
         )
         return 2
