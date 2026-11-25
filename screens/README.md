@@ -27,3 +27,13 @@ login.
 
 To regenerate the files: `sh scripts/render-matrix.sh OUTDIR --sheet` and
 copy the frames listed above.
+
+## Real-seat captures (greetd)
+
+Unlike the renders above, `greetd/` holds framebuffer captures of the
+running greetd greeter on a real seat (clean-Arch VM, cage, QMP
+screendump — see `greetd/README.md` for provenance):
+
+- `greetd/01-sign-in.png`: channel list, session selector, power rail
+- `greetd/02-password-prompt.png`: live PAM secret prompt
+- `greetd/03-login-failed.png`: wrong-password state with retry copy
