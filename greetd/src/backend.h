@@ -79,6 +79,11 @@ private:
     QString m_error;
     int m_attempts = 0;
     bool m_lastFailureWasAuth = false;
+    // True between sending the post-failure cancel_session and its
+    // acknowledgement: greetd may answer that cancel with a spurious
+    // error (its worker is already gone), which must not replace the
+    // user-visible auth failure.
+    bool m_cancelAckPending = false;
     QString m_pendingUser;
     QStringList m_pendingCmd;
     QStringList m_pendingEnv;
