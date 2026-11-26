@@ -3,7 +3,7 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusPendingCallWatcher>
-#include <QDBusReply>
+#include <QDBusPendingReply>
 
 static const QString kService = QStringLiteral("org.freedesktop.login1");
 static const QString kPath = QStringLiteral("/org/freedesktop/login1");
@@ -23,14 +23,24 @@ void PowerActions::refresh()
     if (!bus.isConnected())
         return;
     QDBusInterface logind(kService, kPath, kIface, bus);
-    auto check = [&logind](const QString &method) {
-        const QDBusReply<QString> reply = logind.call(QDBus::BlockWithGui, method);
-        return reply.isValid() && reply.value() == "yes";
+    auto check = [this, &logind](const QString &method, bool *target) {
+        const QDBusPendingCall pending = logind.asyncCall(method);
+        auto *watcher = new QDBusPendingCallWatcher(pending, this);
+        connect(watcher, &QDBusPendingCallWatcher::finished, this,
+                [this, watcher, target] {
+            const QDBusPendingReply<QString> reply = *watcher;
+            const bool allowed =
+                reply.isValid() && reply.value() == QLatin1String("yes");
+            if (*target != allowed) {
+                *target = allowed;
+                emit availabilityChanged();
+            }
+            watcher->deleteLater();
+        });
     };
-    m_canSuspend = check("CanSuspend");
-    m_canReboot = check("CanReboot");
-    m_canPowerOff = check("CanPowerOff");
-    emit availabilityChanged();
+    check(QStringLiteral("CanSuspend"), &m_canSuspend);
+    check(QStringLiteral("CanReboot"), &m_canReboot);
+    check(QStringLiteral("CanPowerOff"), &m_canPowerOff);
 }
 
 void PowerActions::call(const QString &method)

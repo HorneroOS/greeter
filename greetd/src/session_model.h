@@ -19,5 +19,7 @@ struct DesktopSession {
 
 // Extra directories may be injected for tests; by default the XDG data
 // dirs are searched in precedence order and the first entry with a
-// given id wins, matching freedesktop session lookup rules.
-QVector<DesktopSession> discoverSessions(const QStringList &extraDirs = {});
+// given id wins, matching freedesktop session lookup rules. X11 sessions
+// (/usr/share/xsessions) are excluded by default under greetd.
+QVector<DesktopSession> discoverSessions(const QStringList &extraDirs = {},
+                                         bool includeX11 = false);

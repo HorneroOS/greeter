@@ -8,4 +8,7 @@
 # the greeter account's home is "/" (Qt would try //.cache): point it
 # at a writable state dir if your greeter user has none.
 export XDG_RUNTIME_DIR="$(mktemp -d /tmp/greeter-rt-XXXXXX)"
-exec cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter
+trap 'rm -rf "$XDG_RUNTIME_DIR"' EXIT
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$XDG_RUNTIME_DIR/cache}"
+mkdir -p "$XDG_CACHE_HOME"
+cage -s -- env QT_QPA_PLATFORM=wayland /usr/bin/hornero-greetd-greeter
