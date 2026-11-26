@@ -42,7 +42,7 @@ else
 fi
 command -v "$QMLLINT" >/dev/null 2>&1 || { echo "error: qmllint not found (install qt6-declarative-dev-tools)"; exit 1; }
 command -v "$QMLFORMAT" >/dev/null 2>&1 || { echo "error: qmlformat not found (install qt6-declarative-dev-tools)"; exit 1; }
-QML_FILES=$(find "$ROOT" -maxdepth 1 -name '*.qml' -o -path "$ROOT/components/*.qml" | sort)
+QML_FILES=$(find "$ROOT" -maxdepth 1 -name '*.qml' -o -path "$ROOT/components/*.qml" -o -path "$ROOT/greetd/qml/*.qml" | sort)
 QML_IMPORT=""
 # shellcheck disable=SC2086
 for cand in ${QML_IMPORT_EXTRA:-} /usr/lib/qt6/qml /usr/lib/x86_64-linux-gnu/qt6/qml; do

@@ -77,16 +77,20 @@ static QHash<QString, QString> readDesktopEntry(const QString &path)
     return keys;
 }
 
-QVector<DesktopSession> discoverSessions(const QStringList &extraDirs)
+QVector<DesktopSession> discoverSessions(const QStringList &extraDirs, bool includeX11)
 {
     QStringList dataDirs = extraDirs;
     dataDirs += QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+
+    const QStringList kinds = includeX11
+        ? QStringList { QStringLiteral("wayland"), QStringLiteral("x") }
+        : QStringList { QStringLiteral("wayland") };
 
     QVector<DesktopSession> sessions;
     QSet<QString> seen; // "<type>/<id>": first data dir wins
 
     for (const QString &base : dataDirs) {
-        for (const QString &kind : { QStringLiteral("wayland"), QStringLiteral("x") }) {
+        for (const QString &kind : kinds) {
             const QString dirName = kind == "x" ? "xsessions" : "wayland-sessions";
             const QDir dir(base + '/' + dirName);
             const QStringList files = dir.entryList({ "*.desktop" }, QDir::Files, QDir::Name);

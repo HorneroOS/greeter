@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
     Backend backend;
     PowerActions power;
 
+    // Per greetd-ipc(7), once start_session succeeds the greeter must exit
+    // cleanly so greetd can hand the VT over to the user's session.
+    QObject::connect(&backend, &Backend::sessionStarted, &app, &QGuiApplication::quit);
+
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("backend"), &backend);
     engine.rootContext()->setContextProperty(QStringLiteral("power"), &power);
