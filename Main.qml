@@ -507,6 +507,8 @@ Rectangle {
                     Row {
                         id: clockRow
 
+                        readonly property int clockPx: Math.round(136 * container.unit * Math.min(container.accessibilityScale, 1.25))
+
                         spacing: Math.round(4 * container.unit)
 
                         Text {
@@ -514,8 +516,8 @@ Rectangle {
                             color: container.sig.ink
                             font.family: Signal.FONT_DISPLAY
                             font.weight: Font.Medium
-                            font.pixelSize: Math.round(136 * container.unit * Math.min(container.accessibilityScale, 1.25))
-                            font.letterSpacing: -font.pixelSize * 0.015
+                            font.pixelSize: clockRow.clockPx
+                            font.letterSpacing: -clockRow.clockPx * 0.015
                             font.features: {
                                 "tnum": 1
                             }
@@ -527,7 +529,7 @@ Rectangle {
                             color: container.sig.inkMuted
                             font.family: Signal.FONT_DISPLAY
                             font.weight: Font.Medium
-                            font.pixelSize: Math.round(136 * container.unit * Math.min(container.accessibilityScale, 1.25))
+                            font.pixelSize: clockRow.clockPx
                         }
 
                         Text {
@@ -536,8 +538,8 @@ Rectangle {
                             color: container.sig.ink
                             font.family: Signal.FONT_DISPLAY
                             font.weight: Font.Medium
-                            font.pixelSize: Math.round(136 * container.unit * Math.min(container.accessibilityScale, 1.25))
-                            font.letterSpacing: -font.pixelSize * 0.015
+                            font.pixelSize: clockRow.clockPx
+                            font.letterSpacing: -clockRow.clockPx * 0.015
                             font.features: {
                                 "tnum": 1
                             }
