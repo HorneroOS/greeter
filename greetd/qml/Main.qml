@@ -39,22 +39,26 @@ Window {
     property int sessionIndex: 0
     property string pendingPower: ""
     property string pendingTypedText: ""
+    property string localError: ""
 
     readonly property var currentUser: (otherSelected || channel >= backend.users.length) ? null : backend.users[channel]
     readonly property string currentUserName: otherSelected ? usernameField.text.trim() : (currentUser ? currentUser.name : "")
     readonly property string currentUserLabel: otherSelected ? usernameField.text.trim() : (currentUser ? (currentUser.realName !== "" ? currentUser.realName : currentUser.name) : "")
+    readonly property var currentSession: (sessionIndex >= 0 && sessionIndex < backend.sessions.length) ? backend.sessions[sessionIndex] : null
+    readonly property bool currentSessionExperimental: currentSession ? (/experimental/i.test(currentSession.name || "") || /experimental/i.test(currentSession.id || "") || /experimental/i.test(currentSession.comment || "")) : false
     readonly property bool busy: backend.state === "authenticating" || backend.state === "starting"
     readonly property bool prompting: backend.promptKind !== "none"
     readonly property bool noSessions: backend.sessions.length === 0
+    readonly property bool statusIsAlert: !backend.daemonConnected || noSessions || backend.errorMessage !== "" || localError !== ""
+    readonly property bool statusIsBusy: !statusIsAlert && backend.state === "starting"
+    readonly property bool statusIsInfo: !statusIsAlert && !statusIsBusy && backend.infoMessage !== ""
 
     function tr(key) {
         return Strings.t(lang, key);
     }
 
     function greeting() {
-        var h = now.getHours();
-        var part = h < 6 ? "night" : h < 12 ? "morning" : h < 19 ? "afternoon" : "evening";
-        return tr("greeting." + part);
+        return tr("greeting." + Strings.daypart(now.getHours()));
     }
 
     function statusText() {
@@ -62,6 +66,8 @@ Window {
             return tr("daemonDown");
         if (noSessions)
             return tr("noSessions");
+        if (localError !== "")
+            return localError;
         if (backend.errorMessage !== "") {
             // Only a genuine auth failure gets the friendly retry copy;
             // protocol/daemon errors must surface their own description
@@ -77,8 +83,6 @@ Window {
             return tr("started");
         if (backend.infoMessage !== "")
             return backend.infoMessage;
-        if (Qt.inputMethod && Qt.inputMethod.inputItemTransform === null)
-            return "";
         return "";
     }
 
@@ -94,9 +98,11 @@ Window {
         if (busy || noSessions)
             return;
         if (currentUserName === "") {
+            localError = tr("noUser");
             usernameField.forceActiveFocus();
             return;
         }
+        localError = "";
         backend.begin(currentUserName, sessionIndex);
     }
 
@@ -256,7 +262,7 @@ Window {
                 text: "HorneroOS"
                 color: sig.ink
                 font {
-                    family: "IBM Plex Sans Condensed"
+                    family: Signal.FONT_DISPLAY
                     pixelSize: 20 * s
                     weight: Font.Medium
                 }
@@ -266,7 +272,7 @@ Window {
                 color: sig.inkFaint
                 anchors.baseline: parent.children[0].baseline
                 font {
-                    family: "IBM Plex Mono"
+                    family: Signal.FONT_MONO
                     pixelSize: 12 * s
                 }
             }
@@ -320,6 +326,7 @@ Window {
                     activeFocusOnTab: true
                     Accessible.role: Accessible.Button
                     Accessible.name: modelData.a11y
+                    Accessible.onPressAction: root.requestPower(modelData.kind)
                     Keys.onTabPressed: function (event) {
                         root.moveFocus(powerBtn, false);
                         event.accepted = true;
@@ -346,7 +353,7 @@ Window {
                         text: modelData.label
                         color: sig.inkMuted
                         font {
-                            family: "IBM Plex Sans"
+                            family: Signal.FONT_SANS
                             pixelSize: 12 * s
                         }
                     }
@@ -369,7 +376,7 @@ Window {
                 text: now.toLocaleTimeString(loc, "HH:mm")
                 color: sig.ink
                 font {
-                    family: "IBM Plex Sans Condensed"
+                    family: Signal.FONT_DISPLAY
                     pixelSize: 96 * s
                     weight: Font.Medium
                 }
@@ -386,7 +393,7 @@ Window {
                 text: now.toLocaleDateString(loc, "dddd d MMMM").toUpperCase()
                 color: sig.inkFaint
                 font {
-                    family: "IBM Plex Mono"
+                    family: Signal.FONT_MONO
                     pixelSize: 12 * s
                     letterSpacing: 2
                 }
@@ -396,7 +403,7 @@ Window {
                 text: greeting()
                 color: sig.inkMuted
                 font {
-                    family: "IBM Plex Sans"
+                    family: Signal.FONT_SANS
                     pixelSize: 15 * s
                     italic: true
                 }
@@ -432,7 +439,7 @@ Window {
                         text: busy && currentUserLabel !== "" ? tr("authFor").arg(currentUserLabel) : tr("eyebrow.signIn")
                         color: sig.inkFaint
                         font {
-                            family: "IBM Plex Mono"
+                            family: Signal.FONT_MONO
                             pixelSize: 11 * s
                             letterSpacing: 2
                         }
@@ -460,6 +467,11 @@ Window {
                                 activeFocusOnTab: true
                                 Accessible.role: Accessible.Button
                                 Accessible.name: chLabel.text
+                                Accessible.onPressAction: {
+                                    root.otherSelected = false;
+                                    root.localError = "";
+                                    root.channel = index;
+                                }
                                 Keys.onTabPressed: function (event) {
                                     root.moveFocus(chBtn, false);
                                     event.accepted = true;
@@ -470,16 +482,19 @@ Window {
                                 }
                                 Keys.onReturnPressed: function (event) {
                                     root.otherSelected = false;
+                                    root.localError = "";
                                     root.channel = index;
                                     event.accepted = true;
                                 }
                                 Keys.onEnterPressed: function (event) {
                                     root.otherSelected = false;
+                                    root.localError = "";
                                     root.channel = index;
                                     event.accepted = true;
                                 }
                                 Keys.onSpacePressed: function (event) {
                                     root.otherSelected = false;
+                                    root.localError = "";
                                     root.channel = index;
                                     event.accepted = true;
                                 }
@@ -496,7 +511,7 @@ Window {
                                         text: tr("channel") + " " + String(index + 1).padStart(2, "0")
                                         color: tuned ? sig.onSignalWell : sig.inkFaint
                                         font {
-                                            family: "IBM Plex Mono"
+                                            family: Signal.FONT_MONO
                                             pixelSize: 9 * s
                                         }
                                     }
@@ -506,7 +521,7 @@ Window {
                                         text: modelData.realName !== "" ? modelData.realName : modelData.name
                                         color: tuned ? sig.onSignalWell : sig.ink
                                         font {
-                                            family: "IBM Plex Sans"
+                                            family: Signal.FONT_SANS
                                             pixelSize: 13 * s
                                         }
                                     }
@@ -515,6 +530,7 @@ Window {
                                     anchors.fill: parent
                                     onClicked: {
                                         root.otherSelected = false;
+                                        root.localError = "";
                                         root.channel = index;
                                     }
                                 }
@@ -533,6 +549,11 @@ Window {
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
                             Accessible.name: tr("channel.other")
+                            Accessible.onPressAction: {
+                                root.otherSelected = true;
+                                root.localError = "";
+                                usernameField.forceActiveFocus();
+                            }
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(otherChannel, false);
                                 event.accepted = true;
@@ -543,16 +564,19 @@ Window {
                             }
                             Keys.onReturnPressed: function (event) {
                                 root.otherSelected = true;
+                                root.localError = "";
                                 usernameField.forceActiveFocus();
                                 event.accepted = true;
                             }
                             Keys.onEnterPressed: function (event) {
                                 root.otherSelected = true;
+                                root.localError = "";
                                 usernameField.forceActiveFocus();
                                 event.accepted = true;
                             }
                             Keys.onSpacePressed: function (event) {
                                 root.otherSelected = true;
+                                root.localError = "";
                                 usernameField.forceActiveFocus();
                                 event.accepted = true;
                             }
@@ -562,7 +586,7 @@ Window {
                                 text: tr("channel.other")
                                 color: otherSelected ? sig.onSignalWell : sig.ink
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 13 * s
                                 }
                             }
@@ -570,6 +594,7 @@ Window {
                                 anchors.fill: parent
                                 onClicked: {
                                     root.otherSelected = true;
+                                    root.localError = "";
                                     usernameField.forceActiveFocus();
                                 }
                             }
@@ -585,7 +610,7 @@ Window {
                         color: sig.sunken
                         radius: 4
                         border {
-                            color: usernameField.activeFocus ? sig.focus : sig.rule
+                            color: usernameField.activeFocus ? sig.focus : (localError !== "" ? sig.alert : sig.rule)
                             width: usernameField.activeFocus ? 2 : 1
                         }
                         TextInput {
@@ -596,13 +621,17 @@ Window {
                             }
                             color: sig.ink
                             font {
-                                family: "IBM Plex Sans"
+                                family: Signal.FONT_SANS
                                 pixelSize: 14 * s
                             }
                             clip: true
                             activeFocusOnTab: true
                             Accessible.role: Accessible.EditableText
                             Accessible.name: tr("a11y.username")
+                            onTextChanged: {
+                                if (text.trim() !== "" && root.localError === root.tr("noUser"))
+                                    root.localError = "";
+                            }
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(usernameField, false);
                                 event.accepted = true;
@@ -631,9 +660,11 @@ Window {
                             wrapMode: Text.WordWrap
                             text: backend.promptLabel
                             color: backend.promptKind === "error" ? sig.alert : sig.inkMuted
+                            Accessible.role: backend.promptKind === "error" ? Accessible.AlertMessage : Accessible.StaticText
+                            Accessible.name: text
                             font {
-                                family: "IBM Plex Sans"
-                                pixelSize: 13 * s
+                                family: Signal.FONT_SANS
+                                pixelSize: Math.max(13, Signal.TYPE.normal * s)
                             }
                         }
                         Rectangle {
@@ -656,7 +687,7 @@ Window {
                                 color: sig.ink
                                 echoMode: backend.promptKind === "secret" ? TextInput.Password : TextInput.Normal
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 14 * s
                                 }
                                 clip: true
@@ -677,18 +708,36 @@ Window {
                         }
                     }
 
-                    // Status line: words first, colour second.
-                    Text {
-                        visible: text !== ""
+                    // Status line: glyph + words + colour (never colour alone),
+                    // >= 13 px floor matching the SDDM greeter (greeter#45).
+                    Row {
+                        id: statusRow
+                        visible: statusLabel.text !== ""
                         width: parent.width
-                        wrapMode: Text.WordWrap
-                        text: statusText()
-                        color: (backend.errorMessage !== "" || noSessions || !backend.daemonConnected) ? sig.alert : sig.inkMuted
-                        Accessible.role: Accessible.AlertMessage
-                        Accessible.name: text
-                        font {
-                            family: "IBM Plex Sans"
-                            pixelSize: 13 * s
+                        spacing: Signal.SPACING.smaller
+
+                        Glyph {
+                            id: statusGlyph
+                            anchors.verticalCenter: parent.verticalCenter
+                            name: (statusIsBusy || statusIsInfo) ? "info-circle" : "alert-triangle"
+                            size: 16 * s
+                            color: statusLabel.color
+                        }
+
+                        Text {
+                            id: statusLabel
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width - statusGlyph.width - parent.spacing
+                            wrapMode: Text.WordWrap
+                            text: statusText()
+                            color: statusIsAlert ? sig.alert : (statusIsBusy ? sig.phosphor : sig.cue)
+                            Accessible.role: Accessible.AlertMessage
+                            Accessible.name: text
+                            font {
+                                family: Signal.FONT_MONO
+                                pixelSize: Math.max(13, Signal.TYPE.normal * s)
+                                letterSpacing: 0.4
+                            }
                         }
                     }
 
@@ -701,7 +750,7 @@ Window {
                             text: tr("session")
                             color: sig.inkFaint
                             font {
-                                family: "IBM Plex Mono"
+                                family: Signal.FONT_MONO
                                 pixelSize: 11 * s
                             }
                         }
@@ -717,7 +766,8 @@ Window {
                             }
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
-                            Accessible.name: tr("a11y.session") + ": " + sessionLabel.text
+                            Accessible.name: tr("a11y.session") + ": " + sessionLabel.text + (currentSessionExperimental ? " (" + tr("experimental") + ")" : "")
+                            Accessible.onPressAction: root.sessionIndex = (root.sessionIndex + 1) % backend.sessions.length
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(sessionButton, false);
                                 event.accepted = true;
@@ -741,16 +791,39 @@ Window {
                             Text {
                                 id: sessionLabel
                                 anchors.centerIn: parent
-                                text: backend.sessions[sessionIndex] ? backend.sessions[sessionIndex].name : ""
+                                text: currentSession ? currentSession.name : ""
                                 color: sig.ink
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 12 * s
                                 }
                             }
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: root.sessionIndex = (root.sessionIndex + 1) % backend.sessions.length
+                            }
+                        }
+                        Rectangle {
+                            visible: currentSessionExperimental
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: expChipText.implicitWidth + 12 * s
+                            height: 20 * s
+                            radius: Signal.RADIUS.small
+                            color: "transparent"
+                            border {
+                                color: sig.ruleStrong
+                                width: 1
+                            }
+                            Text {
+                                id: expChipText
+                                anchors.centerIn: parent
+                                text: tr("experimental")
+                                color: sig.inkMuted
+                                font {
+                                    family: Signal.FONT_MONO
+                                    pixelSize: Signal.TYPE.small * s
+                                    letterSpacing: Signal.TYPE.small * s * 0.08
+                                }
                             }
                         }
                     }
@@ -772,6 +845,7 @@ Window {
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
                             Accessible.name: prompting ? tr("continue") : tr("a11y.login")
+                            Accessible.onPressAction: root.primaryAction()
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(loginButton, false);
                                 event.accepted = true;
@@ -803,7 +877,7 @@ Window {
                                 text: prompting ? tr("continue") : (busy ? tr("signingIn") : tr("login"))
                                 color: (noSessions || !backend.daemonConnected) ? sig.inkFaint : sig.onSignal
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 14 * s
                                     weight: Font.Medium
                                 }
@@ -827,6 +901,7 @@ Window {
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
                             Accessible.name: tr("a11y.cancel")
+                            Accessible.onPressAction: backend.cancel()
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(cancelButton, false);
                                 event.accepted = true;
@@ -852,7 +927,7 @@ Window {
                                 text: tr("cancel")
                                 color: sig.inkMuted
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 13 * s
                                 }
                             }
@@ -876,7 +951,7 @@ Window {
             text: "HORNERO SIGNAL · GREETD"
             color: sig.inkFaint
             font {
-                family: "IBM Plex Mono"
+                family: Signal.FONT_MONO
                 pixelSize: 10 * s
                 letterSpacing: 2
             }
@@ -923,7 +998,7 @@ Window {
                         text: pendingPower === "" ? "" : tr("confirm." + pendingPower)
                         color: sig.ink
                         font {
-                            family: "IBM Plex Sans"
+                            family: Signal.FONT_SANS
                             pixelSize: 15 * s
                         }
                     }
@@ -943,6 +1018,8 @@ Window {
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
                             Accessible.name: tr("a11y.cancel")
+                            Accessible.onPressAction: root.cancelPower()
+                            Keys.onEscapePressed: root.cancelPower()
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(confirmCancel, false);
                                 event.accepted = true;
@@ -968,7 +1045,7 @@ Window {
                                 text: tr("cancel")
                                 color: sig.ink
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 13 * s
                                 }
                             }
@@ -990,6 +1067,8 @@ Window {
                             activeFocusOnTab: true
                             Accessible.role: Accessible.Button
                             Accessible.name: pendingPower === "" ? "" : tr(pendingPower)
+                            Accessible.onPressAction: root.runPower(root.pendingPower)
+                            Keys.onEscapePressed: root.cancelPower()
                             Keys.onTabPressed: function (event) {
                                 root.moveFocus(confirmAction, false);
                                 event.accepted = true;
@@ -1015,7 +1094,7 @@ Window {
                                 text: pendingPower === "" ? "" : tr(pendingPower)
                                 color: sig.onAlert
                                 font {
-                                    family: "IBM Plex Sans"
+                                    family: Signal.FONT_SANS
                                     pixelSize: 13 * s
                                     weight: Font.Medium
                                 }

@@ -9,7 +9,11 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 STRINGS = REPO_ROOT / "components" / "Strings.js"
-QML = [REPO_ROOT / "Main.qml", *sorted((REPO_ROOT / "components").glob("*.qml"))]
+QML = [
+    REPO_ROOT / "Main.qml",
+    REPO_ROOT / "greetd" / "qml" / "Main.qml",
+    *sorted((REPO_ROOT / "components").glob("*.qml")),
+]
 
 
 def _run(expr):
@@ -36,8 +40,8 @@ def test_every_key_used_by_the_qml_exists(tables):
     used = set()
     for path in QML:
         text = path.read_text(encoding="utf-8")
-        used |= set(re.findall(r'(?:container\.tr|Strings\.t\([^,]+,)\s*\(?\s*"([A-Za-z0-9_.]+)"', text))
-        used |= set(re.findall(r'container\.tr\("([A-Za-z0-9_.]+)"\)', text))
+        used |= set(re.findall(r'(?:\btr|container\.tr|Strings\.t\([^,]+,)\s*\(?\s*"([A-Za-z0-9_.]+)"', text))
+        used |= set(re.findall(r'\btr\("([A-Za-z0-9_.]+)"\)', text))
     # Keys built at runtime: greeting.<daypart>, greetingPlain.<daypart>,
     # confirm.<kind> and the power labels.
     for part in ("morning", "afternoon", "evening", "night"):

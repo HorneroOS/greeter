@@ -3,6 +3,7 @@ self-test binary) against a scripted greetd double. Skipped when the
 binaries have not been built; CI builds them in the greetd job.
 """
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -100,3 +101,73 @@ def test_two_prompt_conversation(tmp_path):
     ]
     responses = [r.get("response") for r in fake.requests if r["type"] == "post_auth_message_response"]
     assert responses == ["anything", "123456"]
+
+
+def _write_session(directory: Path, subdir: str, filename: str, name: str, comment: str = "") -> None:
+    target = directory / subdir
+    target.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "[Desktop Entry]",
+        "Type=Application",
+        f"Name={name}",
+        "Exec=/bin/true",
+    ]
+    if comment:
+        lines.append(f"Comment={comment}")
+    (target / filename).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _list_sessions(datadir: Path, include_x11: bool = False) -> list[dict]:
+    cmd = [str(SELFTEST), "--list-sessions", str(datadir)]
+    if include_x11:
+        cmd.append("--include-x11")
+    env = {
+        "PATH": os.environ.get("PATH", ""),
+        "XDG_DATA_DIRS": str(datadir),
+        "XDG_DATA_HOME": str(datadir),
+    }
+    proc = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=15, env=env)
+    return [json.loads(line) for line in proc.stdout.strip().splitlines() if line.strip()]
+
+
+def test_session_priority_hornero_then_hyprland_then_stable_then_experimental(tmp_path):
+    _write_session(tmp_path, "wayland-sessions", "00-experimental-gaming.desktop", "Gaming (Experimental)")
+    _write_session(tmp_path, "wayland-sessions", "hornero-gaming-session.desktop", "HorneroOS Gaming Session (Experimental)")
+    _write_session(tmp_path, "wayland-sessions", "cosmic.desktop", "COSMIC")
+    _write_session(tmp_path, "wayland-sessions", "hyprland.desktop", "Hyprland")
+    _write_session(tmp_path, "wayland-sessions", "hornero-desktop.desktop", "HorneroOS Desktop")
+
+    sessions = _list_sessions(tmp_path)
+    assert [s["id"] for s in sessions] == [
+        "hornero-desktop",
+        "hyprland",
+        "cosmic",
+        "hornero-gaming-session",
+        "00-experimental-gaming",
+    ]
+
+
+def test_session_priority_hyprland_default_when_no_hornero(tmp_path):
+    # Even when an experimental entry's Comment (or id) flags it rather than
+    # its Name, it must still sort after stable Hyprland and GNOME.
+    _write_session(
+        tmp_path,
+        "wayland-sessions",
+        "a-gaming.desktop",
+        "Gaming Session",
+        comment="Experimental gaming mode",
+    )
+    _write_session(tmp_path, "wayland-sessions", "gnome.desktop", "GNOME")
+    _write_session(tmp_path, "wayland-sessions", "hyprland.desktop", "Hyprland (uwsm-managed)")
+
+    sessions = _list_sessions(tmp_path)
+    assert [s["id"] for s in sessions] == ["hyprland", "gnome", "a-gaming"]
+
+
+def test_session_priority_wayland_before_x11_and_experimental_last(tmp_path):
+    _write_session(tmp_path, "wayland-sessions", "sway.desktop", "Sway")
+    _write_session(tmp_path, "xsessions", "00-experimental-x11.desktop", "Experimental X11")
+    _write_session(tmp_path, "xsessions", "openbox.desktop", "Openbox")
+
+    sessions = _list_sessions(tmp_path, include_x11=True)
+    assert [s["id"] for s in sessions] == ["sway", "openbox", "00-experimental-x11"]

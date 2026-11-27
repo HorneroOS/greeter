@@ -142,9 +142,11 @@ def test_plex_families(tokens):
     assert tokens["fonts"] == ["IBM Plex Sans", "IBM Plex Mono", "IBM Plex Sans Condensed"]
     for family in ("Signal.FONT_SANS", "Signal.FONT_MONO", "Signal.FONT_DISPLAY"):
         assert family in RUNTIME_TEXT
-    # Only the token module names font families.
-    for path in QML_FILES:
-        assert "font.family: \"" not in path.read_text(encoding="utf-8"), path.name
+    # Only the token module names font families (SDDM and greetd QML alike).
+    for path in QML_FILES + [REPO_ROOT / "greetd" / "qml" / "Main.qml"]:
+        text = path.read_text(encoding="utf-8")
+        assert 'font.family: "' not in text, path.name
+        assert not re.search(r'family:\s*"', text), path.name
 
 
 def test_motion_tokens_and_reduced_motion(tokens):
