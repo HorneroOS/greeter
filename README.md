@@ -1,11 +1,14 @@
-# Hornero Greeter (HorneroOS SDDM theme)
+# Hornero Greeter (HorneroOS SDDM theme & greetd greeter)
 
 [![ci](https://github.com/HorneroOS/greeter/actions/workflows/ci.yml/badge.svg)](https://github.com/HorneroOS/greeter/actions/workflows/ci.yml)
 [![qml](https://github.com/HorneroOS/greeter/actions/workflows/qml.yml/badge.svg)](https://github.com/HorneroOS/greeter/actions/workflows/qml.yml)
+[![greetd greeter](https://github.com/HorneroOS/greeter/actions/workflows/greetd.yml/badge.svg)](https://github.com/HorneroOS/greeter/actions/workflows/greetd.yml)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 
 The HorneroOS login screen on **Hornero Signal** (RFC 0001,
-`HorneroOS/docs/development/rfc-0001-hornero-signal.md`). It is an original
+`HorneroOS/docs/development/rfc-0001-hornero-signal.md`), shipped both as an
+**SDDM theme** (`hornero-greeter`, `Main.qml`) and as a native **greetd
+greeter** (`hornero-greeter-greetd`, `greetd/`). It is an original
 instrument-panel sign-in from the same family as the shell's lock screen
 (`HorneroOS/shell` `modules/lock`) and the reload-cover stand-by slate
 (`reloadcover/`). The lock's centred clock and Javi's greeting sit above one
@@ -93,24 +96,27 @@ wells, channel eyebrows and registration ticks.
   90 ms, the scan hairline and the blink stop, and the screen is complete
   without animation.
 
-## greetd greeter (new)
+## greetd greeter
 
 `greetd/` holds a complete **graphical greeter for
 [greetd](https://git.sr.ht/~kennylevinsen/greetd)** — a native Qt6/QML
 program (`hornero-greetd-greeter`) that speaks the greetd IPC protocol
 (`greetd-ipc(7)`) directly, runs fullscreen under
 [cage](https://github.com/cage-kiosk/cage), and renders the same
-Hornero Signal instrument panel as the SDDM theme (palette and copy are
-embedded verbatim from `components/`, one source for both greeters).
+Hornero Signal instrument panel as the SDDM theme (palette, copy, and
+glyphs are embedded verbatim from `components/`, one source for both
+greeters).
 
 - **Real PAM conversation.** greetd may ask any number of questions
   (password, one-time codes) and post notices; the UI renders each
   prompt (`visible`, `secret`, `info`, `error`) as it arrives, counts
   failed attempts, and never starts a session after an `auth_error`.
 - **Users and sessions from the system.** Accounts are channels read
-  from `/etc/passwd` (UID ≥ 1000, real shells; last account remembered);
-  sessions come from `<datadir>/{wayland,x}-sessions/*.desktop` with
-  stable entries first and experimental ones never the default.
+  via NSS (`getpwent`, UID ≥ 1000, real shells; last account remembered);
+  sessions come from `<datadir>/wayland-sessions/*.desktop` (plus
+  `xsessions` when enabled) with stable entries first (`HorneroOS Desktop`,
+  then `Hyprland`, then other Wayland sessions) and experimental ones last
+  and never the default.
 - **Power via logind.** Suspend / Restart / Shut down appear only when
   logind's `Can*` answers "yes", and always ask first.
 - **Honest offline state.** Without `GREETD_SOCK` the greeter shows its
@@ -177,12 +183,14 @@ same locale.
 ## Dependencies
 
 Qt6 (QtQuick, QtQuick.Effects, QtQuick.Shapes, QtQuick.Window,
-QtQuick.VirtualKeyboard), SDDM and IBM Plex:
+QtQuick.VirtualKeyboard), IBM Plex, and either SDDM (`hornero-greeter`) or
+greetd + cage (`hornero-greeter-greetd`):
 
-- Arch: `pacman -S sddm qt6-declarative qt6-virtualkeyboard ttf-ibm-plex`.
+- Arch (SDDM theme): `pacman -S sddm qt6-declarative qt6-virtualkeyboard ttf-ibm-plex`.
   For an opt-in video background, also install `qt6-multimedia` and
   `gst-plugins-good`.
-- Debian/Ubuntu (plus `qml6-module-qtmultimedia` for an opt-in video):
+- Arch (greetd greeter): `pacman -S greetd cage qt6-base qt6-declarative qt6-wayland ttf-ibm-plex`.
+- Debian/Ubuntu (SDDM theme, plus `qml6-module-qtmultimedia` for an opt-in video):
 
   ```bash
   apt install sddm qml6-module-qtquick-virtualkeyboard \
@@ -345,9 +353,12 @@ records remain in the Git history.
 
 ## QML lint, format, and tests
 
-- `sh scripts/qml-lint.sh` runs `qmllint` on every QML file and verifies
-  `qmlformat` cleanliness (`FORMAT=1 sh scripts/qml-lint.sh` reformats).
-- `python3 -m pytest tests/ -q` runs the unit suites:
+- `sh scripts/qml-lint.sh` runs `qmllint` on every QML file (`Main.qml`,
+  `components/*.qml`, and `greetd/qml/*.qml`) and verifies `qmlformat`
+  cleanliness (`FORMAT=1 sh scripts/qml-lint.sh` reformats).
+- `cmake -S greetd -B greetd/build -G Ninja -DCMAKE_BUILD_TYPE=Release && cmake --build greetd/build`
+  builds `hornero-greetd-greeter` and `hornero-greetd-selftest`.
+- `python3 -m pytest tests/ -q` runs the unit and greetd protocol suites:
   - the Hornero Signal contract (RFC palette values, Day from config, WCAG
     contrast on Night, Day and High Contrast, Plex families, motion and
     reduced motion, rationed glow, no Material or legacy controls)
@@ -357,5 +368,7 @@ records remain in the Git history.
   - keyboard and accessibility names, ES/EN string completeness
   - the `theme.conf` contract, packaging dependencies, file permissions
     for the `sddm` user, and the `qmllint` gate
+  - `greetd` IPC protocol and session-priority ordering (`test_greetd_protocol.py`
+    against `hornero-greetd-selftest`)
 
-  The same steps run in CI (`.github/workflows/qml.yml`, `ci.yml`).
+  The same steps run in CI (`.github/workflows/qml.yml`, `ci.yml`, `greetd.yml`).
