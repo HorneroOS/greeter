@@ -4,6 +4,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MAIN = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
+GREETD_MAIN = (REPO_ROOT / "greetd" / "qml" / "Main.qml").read_text(encoding="utf-8")
 COMPONENTS = REPO_ROOT / "components"
 FIELD = (COMPONENTS / "SignalField.qml").read_text(encoding="utf-8")
 SELECT = (COMPONENTS / "SignalSelect.qml").read_text(encoding="utf-8")
@@ -155,15 +156,32 @@ def test_login_failure_line_is_readable_and_has_icon_and_word():
 
 
 def test_experimental_sessions_are_listed_last_and_never_default():
-    # greeter#45: stable sessions first, experimental last with a word chip;
-    # the default is never an experimental session.
+    # greeter#45: stable sessions first (Hornero, then Hyprland, then others),
+    # experimental last with a word chip; the default is never experimental.
     assert "id: sessionChoices" in MAIN
     assert "(a.experimental ? 2 : 0)" in MAIN
+    assert "/hornero/i.test(a.name)" in MAIN
+    assert "/hyprland/i.test(a.name)" in MAIN
     assert "!rows[last].experimental" in MAIN
     assert "model: sessionChoices" in MAIN
     assert "index: container.sessionDefault" in MAIN
     chips = (REPO_ROOT / "components" / "ChoiceList.qml").read_text(encoding="utf-8")
     assert 'Strings.t(list.lang, "experimental")' in chips
+
+
+def test_greetd_login_failure_and_session_parity():
+    # greeter#45 parity in greetd: readable >= 13 px error line with glyph,
+    # alert role, empty-user guard, shared daypart helper, and EXPERIMENTAL chip.
+    assert "Math.max(13, Signal.TYPE.normal * s)" in GREETD_MAIN
+    assert '"alert-triangle"' in GREETD_MAIN
+    assert '"info-circle"' in GREETD_MAIN
+    assert "Accessible.AlertMessage" in GREETD_MAIN
+    assert 'tr("loginFailed")' in GREETD_MAIN
+    assert 'tr("loginFailedCount").arg(backend.failedAttempts)' in GREETD_MAIN
+    assert 'tr("noUser")' in GREETD_MAIN
+    assert "Strings.daypart(" in GREETD_MAIN
+    assert "currentSessionExperimental" in GREETD_MAIN
+    assert 'tr("experimental")' in GREETD_MAIN
 
 
 def test_honest_error_states():

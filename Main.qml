@@ -290,8 +290,8 @@ Rectangle {
     function rebuildSessions() {
         var rows = container.sessionRows.slice();
         rows.sort(function (a, b) {
-            var ka = (a.experimental ? 2 : 0) + (/hornero/i.test(a.name) ? 0 : 1);
-            var kb = (b.experimental ? 2 : 0) + (/hornero/i.test(b.name) ? 0 : 1);
+            var ka = (a.experimental ? 2 : 0) + (/hornero/i.test(a.name) ? 0 : (/hyprland/i.test(a.name) ? 0.5 : 1));
+            var kb = (b.experimental ? 2 : 0) + (/hornero/i.test(b.name) ? 0 : (/hyprland/i.test(b.name) ? 0.5 : 1));
             return ka !== kb ? ka - kb : a.source - b.source;
         });
         sessionChoices.clear();

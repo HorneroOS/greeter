@@ -77,6 +77,25 @@ static QHash<QString, QString> readDesktopEntry(const QString &path)
     return keys;
 }
 
+static bool isExperimentalSession(const DesktopSession &s)
+{
+    return s.id.contains(QLatin1String("experimental"), Qt::CaseInsensitive)
+        || s.name.contains(QLatin1String("experimental"), Qt::CaseInsensitive)
+        || s.comment.contains(QLatin1String("experimental"), Qt::CaseInsensitive);
+}
+
+static int sessionPriority(const DesktopSession &s)
+{
+    const int base = isExperimentalSession(s) ? 4 : 0;
+    if (s.id.contains(QLatin1String("hornero"), Qt::CaseInsensitive)
+        || s.name.contains(QLatin1String("hornero"), Qt::CaseInsensitive))
+        return base;
+    if (s.id.contains(QLatin1String("hyprland"), Qt::CaseInsensitive)
+        || s.name.contains(QLatin1String("hyprland"), Qt::CaseInsensitive))
+        return base + 1;
+    return base + (s.type == QLatin1String("wayland") ? 2 : 3);
+}
+
 QVector<DesktopSession> discoverSessions(const QStringList &extraDirs, bool includeX11)
 {
     QStringList dataDirs = extraDirs;
@@ -130,12 +149,12 @@ QVector<DesktopSession> discoverSessions(const QStringList &extraDirs, bool incl
         }
     }
 
-    // Stable entries first, experimental ones last (mirrors the SDDM
+    // Stable entries first (HorneroOS Desktop ahead of Hyprland, then other
+    // Wayland/X11 sessions), experimental ones last (mirrors the SDDM
     // theme): an experimental session must never become the default
     // just because its file name sorts early.
-    std::stable_partition(sessions.begin(), sessions.end(), [](const DesktopSession &s) {
-        return !s.name.contains("experimental", Qt::CaseInsensitive)
-            && !s.comment.contains("experimental", Qt::CaseInsensitive);
+    std::stable_sort(sessions.begin(), sessions.end(), [](const DesktopSession &a, const DesktopSession &b) {
+        return sessionPriority(a) < sessionPriority(b);
     });
     return sessions;
 }

@@ -3,6 +3,7 @@
 #include "user_model.h"
 
 #include <QCoreApplication>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTextStream>
@@ -15,6 +16,7 @@
 // display. Usage:
 //
 //   hornero-greetd-selftest <socket-path> <username> [answer1 answer2 ...]
+//   hornero-greetd-selftest --list-sessions <datadir> [--include-x11]
 //
 // Answers are consumed in order for visible/secret prompts; info/error
 // prompts are acknowledged with an absent response. On auth success it
@@ -36,6 +38,21 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     const QStringList args = app.arguments();
+    if (args.size() >= 3 && args.at(1) == QLatin1String("--list-sessions")) {
+        const bool includeX11 = args.contains(QLatin1String("--include-x11"));
+        const auto sessions = discoverSessions({ args.at(2) }, includeX11);
+        for (const DesktopSession &s : sessions) {
+            emitEvent({
+                { "id", s.id },
+                { "name", s.name },
+                { "comment", s.comment },
+                { "type", s.type },
+                { "exec", QJsonArray::fromStringList(s.exec) },
+                { "desktopNames", s.desktopNames },
+            });
+        }
+        return 0;
+    }
     if (args.size() < 3)
         return 2;
 

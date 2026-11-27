@@ -5,5 +5,6 @@
          these aliases embed the repo's components/ files verbatim. -->
     <file alias="Signal.js">../components/Signal.js</file>
     <file alias="Strings.js">../components/Strings.js</file>
+    <file alias="Glyph.qml">../components/Glyph.qml</file>
   </qresource>
 </RCC>
