@@ -1,4 +1,4 @@
-"""Hornero Signal contract for the greeter (RFC 0001 + amendment 2, Signal
+"""Hornero Signal contract for the greeter (RFC 0001 + amendment 3, Signal
 Visual Language "Signal Bezel", HorneroOS/docs).
 
 Pins the token values to the RFC, checks WCAG contrast for every text and
@@ -20,21 +20,21 @@ MAIN = (REPO_ROOT / "Main.qml").read_text(encoding="utf-8")
 QML_FILES = [REPO_ROOT / "Main.qml", *sorted(COMPONENTS.glob("*.qml"))]
 RUNTIME_TEXT = "\n".join(p.read_text(encoding="utf-8") for p in QML_FILES + [SIGNAL_JS])
 
-# RFC 0001 §3.2, Signal Night column (factory default), with amendment 2
-# (ruleStrong #707A85, optional glow role).
+# RFC 0001 §3.2, Signal Night column (factory default), with amendment 3
+# (blue-hour graphite Night, ruleStrong #8393A6, optional glow role).
 RFC_NIGHT = {
-    "ground": "#0C0F13", "sunken": "#101419", "base": "#13171D",
-    "panel": "#181D24", "raised": "#1F252E", "lifted": "#283039",
-    "ink": "#ECE6DA", "inkMuted": "#A8ABAD", "inkFaint": "#737980",
-    "rule": "#2C333C", "ruleStrong": "#707A85", "focus": "#7EC1EA",
-    "signal": "#F2A33A", "onSignal": "#1A1205", "signalWell": "#3A2A12",
-    "onSignalWell": "#FFD9A3", "cue": "#7EC1EA", "onCue": "#06151F",
-    "cueWell": "#16303F", "onCueWell": "#CDE8F8", "phosphor": "#8BD49A",
-    "onPhosphor": "#07170C", "phosphorWell": "#173222",
-    "onPhosphorWell": "#CDEFD4", "alert": "#F0705A", "onAlert": "#1E0905",
-    "alertWell": "#3D1A14", "onAlertWell": "#FFD3CA", "inverse": "#ECE6DA",
-    "onInverse": "#181D24", "inverseSignal": "#8A5200", "scrim": "#000000",
-    "shadow": "#000000", "glow": "#FFB650",
+    "ground": "#0C1016", "sunken": "#10151C", "base": "#141B24",
+    "panel": "#1B2430", "raised": "#24303D", "lifted": "#2C3947",
+    "ink": "#E6EBF1", "inkMuted": "#A9B7C6", "inkFaint": "#8999AB",
+    "rule": "#2D3B4B", "ruleStrong": "#8393A6", "focus": "#8BCEF0",
+    "signal": "#F2AC52", "onSignal": "#1E1304", "signalWell": "#3D2B12",
+    "onSignalWell": "#FFE0B0", "cue": "#8BCEF0", "onCue": "#071A26",
+    "cueWell": "#163345", "onCueWell": "#D6EFFC", "phosphor": "#8DDBAF",
+    "onPhosphor": "#071D12", "phosphorWell": "#153425",
+    "onPhosphorWell": "#D1F5E0", "alert": "#FF8494", "onAlert": "#24070C",
+    "alertWell": "#421922", "onAlertWell": "#FFD6DC", "inverse": "#E6EBF1",
+    "onInverse": "#1B2430", "inverseSignal": "#864700", "scrim": "#000000",
+    "shadow": "#000000", "glow": "#FFC06B",
 }
 
 FORBIDDEN = (
@@ -81,19 +81,34 @@ def test_night_palette_matches_rfc(tokens):
     assert tokens["night"] == RFC_NIGHT
 
 
-# HorneroOS/config profiles/themes/hornero-signal-day/theme.json palette.
+# HorneroOS/config profiles/themes/hornero-signal-day/theme.json palette (RFC 0001 Amendment 3).
 CONFIG_DAY = {
-    "ground": "#E6E1D5", "sunken": "#DCD6C8", "base": "#F2EEE5",
-    "panel": "#F7F4EE", "raised": "#FBF9F5", "lifted": "#FFFFFF",
-    "ink": "#1B1E22", "inkMuted": "#4E545B", "inkFaint": "#7A8086",
-    "rule": "#D3CCBD", "ruleStrong": "#736D62", "signal": "#8F4B00",
-    "onSignal": "#FFFFFF", "signalWell": "#F6DDB8", "onSignalWell": "#3D2200",
-    "cue": "#1A5F88", "onCue": "#FFFFFF", "cueWell": "#D3E7F3",
-    "onCueWell": "#0B2E44", "phosphor": "#256A3B", "onPhosphor": "#FFFFFF",
-    "phosphorWell": "#D5EBD9", "onPhosphorWell": "#0E2E17", "alert": "#A8341C",
-    "onAlert": "#FFFFFF", "alertWell": "#F7D7D0", "onAlertWell": "#4A1209",
-    "inverse": "#1B1E22", "onInverse": "#F2EEE5", "inverseSignal": "#F2A33A",
-    "scrim": "#000000", "shadow": "#000000", "focus": "#1A5F88", "glow": "#8F4B00",
+    "ground": "#E8EDF4", "sunken": "#E0E6EF", "base": "#EEF2F7",
+    "panel": "#F5F8FC", "raised": "#FCFCFE", "lifted": "#FFFFFF",
+    "ink": "#283344", "inkMuted": "#505E70", "inkFaint": "#606D80",
+    "rule": "#D2DAE6", "ruleStrong": "#7A8798", "signal": "#864700",
+    "onSignal": "#FFFFFF", "signalWell": "#FCE9C8", "onSignalWell": "#432300",
+    "cue": "#145D86", "onCue": "#FFFFFF", "cueWell": "#D8EEF9",
+    "onCueWell": "#0B334B", "phosphor": "#1E6448", "onPhosphor": "#FFFFFF",
+    "phosphorWell": "#D6F4E8", "onPhosphorWell": "#0E3425", "alert": "#9C293E",
+    "onAlert": "#FFFFFF", "alertWell": "#FADDE4", "onAlertWell": "#4E111E",
+    "inverse": "#283344", "onInverse": "#F5F8FC", "inverseSignal": "#F2AC52",
+    "scrim": "#000000", "shadow": "#000000", "focus": "#145D86", "glow": "#864700",
+}
+
+# HorneroOS/config profiles/themes/hornero-signal-contrast/theme.json palette (RFC 0001 Amendment 3).
+CONFIG_CONTRAST = {
+    "ground": "#000000", "sunken": "#050607", "base": "#0A0C0F",
+    "panel": "#101317", "raised": "#181C21", "lifted": "#22272E",
+    "ink": "#FFFFFF", "inkMuted": "#D9DCDF", "inkFaint": "#9DA3A9",
+    "rule": "#5C646D", "ruleStrong": "#FFFFFF", "signal": "#FFC247",
+    "onSignal": "#000000", "signalWell": "#3D2C00", "onSignalWell": "#FFE6B0",
+    "cue": "#8FD3FF", "onCue": "#000000", "cueWell": "#0B2B3D",
+    "onCueWell": "#DDF2FF", "phosphor": "#8CF0A4", "onPhosphor": "#000000",
+    "phosphorWell": "#0E3319", "onPhosphorWell": "#D4FADE", "alert": "#FF8A73",
+    "onAlert": "#000000", "alertWell": "#45120A", "onAlertWell": "#FFDCD4",
+    "inverse": "#FFFFFF", "onInverse": "#000000", "inverseSignal": "#7A4A00",
+    "scrim": "#000000", "shadow": "#000000", "focus": "#8FD3FF", "glow": "#FFC247",
 }
 
 
@@ -111,9 +126,7 @@ def test_palette_selection_and_scheme_preference(tokens):
 def test_contrast_palette_has_every_role_and_rfc_anchors(tokens):
     hc = tokens["contrast"]
     assert set(hc) == set(RFC_NIGHT)
-    assert hc["ground"] == "#000000" and hc["ink"] == "#FFFFFF"
-    assert hc["signal"] == "#FFC247" and hc["cue"] == "#8FD3FF"
-    assert hc["ruleStrong"] == "#FFFFFF"
+    assert hc == CONFIG_CONTRAST
 
 
 @pytest.mark.parametrize("palette", ["night", "day", "contrast"])
@@ -127,15 +140,38 @@ def test_text_roles_pass_aa_on_greeter_surfaces(tokens, palette):
         assert contrast(p["alert"], p[surface]) >= 4.5, (palette, "alert", surface)
         assert contrast(p["cue"], p[surface]) >= 4.5, (palette, "cue", surface)
         assert contrast(p["phosphor"], p[surface]) >= 4.5, (palette, "phosphor", surface)
-    assert contrast(p["onSignal"], p["signal"]) >= 4.5
+    for fg, bg in (
+        ("onSignal", "signal"),
+        ("onCue", "cue"),
+        ("onPhosphor", "phosphor"),
+        ("onAlert", "alert"),
+        ("onSignalWell", "signalWell"),
+        ("onCueWell", "cueWell"),
+        ("onPhosphorWell", "phosphorWell"),
+        ("onAlertWell", "alertWell"),
+        ("onInverse", "inverse"),
+    ):
+        assert contrast(p[fg], p[bg]) >= 4.5, (palette, fg, bg)
 
 
 @pytest.mark.parametrize("palette", ["night", "day", "contrast"])
 def test_boundaries_and_focus_pass_three_to_one(tokens, palette):
     p = tokens[palette]
-    for surface in ("sunken", "base", "panel"):
+    for surface in ("base", "panel", "lifted"):
         assert contrast(p["ruleStrong"], p[surface]) >= 3, (palette, surface)
+    for surface in ("ground", "sunken", "base", "panel", "raised", "lifted"):
         assert contrast(p["focus"], p[surface]) >= 3, (palette, surface)
+
+
+def test_ink_faint_reserved_for_disabled_and_decorative():
+    # RFC 0001 §3.1: inkFaint is for disabled/decorative use only, never
+    # readable text (captions, eyebrows, placeholders, metadata).
+    assert "inkFaint" not in MAIN
+    greetd_main = (REPO_ROOT / "greetd" / "qml" / "Main.qml").read_text(encoding="utf-8")
+    faint_lines = [line.strip() for line in greetd_main.splitlines() if "inkFaint" in line]
+    assert faint_lines == [
+        "color: (noSessions || !backend.daemonConnected) ? sig.inkFaint : sig.onSignal"
+    ]
 
 
 def test_plex_families(tokens):
