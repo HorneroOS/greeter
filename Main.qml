@@ -711,7 +711,7 @@ Rectangle {
                     anchors.verticalCenter: moduleEyebrow.verticalCenter
                     visible: container.showChannels
                     text: container.tr("eyebrow.channels") + " " + channels.count
-                    color: container.sig.inkFaint
+                    color: container.sig.inkMuted
                     font.family: Signal.FONT_MONO
                     font.pixelSize: Signal.TYPE.small * login_container.s
                     font.letterSpacing: Signal.TYPE.small * login_container.s * 0.08
@@ -1186,7 +1186,7 @@ Rectangle {
             Text {
                 visible: Screen.name !== ""
                 text: container.tr("out") + " · " + Screen.name.toUpperCase()
-                color: container.sig.inkFaint
+                color: container.sig.inkMuted
                 font.family: Signal.FONT_MONO
                 font.pixelSize: Signal.TYPE.small * bottomRail.s
                 font.letterSpacing: Signal.TYPE.small * bottomRail.s * 0.12
@@ -1195,7 +1195,7 @@ Rectangle {
             Text {
                 visible: container.isPrimary
                 text: container.tr("zone") + " · " + container.zoneLabel(Qt.formatDateTime(container.now, "t"))
-                color: container.sig.inkFaint
+                color: container.sig.inkMuted
                 font.family: Signal.FONT_MONO
                 font.pixelSize: Signal.TYPE.small * bottomRail.s
                 font.letterSpacing: Signal.TYPE.small * bottomRail.s * 0.12

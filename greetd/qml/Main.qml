@@ -269,7 +269,7 @@ Window {
             }
             Text {
                 text: backend.hostname
-                color: sig.inkFaint
+                color: sig.inkMuted
                 anchors.baseline: parent.children[0].baseline
                 font {
                     family: Signal.FONT_MONO
@@ -391,7 +391,7 @@ Window {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: now.toLocaleDateString(loc, "dddd d MMMM").toUpperCase()
-                color: sig.inkFaint
+                color: sig.inkMuted
                 font {
                     family: Signal.FONT_MONO
                     pixelSize: 12 * s
@@ -437,7 +437,7 @@ Window {
 
                     Text {
                         text: busy && currentUserLabel !== "" ? tr("authFor").arg(currentUserLabel) : tr("eyebrow.signIn")
-                        color: sig.inkFaint
+                        color: sig.inkMuted
                         font {
                             family: Signal.FONT_MONO
                             pixelSize: 11 * s
@@ -509,7 +509,7 @@ Window {
                                     Text {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         text: tr("channel") + " " + String(index + 1).padStart(2, "0")
-                                        color: tuned ? sig.onSignalWell : sig.inkFaint
+                                        color: tuned ? sig.onSignalWell : sig.inkMuted
                                         font {
                                             family: Signal.FONT_MONO
                                             pixelSize: 9 * s
@@ -644,7 +644,7 @@ Window {
                             Text {
                                 visible: parent.text === ""
                                 text: tr("user")
-                                color: sig.inkFaint
+                                color: sig.inkMuted
                                 font: parent.font
                             }
                         }
@@ -748,7 +748,7 @@ Window {
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             text: tr("session")
-                            color: sig.inkFaint
+                            color: sig.inkMuted
                             font {
                                 family: Signal.FONT_MONO
                                 pixelSize: 11 * s
@@ -949,7 +949,7 @@ Window {
             }
             anchors.margins: Math.round(40 * unit)
             text: "HORNERO SIGNAL · GREETD"
-            color: sig.inkFaint
+            color: sig.inkMuted
             font {
                 family: Signal.FONT_MONO
                 pixelSize: 10 * s
